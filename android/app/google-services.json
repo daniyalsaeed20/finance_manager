@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "272843134113",
+    "project_id": "barberandsalon-a8c01",
+    "storage_bucket": "barberandsalon-a8c01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272843134113:android:d9913f865a1b6da917cce0",
+        "android_client_info": {
+          "package_name": "com.example.barber_and_salon_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272843134113-g8h29aimaqjeacu4eucdfm991e7a8aof.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.barber_and_salon_app",
+            "certificate_hash": "58289cae38cc284dd1e708863302dcb0f998a999"
+          }
+        },
+        {
+          "client_id": "272843134113-nb9fvgc24fijq586hrn1cakof3j2dia4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfEmJektUESOdUnos9HfSMloK7W8F0e-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272843134113-nb9fvgc24fijq586hrn1cakof3j2dia4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
