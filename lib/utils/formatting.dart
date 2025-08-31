@@ -101,23 +101,29 @@ String formatNumber(int number) {
   }
 }
 
-// Currency-specific number formatting
-String formatCurrencyAmount(int amount) {
-  if (amount < 1000) {
-    return amount.toString();
-  } else if (amount < 1000000) {
-    final k = amount / 1000.0;
-    return '${k.toStringAsFixed(k.truncateToDouble() == k ? 0 : 1)}K';
-  } else if (amount < 1000000000) {
-    final m = amount / 1000000.0;
-    return '${m.toStringAsFixed(m.truncateToDouble() == m ? 0 : 1)}M';
-  } else {
-    final b = amount / 1000000000.0;
-    return '${b.toStringAsFixed(b.truncateToDouble() == b ? 0 : 1)}B';
-  }
+// Currency-specific number formatting (converts from minor units to dollars first)
+String formatCurrencyAmount(int amountMinor) {
+  // Convert from minor units (cents) to dollars
+  final amount = amountMinor / 100.0;
+
+  // Always show with 2 decimal places for currency
+  return '\$${amount.toStringAsFixed(2)}';
 }
 
-// Goal amount formatting (uses formatNumber)
-String formatGoalAmount(int amount) {
-  return formatNumber(amount);
+// Goal amount formatting (converts from minor units to dollars first)
+String formatGoalAmount(int amountMinor) {
+  // Convert from minor units (cents) to dollars
+  final amount = amountMinor / 100.0;
+
+  // Always show with 2 decimal places for currency
+  return '\$${amount.toStringAsFixed(2)}';
+}
+
+// Number formatting without currency symbol (converts from minor units to dollars first)
+String formatNumberFromMinor(int amountMinor) {
+  // Convert from minor units (cents) to dollars
+  final amount = amountMinor / 100.0;
+
+  // Always show with 2 decimal places
+  return amount.toStringAsFixed(2);
 }

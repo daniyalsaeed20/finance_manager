@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -718,12 +719,18 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                       TextField(
                         controller: _amountController,
                         decoration: const InputDecoration(
-                          labelText: 'Monthly Goal Amount',
+                          labelText: 'Monthly Goal Amount (e.g., 500.00)',
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.attach_money),
                         ),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [AmountInputFormatter()],
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d{0,2}'),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
 
@@ -986,13 +993,15 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
   void _saveGoal() {
     if (_amountController.text.isEmpty) return;
 
-    final amount = int.tryParse(
-      _amountController.text.replaceAll(RegExp(r'[^\d]'), ''),
-    );
+    // Parse the amount as a double first, then convert to minor units
+    final amount = double.tryParse(_amountController.text);
     if (amount == null || amount <= 0) return;
 
+    // Convert to minor units (cents)
+    final amountMinor = (amount * 100).round();
+
     final goal = MonthlyGoal()
-      ..targetAmountMinor = amount
+      ..targetAmountMinor = amountMinor
       ..strategies = _strategies
           .map((s) => GoalStrategyItem()..title = s)
           .toList()
@@ -1011,18 +1020,22 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
   void _updateGoal() {
     if (_amountController.text.isEmpty) return;
 
-    final amount = int.tryParse(
-      _amountController.text.replaceAll(RegExp(r'[^\d]'), ''),
-    );
+    // Parse the amount as a double first, then convert to minor units
+    final amount = double.tryParse(_amountController.text);
     if (amount == null || amount <= 0) return;
 
-    print('Updating goal: amount=$amount, strategies=${_strategies}');
+    // Convert to minor units (cents)
+    final amountMinor = (amount * 100).round();
+
+    print(
+      'Updating goal: amount=$amount, amountMinor=$amountMinor, strategies=${_strategies}',
+    );
     print(
       'Original goal: ${_editingGoal!.targetAmountMinor}, monthKey: ${_editingGoal!.monthKey}',
     );
 
     final updatedGoal = _editingGoal!
-      ..targetAmountMinor = amount
+      ..targetAmountMinor = amountMinor
       ..strategies = _strategies
           .map((s) => GoalStrategyItem()..title = s)
           .toList();

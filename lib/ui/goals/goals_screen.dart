@@ -322,7 +322,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                   // Progress Bar
                                   LinearProgressIndicator(
                                     value: progress.clamp(0.0, 1.0),
-                                    backgroundColor: Colors.grey[300],
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.surfaceVariant,
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       isAchieved
                                           ? Theme.of(
@@ -451,7 +453,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             ? Theme.of(
                                                 context,
                                               ).colorScheme.primary
-                                            : Colors.grey,
+                                            : Theme.of(
+                                                context,
+                                              ).colorScheme.outline,
                                         size: 32,
                                       ),
                                       const SizedBox(height: 8),
@@ -483,7 +487,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                   ? Theme.of(
                                                       context,
                                                     ).colorScheme.primary
-                                                  : Colors.grey,
+                                                  : Theme.of(
+                                                      context,
+                                                    ).colorScheme.outline,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -500,7 +506,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                     children: [
                                       Icon(
                                         Icons.account_balance_wallet,
-                                        color: Colors.orange,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
                                         size: 32,
                                       ),
                                       const SizedBox(height: 8),
@@ -523,7 +531,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             .textTheme
                                             .titleMedium
                                             ?.copyWith(
-                                              color: Colors.orange,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.secondary,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -604,7 +614,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                           )
                                                           .toDouble(),
                                                   title: '', // Remove label
-                                                  color: Colors.orange,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.secondary,
                                                   radius: 60,
                                                 ),
                                               ],
@@ -749,7 +761,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                     ? Theme.of(
                                                         context,
                                                       ).colorScheme.primary
-                                                    : Colors.grey,
+                                                    : Theme.of(
+                                                        context,
+                                                      ).colorScheme.outline,
                                                 width: 25,
                                                 borderRadius:
                                                     const BorderRadius.vertical(
@@ -803,7 +817,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                           double.infinity,
                                                         )
                                                         .toDouble(),
-                                                color: Colors.orange,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.secondary,
                                                 width: 25,
                                                 borderRadius:
                                                     const BorderRadius.vertical(
@@ -1016,7 +1032,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                color: Colors.orange,
+                color: Theme.of(context).colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
             ),
