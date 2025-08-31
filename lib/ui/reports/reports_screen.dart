@@ -674,6 +674,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     tooltipRoundedRadius: 8,
                                     tooltipPadding: const EdgeInsets.all(8),
                                     tooltipMargin: 8,
+                                    getTooltipColor: (touchedSpot) => Theme.of(context).colorScheme.surface,
                                     getTooltipItems: (touchedSpots) {
                                       return touchedSpots.map((touchedSpot) {
                                         String label;
@@ -693,29 +694,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           default:
                                             label = '';
                                         }
-                                        // Get the color that matches the line
-                                        Color tooltipColor;
-                                        switch (touchedSpot.x.toInt()) {
-                                          case 0:
-                                            tooltipColor = Theme.of(context).colorScheme.tertiary;
-                                            break;
-                                          case 1:
-                                            tooltipColor = Theme.of(context).colorScheme.error;
-                                            break;
-                                          case 2:
-                                            tooltipColor = Theme.of(context).colorScheme.primary;
-                                            break;
-                                          case 3:
-                                            tooltipColor = Theme.of(context).colorScheme.secondary;
-                                            break;
-                                          default:
-                                            tooltipColor = Theme.of(context).colorScheme.primary;
-                                        }
-                                        
                                         return LineTooltipItem(
                                           '$label\n${formatCurrencySync(touchedSpot.y.toInt())}',
                                           TextStyle(
-                                            color: tooltipColor,
+                                            color: Theme.of(context).colorScheme.onSurface,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                             shadows: [
