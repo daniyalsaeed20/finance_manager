@@ -685,36 +685,49 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                           enabled: true,
                                           touchTooltipData: BarTouchTooltipData(
                                             tooltipRoundedRadius: 8,
-                                            tooltipPadding: const EdgeInsets.all(8),
+                                            tooltipPadding:
+                                                const EdgeInsets.all(8),
                                             tooltipMargin: 8,
-                                            getTooltipColor: (touchedSpot) => Theme.of(context).colorScheme.surface,
-                                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                                              String label;
-                                              switch (group.x.toInt()) {
-                                                case 0:
-                                                  label = 'Savings';
-                                                  break;
-                                                case 1:
-                                                  label = 'Income';
-                                                  break;
-                                                case 2:
-                                                  label = 'Expenses';
-                                                  break;
-                                                case 3:
-                                                  label = 'Profit';
-                                                  break;
-                                                default:
-                                                  label = '';
-                                              }
-                                              return BarTooltipItem(
-                                                '$label\n${formatCurrencySync((rod.toY * 100).round())}',
-                                                TextStyle(
-                                                  color: Theme.of(context).colorScheme.onSurface,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                ),
-                                              );
-                                            },
+                                            getTooltipColor: (touchedSpot) =>
+                                                Theme.of(
+                                                  context,
+                                                ).colorScheme.surface,
+                                            getTooltipItem:
+                                                (
+                                                  group,
+                                                  groupIndex,
+                                                  rod,
+                                                  rodIndex,
+                                                ) {
+                                                  String label;
+                                                  switch (group.x.toInt()) {
+                                                    case 0:
+                                                      label = 'Savings';
+                                                      break;
+                                                    case 1:
+                                                      label = 'Income';
+                                                      break;
+                                                    case 2:
+                                                      label = 'Expenses';
+                                                      break;
+                                                    case 3:
+                                                      label = 'Profit';
+                                                      break;
+                                                    default:
+                                                      label = '';
+                                                  }
+                                                                                                     return BarTooltipItem(
+                                                     '$label\n${formatCurrencySync(rod.toY.round())}',
+                                                     TextStyle(
+                                                       color: Theme.of(
+                                                         context,
+                                                       ).colorScheme.onSurface,
+                                                       fontWeight:
+                                                           FontWeight.bold,
+                                                       fontSize: 12,
+                                                     ),
+                                                   );
+                                                },
                                           ),
                                         ),
                                         titlesData: FlTitlesData(
@@ -729,8 +742,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                       'Savings',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: Theme.of(context).colorScheme.onSurface,
-                                                        fontWeight: FontWeight.w500,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onSurface,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     );
                                                   case 1:
@@ -738,8 +754,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                       'Income',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: Theme.of(context).colorScheme.onSurface,
-                                                        fontWeight: FontWeight.w500,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onSurface,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     );
                                                   case 2:
@@ -747,8 +766,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                       'Expenses',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: Theme.of(context).colorScheme.onSurface,
-                                                        fontWeight: FontWeight.w500,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onSurface,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     );
                                                   case 3:
@@ -756,8 +778,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                       'Profit',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: Theme.of(context).colorScheme.onSurface,
-                                                        fontWeight: FontWeight.w500,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onSurface,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     );
                                                   default:
@@ -783,10 +808,14 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                   return const SizedBox.shrink();
                                                 }
                                                 return Text(
-                                                  formatCurrencySync((value * 100).round()),
+                                                  formatCurrencySync(
+                                                    value.round(),
+                                                  ),
                                                   style: TextStyle(
                                                     fontSize: 10,
-                                                    color: Theme.of(context).colorScheme.onSurface,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.onSurface,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 );
@@ -807,7 +836,10 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                         borderData: FlBorderData(
                                           show: true,
                                           border: Border.all(
-                                            color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline
+                                                .withOpacity(0.3),
                                           ),
                                         ),
                                         barGroups: [

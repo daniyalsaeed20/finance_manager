@@ -700,16 +700,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                             color: Theme.of(context).colorScheme.onSurface,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
-                                            shadows: [
-                                              Shadow(
-                                                offset: const Offset(0, 1),
-                                                blurRadius: 2,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .shadow
-                                                    .withOpacity(0.3),
-                                              ),
-                                            ],
                                           ),
                                         );
                                       }).toList();
