@@ -7,9 +7,13 @@ import '../models/income_models.dart';
 import '../services/isar_service.dart';
 
 class IncomeRepository {
-  Future<List<ServiceTemplate>> getServiceTemplates() async {
+  Future<List<ServiceTemplate>> getServiceTemplates(String userId) async {
     final db = await IsarService.instance.db;
-    return db.serviceTemplates.where().sortBySortOrder().findAll();
+    return db.serviceTemplates
+        .filter()
+        .userIdEqualTo(userId)
+        .sortBySortOrder()
+        .findAll();
   }
 
   Future<void> upsertServiceTemplate(ServiceTemplate template) async {
@@ -27,8 +31,11 @@ class IncomeRepository {
   }
 
   Future<void> addIncomeRecord(IncomeRecord record) async {
-    // compute totalMinor
-    final totalServices = record.services.fold<int>(0, (sum, s) => sum + s.priceMinor);
+    // compute totalMinor: sum(services.price * count) + tip
+    final totalServices = record.services.fold<int>(
+      0,
+      (sum, s) => sum + (s.priceMinor * s.count),
+    );
     record.totalMinor = totalServices + (record.tipMinor);
 
     final db = await IsarService.instance.db;
@@ -38,7 +45,11 @@ class IncomeRepository {
   }
 
   Future<void> updateIncomeRecord(IncomeRecord record) async {
-    final totalServices = record.services.fold<int>(0, (sum, s) => sum + s.priceMinor);
+    // compute totalMinor: sum(services.price * count) + tip
+    final totalServices = record.services.fold<int>(
+      0,
+      (sum, s) => sum + (s.priceMinor * s.count),
+    );
     record.totalMinor = totalServices + (record.tipMinor);
 
     final db = await IsarService.instance.db;
@@ -54,11 +65,24 @@ class IncomeRepository {
     });
   }
 
-  Future<List<IncomeRecord>> getIncomeForDateRange(DateTime start, DateTime end) async {
+  Future<List<IncomeRecord>> getIncomeForDateRange(
+    DateTime start,
+    DateTime end,
+    String userId,
+  ) async {
     final db = await IsarService.instance.db;
     final from = DateTime(start.year, start.month, start.day);
     final to = DateTime(end.year, end.month, end.day, 23, 59, 59);
-    return db.incomeRecords.filter().dateBetween(from, to).findAll();
+    return db.incomeRecords
+        .filter()
+        .dateBetween(from, to)
+        .and()
+        .userIdEqualTo(userId)
+        .findAll();
+  }
+
+  Future<IncomeRecord?> getIncomeRecordById(Id id) async {
+    final db = await IsarService.instance.db;
+    return db.incomeRecords.get(id);
   }
 }
-

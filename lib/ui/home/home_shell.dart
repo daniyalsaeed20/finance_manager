@@ -11,8 +11,64 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _index = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _wasDrawerOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Restore drawer state after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _restoreDrawerState();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update index from route after dependencies are available
+    _updateIndexFromRoute();
+  }
+
+  void _restoreDrawerState() {
+    if (_wasDrawerOpen && _scaffoldKey.currentState != null) {
+      // Small delay to ensure scaffold is ready
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted && _wasDrawerOpen) {
+          _scaffoldKey.currentState!.openDrawer();
+        }
+      });
+    }
+  }
+
+  void _updateIndexFromRoute() {
+    try {
+      final location = GoRouterState.of(context).uri.path;
+      switch (location) {
+        case '/home':
+        case '/home/dashboard':
+          if (_index != 0) setState(() => _index = 0);
+          break;
+        case '/home/income':
+          if (_index != 1) setState(() => _index = 1);
+          break;
+        case '/home/expenses':
+          if (_index != 2) setState(() => _index = 2);
+          break;
+        case '/home/reports':
+          if (_index != 3) setState(() => _index = 3);
+          break;
+      }
+    } catch (e) {
+      // If GoRouterState is not available yet, just skip the update
+      debugPrint('⚠️ Route update skipped: $e');
+    }
+  }
 
   void _onTap(int idx) {
+    if (_index == idx) return; // Prevent unnecessary navigation
+
     setState(() => _index = idx);
     switch (idx) {
       case 0:
@@ -27,28 +83,187 @@ class _HomeShellState extends State<HomeShell> {
       case 3:
         context.go('/home/reports');
         break;
-      case 4:
-        context.go('/home/settings');
-        break;
     }
+  }
+
+  String _getAppBarTitle() {
+    try {
+      final location = GoRouterState.of(context).uri.path;
+      switch (location) {
+        case '/home':
+        case '/home/dashboard':
+          return 'Dashboard';
+        case '/home/income':
+          return 'Income';
+        case '/home/expenses':
+          return 'Expenses';
+        case '/home/reports':
+          return 'Reports';
+        default:
+          return 'Financial Manager';
+      }
+    } catch (e) {
+      // If GoRouterState is not available yet, return default title
+      debugPrint('⚠️ AppBar title update skipped: $e');
+      return 'Financial Manager';
+    }
+  }
+
+  bool _shouldShowBottomNavigation() {
+    try {
+      final location = GoRouterState.of(context).uri.path;
+      // Only show bottom navigation on primary screens
+      return location == '/home' ||
+          location == '/home/dashboard' ||
+          location == '/home/income' ||
+          location == '/home/expenses' ||
+          location == '/home/reports';
+    } catch (e) {
+      // If GoRouterState is not available yet, show bottom navigation by default
+      debugPrint('⚠️ Bottom navigation check skipped: $e');
+      return true;
+    }
+  }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.account_balance_wallet,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Financial Manager',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Manage your business finances',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.dashboard_outlined),
+            title: const Text('Dashboard'),
+            onTap: () {
+              Navigator.pop(context);
+              context.go('/home/dashboard');
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.flag_outlined),
+            title: const Text('Goals'),
+            onTap: () {
+              debugPrint('🎯 Drawer: Navigating to Goals');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/goals');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.business_outlined),
+            title: const Text('Business Manager'),
+            onTap: () {
+              debugPrint('🏢 Drawer: Navigating to Business Manager');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/business');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.calculate_outlined),
+            title: const Text('Taxes'),
+            onTap: () {
+              debugPrint('🧮 Drawer: Navigating to Taxes');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/taxes');
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Settings'),
+            onTap: () {
+              debugPrint('⚙️ Drawer: Navigating to Settings');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/settings');
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _index,
-        onTap: _onTap,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.attach_money_outlined), label: 'Income'),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), label: 'Expenses'),
-          BottomNavigationBarItem(icon: Icon(Icons.picture_as_pdf_outlined), label: 'Reports'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: 'Settings'),
-        ],
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text(_getAppBarTitle()),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        elevation: 0,
       ),
+      drawer: _buildDrawer(),
+      onDrawerChanged: (isOpened) {
+        // Track when drawer is manually opened/closed
+        if (!isOpened) {
+          _wasDrawerOpen = false;
+        }
+      },
+      body: widget.child,
+      bottomNavigationBar: _shouldShowBottomNavigation()
+          ? BottomNavigationBar(
+              currentIndex: _index,
+              onTap: _onTap,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard_outlined),
+                  label: 'Dashboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.attach_money_outlined),
+                  label: 'Income',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  label: 'Expenses',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.assessment_outlined),
+                  label: 'Reports',
+                ),
+              ],
+            )
+          : null,
     );
   }
 }
-

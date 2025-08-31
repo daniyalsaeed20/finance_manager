@@ -15,12 +15,16 @@ class ServiceTemplate {
   late int defaultPriceMinor;
   bool active = true;
   int sortOrder = 0;
+
+  // User ID for data isolation
+  late String userId;
 }
 
 @embedded
-class IncomeServiceItem {
+class IncomeServiceCount {
   late String serviceName;
   late int priceMinor;
+  late int count; // Number of times this service was provided
 }
 
 @collection
@@ -30,18 +34,17 @@ class IncomeRecord {
   // Use dateOnly (midnight) for grouping
   late DateTime date;
 
-  // Optional number of clients served
-  int? clientCount;
-
-  // Selected services with prices captured at time of entry
-  List<IncomeServiceItem> services = [];
+  // Selected services with prices captured at time of entry and counts
+  List<IncomeServiceCount> services = [];
 
   // Optional tip in minor units
   int tipMinor = 0;
 
-  // Cached total for fast queries: sum(services.price) + tip
+  // Cached total for fast queries: sum(services.price * count) + tip
   int totalMinor = 0;
 
   String? note;
-}
 
+  // User ID for data isolation
+  late String userId;
+}

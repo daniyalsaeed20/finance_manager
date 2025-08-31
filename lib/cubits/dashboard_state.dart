@@ -7,6 +7,7 @@ class DashboardState extends Equatable {
   final int totalIncomeMinor;
   final int totalExpenseMinor;
   final int netMinor;
+  final int goalAmountMinor;
 
   DashboardState({
     required this.loading,
@@ -15,6 +16,7 @@ class DashboardState extends Equatable {
     required this.totalIncomeMinor,
     required this.totalExpenseMinor,
     required this.netMinor,
+    required this.goalAmountMinor,
   });
 
   DashboardState.initial()
@@ -23,7 +25,8 @@ class DashboardState extends Equatable {
       rangeEnd = DateTime(2099, 12, 31),
       totalIncomeMinor = 0,
       totalExpenseMinor = 0,
-      netMinor = 0;
+      netMinor = 0,
+      goalAmountMinor = 0;
 
   DashboardState copyWith({
     bool? loading,
@@ -32,6 +35,7 @@ class DashboardState extends Equatable {
     int? totalIncomeMinor,
     int? totalExpenseMinor,
     int? netMinor,
+    int? goalAmountMinor,
   }) {
     return DashboardState(
       loading: loading ?? this.loading,
@@ -40,6 +44,7 @@ class DashboardState extends Equatable {
       totalIncomeMinor: totalIncomeMinor ?? this.totalIncomeMinor,
       totalExpenseMinor: totalExpenseMinor ?? this.totalExpenseMinor,
       netMinor: netMinor ?? this.netMinor,
+      goalAmountMinor: goalAmountMinor ?? this.goalAmountMinor,
     );
   }
 
@@ -51,5 +56,6 @@ class DashboardState extends Equatable {
     totalIncomeMinor,
     totalExpenseMinor,
     netMinor,
+    goalAmountMinor,
   ];
 }

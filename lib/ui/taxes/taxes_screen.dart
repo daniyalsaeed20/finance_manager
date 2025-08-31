@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/dashboard_cubit.dart';
 import '../../cubits/tax_cubit.dart';
 import '../../models/tax_models.dart';
-import '../../repositories/expense_repository.dart';
-import '../../repositories/income_repository.dart';
-import '../../repositories/tax_repository.dart';
+import '../../services/user_manager.dart';
 import '../../utils/formatting.dart';
+import '../../utils/amount_input_formatter.dart';
 
 class TaxesScreen extends StatefulWidget {
   const TaxesScreen({super.key});
@@ -19,257 +18,376 @@ class TaxesScreen extends StatefulWidget {
 class _TaxesScreenState extends State<TaxesScreen> {
   DateTime _selectedMonth = DateTime.now();
   double _taxRate = 0.15; // Default 15%
+  bool _isAddPaymentExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load initial data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userId = UserManager.instance.currentUserId;
+      context.read<TaxCubit>().load(userId);
+      context.read<DashboardCubit>().loadForRange(
+        DateTime(_selectedMonth.year, _selectedMonth.month, 1),
+        DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59),
+        userId,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => DashboardCubit(
-            incomeRepo: IncomeRepository(),
-            expenseRepo: ExpenseRepository(),
-          )..loadForRange(
-              DateTime(_selectedMonth.year, _selectedMonth.month, 1),
-              DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59),
-            ),
-        ),
-        BlocProvider(
-          create: (_) => TaxCubit(TaxRepository())..load(),
-        ),
-      ],
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Tax Planning')),
-        floatingActionButton: const _AddPaymentButton(),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tax Planning'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            // Month Selector
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month - 1);
-                    });
-                    context.read<DashboardCubit>().loadForRange(
-                      DateTime(_selectedMonth.year, _selectedMonth.month, 1),
-                      DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59),
-                    );
-                  },
-                  icon: const Icon(Icons.chevron_left),
-                ),
-                Text(
-                  '${_selectedMonth.month == DateTime.now().month && _selectedMonth.year == DateTime.now().year ? 'This Month' : formatMonthYear(_selectedMonth)}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                  onPressed: _selectedMonth.isBefore(DateTime.now()) ? () {
-                    setState(() {
-                      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month + 1);
-                    });
-                    context.read<DashboardCubit>().loadForRange(
-                      DateTime(_selectedMonth.year, _selectedMonth.month, 1),
-                      DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59),
-                    );
-                  } : null,
-                  icon: const Icon(Icons.chevron_right),
-                ),
-              ],
+            // Month selector
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedMonth = DateTime(
+                          _selectedMonth.year,
+                          _selectedMonth.month - 1,
+                        );
+                      });
+                      final userId = UserManager.instance.currentUserId;
+                      context.read<DashboardCubit>().loadForRange(
+                        DateTime(_selectedMonth.year, _selectedMonth.month, 1),
+                        DateTime(
+                          _selectedMonth.year,
+                          _selectedMonth.month + 1,
+                          0,
+                          23,
+                          59,
+                          59,
+                        ),
+                        userId,
+                      );
+                    },
+                    icon: const Icon(Icons.chevron_left),
+                  ),
+                  TextButton(
+                    onPressed: () => _selectMonth(),
+                    child: Text(formatMonthYear(_selectedMonth)),
+                  ),
+                  IconButton(
+                    onPressed: _selectedMonth.isBefore(DateTime.now())
+                        ? () {
+                            setState(() {
+                              _selectedMonth = DateTime(
+                                _selectedMonth.year,
+                                _selectedMonth.month + 1,
+                              );
+                            });
+                            final userId = UserManager.instance.currentUserId;
+                            context.read<DashboardCubit>().loadForRange(
+                              DateTime(
+                                _selectedMonth.year,
+                                _selectedMonth.month,
+                                1,
+                              ),
+                              DateTime(
+                                _selectedMonth.year,
+                                _selectedMonth.month + 1,
+                                0,
+                                23,
+                                59,
+                                59,
+                              ),
+                              userId,
+                            );
+                          }
+                        : null,
+                    icon: const Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
 
             // Tax Rate Setting
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Tax Rate Setting', style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Slider(
-                            value: _taxRate,
-                            min: 0.0,
-                            max: 0.50,
-                            divisions: 50,
-                            label: '${(_taxRate * 100).toStringAsFixed(1)}%',
-                            onChanged: (value) {
-                              setState(() {
-                                _taxRate = value;
-                              });
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 80,
-                          child: Text(
-                            '${(_taxRate * 100).toStringAsFixed(1)}%',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      'Adjust the slider to set your estimated tax rate',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Tax Rate',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Slider(
+                        value: _taxRate,
+                        min: 0.0,
+                        max: 0.50,
+                        divisions: 50,
+                        label: '${(_taxRate * 100).toStringAsFixed(1)}%',
+                        onChanged: (value) {
+                          setState(() {
+                            _taxRate = value;
+                          });
+                        },
+                      ),
+                      Text(
+                        'Current Rate: ${(_taxRate * 100).toStringAsFixed(1)}%',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+
             const SizedBox(height: 16),
 
             // Monthly Tax Summary
-            BlocBuilder<DashboardCubit, DashboardState>(
-              builder: (context, dashboardState) {
-                if (dashboardState.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                
-                final monthlyIncome = dashboardState.totalIncomeMinor;
-                final monthlyExpenses = dashboardState.totalExpenseMinor;
-                final monthlyNetProfit = dashboardState.netMinor;
-                final estimatedTax = (monthlyNetProfit * _taxRate).round();
-                
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Monthly Tax Summary', style: Theme.of(context).textTheme.titleMedium),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text('Income', style: Theme.of(context).textTheme.labelMedium),
-                                  Text(
-                                    formatCurrencyMinor(monthlyIncome),
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text('Expenses', style: Theme.of(context).textTheme.labelMedium),
-                                  Text(
-                                    formatCurrencyMinor(monthlyExpenses),
-                                    style: Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text('Net Profit', style: Theme.of(context).textTheme.labelMedium),
-                                  Text(
-                                    formatCurrencyMinor(monthlyNetProfit),
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      color: monthlyNetProfit < 0 ? Colors.red : Colors.green,
+            BlocBuilder<TaxCubit, TaxState>(
+              builder: (context, taxState) {
+                return BlocBuilder<DashboardCubit, DashboardState>(
+                  builder: (context, dashboardState) {
+                    if (taxState.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final monthlyIncome = dashboardState.totalIncomeMinor;
+                    final monthlyExpenses = dashboardState.totalExpenseMinor;
+                    final monthlyNetProfit = dashboardState.netMinor;
+                    final estimatedTax = (monthlyNetProfit * _taxRate).round();
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        children: [
+                          // Income, Expenses, Net Profit
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Income',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelMedium,
+                                        ),
+                                        FutureBuilder<String>(
+                                          future: formatCurrency(monthlyIncome),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                snapshot.data!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              );
+                                            }
+                                            return const Text('Loading...');
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Estimated Tax Owed',
-                                    style: Theme.of(context).textTheme.titleMedium,
+                              Expanded(
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Expenses',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelMedium,
+                                        ),
+                                        FutureBuilder<String>(
+                                          future: formatCurrency(
+                                            monthlyExpenses,
+                                          ),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                snapshot.data!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              );
+                                            }
+                                            return const Text('Loading...');
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    'Based on ${(_taxRate * 100).toStringAsFixed(1)}% rate',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
+                                ),
                               ),
-                              Text(
-                                formatCurrencyMinor(estimatedTax),
-                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                  color: estimatedTax > 0 ? Colors.red : Colors.green,
+                              Expanded(
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Net Profit',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelMedium,
+                                        ),
+                                        FutureBuilder<String>(
+                                          future: formatCurrency(
+                                            monthlyNetProfit,
+                                          ),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                snapshot.data!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                      color:
+                                                          monthlyNetProfit >= 0
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              );
+                                            }
+                                            return const Text('Loading...');
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+
+                          const SizedBox(height: 16),
+
+                          // Estimated Tax
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Estimated Tax',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
+                                FutureBuilder<String>(
+                                  future: formatCurrency(estimatedTax),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                        snapshot.data!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimaryContainer,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      );
+                                    }
+                                    return const Text('Loading...');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 );
               },
             ),
+
             const SizedBox(height: 16),
 
-            // Tax Plans
-            Text('Tax Plans', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
+            // Add Tax Payment Expandable Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Card(
+                child: ExpansionTile(
+                  title: const Text('Add Tax Payment'),
+                  leading: const Icon(Icons.add),
+                  initiallyExpanded: _isAddPaymentExpanded,
+                  onExpansionChanged: (expanded) {
+                    setState(() {
+                      _isAddPaymentExpanded = expanded;
+                    });
+                  },
+                  children: [const _AddTaxPaymentForm()],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Tax Payments List
             BlocBuilder<TaxCubit, TaxState>(
-              builder: (context, taxState) {
-                if (taxState.loading) {
-                  return const Center(child: CircularProgressIndicator());
+              builder: (context, state) {
+                if (state.payments.isEmpty) {
+                  return const Center(child: Text('No tax payments recorded'));
                 }
+
                 return Column(
-                  children: [
-                    for (final p in taxState.plans)
-                      Card(
-                        child: ListTile(
-                          title: Text(p.periodKey),
-                          subtitle: Text('Rate: ${(p.estimatedRate * 100).toStringAsFixed(1)}%  Due: ${p.dueDate == null ? '-' : formatShortDate(p.dueDate!)}'),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: () => context.read<TaxCubit>().deletePlan(p.id),
+                  children: state.payments
+                      .map(
+                        (payment) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: _TaxPaymentTile(
+                            payment: payment,
+                            onTap: () => _editTaxPayment(payment),
                           ),
                         ),
-                      ),
-                    const SizedBox(height: 16),
-                    const _AddPlanCard(),
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Tax Payments
-            Text('Tax Payments', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            BlocBuilder<TaxCubit, TaxState>(
-              builder: (context, taxState) {
-                if (taxState.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Column(
-                  children: [
-                    for (final pay in taxState.payments)
-                      Card(
-                        child: ListTile(
-                          title: Text(formatShortDate(pay.date)),
-                          subtitle: Text(pay.method ?? ''),
-                          trailing: Text(formatCurrencyMinor(pay.amountMinor)),
-                        ),
-                      ),
-                  ],
+                      )
+                      .toList(),
                 );
               },
             ),
@@ -278,142 +396,365 @@ class _TaxesScreenState extends State<TaxesScreen> {
       ),
     );
   }
+
+  Future<void> _selectMonth() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedMonth,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      initialDatePickerMode: DatePickerMode.year,
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedMonth = DateTime(picked.year, picked.month);
+      });
+      final userId = 'current_user_id'; // TODO: Get from AppManager
+      context.read<DashboardCubit>().loadForRange(
+        DateTime(_selectedMonth.year, _selectedMonth.month, 1),
+        DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0, 23, 59, 59),
+        userId,
+      );
+    }
+  }
+
+  void _editTaxPayment(TaxPayment payment) {
+    showDialog(
+      context: context,
+      builder: (context) => _EditTaxPaymentDialog(payment: payment),
+    );
+  }
 }
 
-class _AddPlanCard extends StatefulWidget {
-  const _AddPlanCard();
+class _AddTaxPaymentForm extends StatefulWidget {
+  const _AddTaxPaymentForm();
 
   @override
-  State<_AddPlanCard> createState() => _AddPlanCardState();
+  State<_AddTaxPaymentForm> createState() => _AddTaxPaymentFormState();
 }
 
-class _AddPlanCardState extends State<_AddPlanCard> {
-  final _periodController = TextEditingController();
-  final _rateController = TextEditingController();
-  DateTime? _dueDate;
+class _AddTaxPaymentFormState extends State<_AddTaxPaymentForm> {
+  final _amountController = TextEditingController();
+  final _methodController = TextEditingController();
+  final _noteController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+  int _amountMinor = 0;
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _methodController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Date picker
+          ListTile(
+            title: const Text('Date'),
+            subtitle: Text(formatShortDate(_selectedDate)),
+            trailing: const Icon(Icons.calendar_today),
+            onTap: () => _selectDate(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Amount input
+          TextField(
+            controller: _amountController,
+            decoration: const InputDecoration(
+              labelText: 'Amount (e.g., 10.00)',
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [AmountInputFormatter()],
+            onChanged: (value) {
+              final parsed = double.tryParse(value) ?? 0;
+              setState(() {
+                _amountMinor = (parsed * 100).round();
+              });
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          // Method input
+          TextField(
+            controller: _methodController,
+            decoration: const InputDecoration(
+              labelText: 'Payment Method (e.g., Bank Transfer)',
+              border: OutlineInputBorder(),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Note input
+          TextField(
+            controller: _noteController,
+            decoration: const InputDecoration(
+              labelText: 'Note (optional)',
+              border: OutlineInputBorder(),
+            ),
+            maxLines: 2,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Add button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _canSubmit() ? () => _addTaxPayment() : null,
+              child: const Text('Add Tax Payment'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool _canSubmit() {
+    return _amountMinor > 0;
+  }
+
+  void _addTaxPayment() {
+    final payment = TaxPayment()
+      ..date = _selectedDate
+      ..amountMinor = _amountMinor
+      ..method = _methodController.text.isEmpty ? null : _methodController.text
+      ..note = _noteController.text.isEmpty ? null : _noteController.text
+      ..userId = 'current_user_id'; // TODO: Get from AppManager
+
+    context.read<TaxCubit>().addPayment(payment);
+
+    // Reset form
+    _amountController.clear();
+    _methodController.clear();
+    _noteController.clear();
+    setState(() {
+      _amountMinor = 0;
+    });
+  }
+
+  Future<void> _selectDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+}
+
+class _TaxPaymentTile extends StatelessWidget {
+  final TaxPayment payment;
+  final VoidCallback onTap;
+
+  const _TaxPaymentTile({required this.payment, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      child: ListTile(
+        onTap: onTap,
+        title: Text(formatShortDate(payment.date)),
+        subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create Plan', style: Theme.of(context).textTheme.titleMedium),
-            TextField(controller: _periodController, decoration: const InputDecoration(labelText: 'Period (e.g., 2025-01 or 2025-Q1)')),
-            TextField(controller: _rateController, decoration: const InputDecoration(labelText: 'Estimated Rate (e.g., 0.25)')),
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () async {
-                    final now = DateTime.now();
-                    final d = await showDatePicker(context: context, initialDate: now, firstDate: DateTime(2020), lastDate: DateTime(2100));
-                    if (d != null) setState(() => _dueDate = d);
-                  },
-                  child: Text('Due: ${_dueDate == null ? '-' : formatShortDate(_dueDate!)}'),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () async {
-                    final rate = double.tryParse(_rateController.text) ?? 0.0;
-                    final plan = TaxPlan()
-                      ..periodKey = _periodController.text
-                      ..estimatedRate = rate
-                      ..dueDate = _dueDate;
-                    await context.read<TaxCubit>().upsertPlan(plan);
-                    if (mounted) {
-                      _periodController.clear();
-                      _rateController.clear();
-                      setState(() => _dueDate = null);
-                    }
-                  },
-                  child: const Text('Add Plan'),
-                )
-              ],
-            )
+            Text(payment.method ?? 'No method specified'),
+            if (payment.note != null) Text('Note: ${payment.note}'),
           ],
+        ),
+        trailing: Text(
+          formatCurrencyMinor(payment.amountMinor),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
     );
   }
 }
 
-class _AddPaymentButton extends StatelessWidget {
-  const _AddPaymentButton();
+class _EditTaxPaymentDialog extends StatefulWidget {
+  final TaxPayment payment;
+
+  const _EditTaxPaymentDialog({required this.payment});
 
   @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: () async {
-        await showDialog(context: context, builder: (_) => const _PaymentDialog());
-      },
-      icon: const Icon(Icons.add_card_outlined),
-      label: const Text('Add Payment'),
-    );
-  }
+  State<_EditTaxPaymentDialog> createState() => _EditTaxPaymentDialogState();
 }
 
-class _PaymentDialog extends StatefulWidget {
-  const _PaymentDialog();
-
-  @override
-  State<_PaymentDialog> createState() => _PaymentDialogState();
-}
-
-class _PaymentDialogState extends State<_PaymentDialog> {
-  DateTime _date = DateTime.now();
-  int _amountMinor = 0;
+class _EditTaxPaymentDialogState extends State<_EditTaxPaymentDialog> {
   final _amountController = TextEditingController();
   final _methodController = TextEditingController();
   final _noteController = TextEditingController();
+  late DateTime _selectedDate;
+  late int _amountMinor;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.payment.date;
+    _amountController.text = (widget.payment.amountMinor / 100).toStringAsFixed(
+      2,
+    );
+    _methodController.text = widget.payment.method ?? '';
+    _noteController.text = widget.payment.note ?? '';
+    _amountMinor = widget.payment.amountMinor;
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _methodController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('New Tax Payment'),
-      content: SingleChildScrollView(
+      title: const Text('Edit Tax Payment'),
+      content: SizedBox(
+        width: double.maxFinite,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextButton(
-              onPressed: () async {
-                final d = await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2020), lastDate: DateTime(2100));
-                if (d != null) setState(() => _date = d);
-              },
-              child: Text('Date: ${formatShortDate(_date)}'),
+            // Date picker
+            ListTile(
+              title: const Text('Date'),
+              subtitle: Text(formatShortDate(_selectedDate)),
+              trailing: const Icon(Icons.calendar_today),
+              onTap: () => _selectDate(),
             ),
+
+            const SizedBox(height: 16),
+
+            // Amount input
             TextField(
               controller: _amountController,
-              decoration: const InputDecoration(labelText: 'Amount (e.g., 150.00)'),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              onChanged: (v) {
-                final parsed = double.tryParse(v) ?? 0;
-                _amountMinor = (parsed * 100).round();
+              decoration: const InputDecoration(
+                labelText: 'Amount',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [AmountInputFormatter()],
+              onChanged: (value) {
+                final parsed = double.tryParse(value) ?? 0;
+                setState(() {
+                  _amountMinor = (parsed * 100).round();
+                });
               },
             ),
-            TextField(controller: _methodController, decoration: const InputDecoration(labelText: 'Method (optional)')),
-            TextField(controller: _noteController, decoration: const InputDecoration(labelText: 'Note (optional)')),
+
+            const SizedBox(height: 16),
+
+            // Method input
+            TextField(
+              controller: _methodController,
+              decoration: const InputDecoration(
+                labelText: 'Payment Method',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Note input
+            TextField(
+              controller: _noteController,
+              decoration: const InputDecoration(
+                labelText: 'Note',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
           ],
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
         ElevatedButton(
-          onPressed: () async {
-            final payment = TaxPayment()
-              ..date = _date
-              ..amountMinor = _amountMinor
-              ..method = _methodController.text.isEmpty ? null : _methodController.text
-              ..note = _noteController.text.isEmpty ? null : _noteController.text;
-            await context.read<TaxCubit>().addPayment(payment);
-            if (mounted) Navigator.pop(context);
-          },
-          child: const Text('Save'),
-        )
+          onPressed: () => _updateTaxPayment(),
+          child: const Text('Update'),
+        ),
+        ElevatedButton(
+          onPressed: () => _deleteTaxPayment(),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+          child: const Text('Delete'),
+        ),
       ],
     );
   }
-}
 
+  Future<void> _selectDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _updateTaxPayment() {
+    final updatedPayment = widget.payment
+      ..date = _selectedDate
+      ..amountMinor = _amountMinor
+      ..method = _methodController.text.isEmpty ? null : _methodController.text
+      ..note = _noteController.text.isEmpty ? null : _noteController.text;
+
+    context.read<TaxCubit>().addPayment(updatedPayment);
+    Navigator.pop(context);
+  }
+
+  void _deleteTaxPayment() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Tax Payment'),
+        content: const Text(
+          'Are you sure you want to delete this tax payment?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.read<TaxCubit>().deletePayment(widget.payment.id);
+              Navigator.pop(context); // Close confirmation dialog
+              Navigator.pop(context); // Close edit dialog
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+}

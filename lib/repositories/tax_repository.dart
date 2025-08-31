@@ -14,9 +14,9 @@ class TaxRepository {
     });
   }
 
-  Future<List<TaxPlan>> getPlans() async {
+  Future<List<TaxPlan>> getPlans(String userId) async {
     final db = await IsarService.instance.db;
-    return db.taxPlans.where().findAll();
+    return db.taxPlans.filter().userIdEqualTo(userId).findAll();
   }
 
   Future<void> deletePlan(Id id) async {
@@ -33,9 +33,9 @@ class TaxRepository {
     });
   }
 
-  Future<List<TaxPayment>> getPayments() async {
+  Future<List<TaxPayment>> getPayments(String userId) async {
     final db = await IsarService.instance.db;
-    return db.taxPayments.where().findAll();
+    return db.taxPayments.filter().userIdEqualTo(userId).findAll();
   }
 
   Future<void> deletePayment(Id id) async {
@@ -45,4 +45,3 @@ class TaxRepository {
     });
   }
 }
-

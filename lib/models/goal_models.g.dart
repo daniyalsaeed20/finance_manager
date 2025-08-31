@@ -32,6 +32,11 @@ const MonthlyGoalSchema = CollectionSchema(
       id: 2,
       name: r'targetAmountMinor',
       type: IsarType.long,
+    ),
+    r'userId': PropertySchema(
+      id: 3,
+      name: r'userId',
+      type: IsarType.string,
     )
   },
   estimateSize: _monthlyGoalEstimateSize,
@@ -64,6 +69,7 @@ int _monthlyGoalEstimateSize(
           GoalStrategyItemSchema.estimateSize(value, offsets, allOffsets);
     }
   }
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -81,6 +87,7 @@ void _monthlyGoalSerialize(
     object.strategies,
   );
   writer.writeLong(offsets[2], object.targetAmountMinor);
+  writer.writeString(offsets[3], object.userId);
 }
 
 MonthlyGoal _monthlyGoalDeserialize(
@@ -100,6 +107,7 @@ MonthlyGoal _monthlyGoalDeserialize(
       ) ??
       [];
   object.targetAmountMinor = reader.readLong(offsets[2]);
+  object.userId = reader.readString(offsets[3]);
   return object;
 }
 
@@ -122,6 +130,8 @@ P _monthlyGoalDeserializeProp<P>(
           []) as P;
     case 2:
       return (reader.readLong(offset)) as P;
+    case 3:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -552,6 +562,140 @@ extension MonthlyGoalQueryFilter
       ));
     });
   }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition>
+      userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition>
+      userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition> userIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition>
+      userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterFilterCondition>
+      userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension MonthlyGoalQueryObject
@@ -592,6 +736,18 @@ extension MonthlyGoalQuerySortBy
       sortByTargetAmountMinorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'targetAmountMinor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterSortBy> sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
     });
   }
 }
@@ -635,6 +791,18 @@ extension MonthlyGoalQuerySortThenBy
       return query.addSortBy(r'targetAmountMinor', Sort.desc);
     });
   }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QAfterSortBy> thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension MonthlyGoalQueryWhereDistinct
@@ -650,6 +818,13 @@ extension MonthlyGoalQueryWhereDistinct
       distinctByTargetAmountMinor() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'targetAmountMinor');
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, MonthlyGoal, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -678,6 +853,12 @@ extension MonthlyGoalQueryProperty
   QueryBuilder<MonthlyGoal, int, QQueryOperations> targetAmountMinorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'targetAmountMinor');
+    });
+  }
+
+  QueryBuilder<MonthlyGoal, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
     });
   }
 }

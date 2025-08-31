@@ -7,9 +7,13 @@ import '../models/expense_models.dart';
 import '../services/isar_service.dart';
 
 class ExpenseRepository {
-  Future<List<ExpenseCategory>> getCategories() async {
+  Future<List<ExpenseCategory>> getCategories(String userId) async {
     final db = await IsarService.instance.db;
-    return db.expenseCategorys.where().sortBySortOrder().findAll();
+    return db.expenseCategorys
+        .filter()
+        .userIdEqualTo(userId)
+        .sortBySortOrder()
+        .findAll();
   }
 
   Future<void> upsertCategory(ExpenseCategory category) async {
@@ -47,11 +51,24 @@ class ExpenseRepository {
     });
   }
 
-  Future<List<Expense>> getExpensesForDateRange(DateTime start, DateTime end) async {
+  Future<List<Expense>> getExpensesForDateRange(
+    DateTime start,
+    DateTime end,
+    String userId,
+  ) async {
     final db = await IsarService.instance.db;
     final from = DateTime(start.year, start.month, start.day);
     final to = DateTime(end.year, end.month, end.day, 23, 59, 59);
-    return db.expenses.filter().dateBetween(from, to).findAll();
+    return db.expenses
+        .filter()
+        .dateBetween(from, to)
+        .and()
+        .userIdEqualTo(userId)
+        .findAll();
+  }
+
+  Future<Expense?> getExpenseById(Id id) async {
+    final db = await IsarService.instance.db;
+    return db.expenses.get(id);
   }
 }
-

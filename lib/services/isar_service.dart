@@ -19,110 +19,50 @@ class IsarService {
   Future<Isar> get db async {
     if (_isar != null) return _isar!;
     final dir = await getApplicationDocumentsDirectory();
-    _isar = await Isar.open(
-      [
-        ServiceTemplateSchema,
-        IncomeRecordSchema,
-        ExpenseCategorySchema,
-        ExpenseSchema,
-        TaxPlanSchema,
-        TaxPaymentSchema,
-        MonthlyGoalSchema,
-      ],
-      directory: dir.path,
-      inspector: kDebugMode,
-    );
-    
-    // Populate default data on first run
-    await _populateDefaultData();
-    
+    _isar = await Isar.open([
+      ServiceTemplateSchema,
+      IncomeRecordSchema,
+      ExpenseCategorySchema,
+      ExpenseSchema,
+      TaxPlanSchema,
+      TaxPaymentSchema,
+      MonthlyGoalSchema,
+    ], directory: dir.path);
     return _isar!;
   }
 
-  Future<void> _populateDefaultData() async {
-    try {
-      // Check if we already have expense categories
-      final existingCategories = await _isar!.expenseCategorys.where().findAll();
-      if (existingCategories.isEmpty) {
-        // Add default expense categories
+  Future<void> populateDefaultExpenseCategories(
+    Isar isar,
+    String userId,
+  ) async {
+    await isar.writeTxn(() async {
+      final count = await isar.expenseCategorys
+          .filter()
+          .userIdEqualTo(userId)
+          .count();
+      if (count == 0) {
         final defaultCategories = [
           ExpenseCategory()
             ..name = 'Rent'
-            ..color = 0xFFE57373
-            ..iconName = 'home'
-            ..sortOrder = 1,
-          ExpenseCategory()
-            ..name = 'Supplies'
-            ..color = 0xFF81C784
-            ..iconName = 'inventory'
-            ..sortOrder = 2,
+            ..userId = userId,
           ExpenseCategory()
             ..name = 'Utilities'
-            ..color = 0xFF64B5F6
-            ..iconName = 'bolt'
-            ..sortOrder = 3,
+            ..userId = userId,
+          ExpenseCategory()
+            ..name = 'Supplies'
+            ..userId = userId,
           ExpenseCategory()
             ..name = 'Marketing'
-            ..color = 0xFFFFB74D
-            ..iconName = 'campaign'
-            ..sortOrder = 4,
+            ..userId = userId,
           ExpenseCategory()
-            ..name = 'Insurance'
-            ..color = 0xFFBA68C8
-            ..iconName = 'security'
-            ..sortOrder = 5,
+            ..name = 'Salaries'
+            ..userId = userId,
           ExpenseCategory()
             ..name = 'Other'
-            ..color = 0xFF90A4AE
-            ..iconName = 'more_horiz'
-            ..sortOrder = 6,
+            ..userId = userId,
         ];
-
-        await _isar!.writeTxn(() async {
-          for (final category in defaultCategories) {
-            await _isar!.expenseCategorys.put(category);
-          }
-        });
-        debugPrint('Default expense categories populated');
+        await isar.expenseCategorys.putAll(defaultCategories);
       }
-
-      // Check if we have service templates
-      final existingTemplates = await _isar!.serviceTemplates.where().findAll();
-      if (existingTemplates.isEmpty) {
-        // Add default service templates
-        final defaultTemplates = [
-          ServiceTemplate()
-            ..name = 'Haircut'
-            ..defaultPriceMinor = 2500
-            ..active = true
-            ..sortOrder = 1,
-          ServiceTemplate()
-            ..name = 'Hair Styling'
-            ..defaultPriceMinor = 3500
-            ..active = true
-            ..sortOrder = 2,
-          ServiceTemplate()
-            ..name = 'Hair Coloring'
-            ..defaultPriceMinor = 8000
-            ..active = true
-            ..sortOrder = 3,
-          ServiceTemplate()
-            ..name = 'Beard Trim'
-            ..defaultPriceMinor = 1500
-            ..active = true
-            ..sortOrder = 4,
-        ];
-
-        await _isar!.writeTxn(() async {
-          for (final template in defaultTemplates) {
-            await _isar!.serviceTemplates.put(template);
-          }
-        });
-        debugPrint('Default service templates populated');
-      }
-    } catch (e) {
-      debugPrint('Error populating default data: $e');
-    }
+    });
   }
 }
-

@@ -36,6 +36,11 @@ const ServiceTemplateSchema = CollectionSchema(
       id: 3,
       name: r'sortOrder',
       type: IsarType.long,
+    ),
+    r'userId': PropertySchema(
+      id: 4,
+      name: r'userId',
+      type: IsarType.string,
     )
   },
   estimateSize: _serviceTemplateEstimateSize,
@@ -59,6 +64,7 @@ int _serviceTemplateEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -72,6 +78,7 @@ void _serviceTemplateSerialize(
   writer.writeLong(offsets[1], object.defaultPriceMinor);
   writer.writeString(offsets[2], object.name);
   writer.writeLong(offsets[3], object.sortOrder);
+  writer.writeString(offsets[4], object.userId);
 }
 
 ServiceTemplate _serviceTemplateDeserialize(
@@ -86,6 +93,7 @@ ServiceTemplate _serviceTemplateDeserialize(
   object.id = id;
   object.name = reader.readString(offsets[2]);
   object.sortOrder = reader.readLong(offsets[3]);
+  object.userId = reader.readString(offsets[4]);
   return object;
 }
 
@@ -104,6 +112,8 @@ P _serviceTemplateDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 3:
       return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -517,6 +527,142 @@ extension ServiceTemplateQueryFilter
       ));
     });
   }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterFilterCondition>
+      userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension ServiceTemplateQueryObject
@@ -578,6 +724,19 @@ extension ServiceTemplateQuerySortBy
       sortBySortOrderDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortOrder', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+      sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
     });
   }
 }
@@ -649,6 +808,19 @@ extension ServiceTemplateQuerySortThenBy
       return query.addSortBy(r'sortOrder', Sort.desc);
     });
   }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QAfterSortBy>
+      thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension ServiceTemplateQueryWhereDistinct
@@ -677,6 +849,13 @@ extension ServiceTemplateQueryWhereDistinct
       distinctBySortOrder() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'sortOrder');
+    });
+  }
+
+  QueryBuilder<ServiceTemplate, ServiceTemplate, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -713,6 +892,12 @@ extension ServiceTemplateQueryProperty
       return query.addPropertyName(r'sortOrder');
     });
   }
+
+  QueryBuilder<ServiceTemplate, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
+    });
+  }
 }
 
 // coverage:ignore-file
@@ -726,36 +911,36 @@ const IncomeRecordSchema = CollectionSchema(
   name: r'IncomeRecord',
   id: 4973069917103113377,
   properties: {
-    r'clientCount': PropertySchema(
-      id: 0,
-      name: r'clientCount',
-      type: IsarType.long,
-    ),
     r'date': PropertySchema(
-      id: 1,
+      id: 0,
       name: r'date',
       type: IsarType.dateTime,
     ),
     r'note': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'note',
       type: IsarType.string,
     ),
     r'services': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'services',
       type: IsarType.objectList,
-      target: r'IncomeServiceItem',
+      target: r'IncomeServiceCount',
     ),
     r'tipMinor': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'tipMinor',
       type: IsarType.long,
     ),
     r'totalMinor': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'totalMinor',
       type: IsarType.long,
+    ),
+    r'userId': PropertySchema(
+      id: 5,
+      name: r'userId',
+      type: IsarType.string,
     )
   },
   estimateSize: _incomeRecordEstimateSize,
@@ -765,7 +950,7 @@ const IncomeRecordSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {r'IncomeServiceItem': IncomeServiceItemSchema},
+  embeddedSchemas: {r'IncomeServiceCount': IncomeServiceCountSchema},
   getId: _incomeRecordGetId,
   getLinks: _incomeRecordGetLinks,
   attach: _incomeRecordAttach,
@@ -786,13 +971,14 @@ int _incomeRecordEstimateSize(
   }
   bytesCount += 3 + object.services.length * 3;
   {
-    final offsets = allOffsets[IncomeServiceItem]!;
+    final offsets = allOffsets[IncomeServiceCount]!;
     for (var i = 0; i < object.services.length; i++) {
       final value = object.services[i];
       bytesCount +=
-          IncomeServiceItemSchema.estimateSize(value, offsets, allOffsets);
+          IncomeServiceCountSchema.estimateSize(value, offsets, allOffsets);
     }
   }
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -802,17 +988,17 @@ void _incomeRecordSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.clientCount);
-  writer.writeDateTime(offsets[1], object.date);
-  writer.writeString(offsets[2], object.note);
-  writer.writeObjectList<IncomeServiceItem>(
-    offsets[3],
+  writer.writeDateTime(offsets[0], object.date);
+  writer.writeString(offsets[1], object.note);
+  writer.writeObjectList<IncomeServiceCount>(
+    offsets[2],
     allOffsets,
-    IncomeServiceItemSchema.serialize,
+    IncomeServiceCountSchema.serialize,
     object.services,
   );
-  writer.writeLong(offsets[4], object.tipMinor);
-  writer.writeLong(offsets[5], object.totalMinor);
+  writer.writeLong(offsets[3], object.tipMinor);
+  writer.writeLong(offsets[4], object.totalMinor);
+  writer.writeString(offsets[5], object.userId);
 }
 
 IncomeRecord _incomeRecordDeserialize(
@@ -822,19 +1008,19 @@ IncomeRecord _incomeRecordDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = IncomeRecord();
-  object.clientCount = reader.readLongOrNull(offsets[0]);
-  object.date = reader.readDateTime(offsets[1]);
+  object.date = reader.readDateTime(offsets[0]);
   object.id = id;
-  object.note = reader.readStringOrNull(offsets[2]);
-  object.services = reader.readObjectList<IncomeServiceItem>(
-        offsets[3],
-        IncomeServiceItemSchema.deserialize,
+  object.note = reader.readStringOrNull(offsets[1]);
+  object.services = reader.readObjectList<IncomeServiceCount>(
+        offsets[2],
+        IncomeServiceCountSchema.deserialize,
         allOffsets,
-        IncomeServiceItem(),
+        IncomeServiceCount(),
       ) ??
       [];
-  object.tipMinor = reader.readLong(offsets[4]);
-  object.totalMinor = reader.readLong(offsets[5]);
+  object.tipMinor = reader.readLong(offsets[3]);
+  object.totalMinor = reader.readLong(offsets[4]);
+  object.userId = reader.readString(offsets[5]);
   return object;
 }
 
@@ -846,23 +1032,23 @@ P _incomeRecordDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
-    case 1:
       return (reader.readDateTime(offset)) as P;
-    case 2:
+    case 1:
       return (reader.readStringOrNull(offset)) as P;
-    case 3:
-      return (reader.readObjectList<IncomeServiceItem>(
+    case 2:
+      return (reader.readObjectList<IncomeServiceCount>(
             offset,
-            IncomeServiceItemSchema.deserialize,
+            IncomeServiceCountSchema.deserialize,
             allOffsets,
-            IncomeServiceItem(),
+            IncomeServiceCount(),
           ) ??
           []) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
     case 4:
       return (reader.readLong(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -962,80 +1148,6 @@ extension IncomeRecordQueryWhere
 
 extension IncomeRecordQueryFilter
     on QueryBuilder<IncomeRecord, IncomeRecord, QFilterCondition> {
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'clientCount',
-      ));
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'clientCount',
-      ));
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'clientCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'clientCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'clientCount',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      clientCountBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'clientCount',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition> dateEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -1494,12 +1606,147 @@ extension IncomeRecordQueryFilter
       ));
     });
   }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition> userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition> userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition> userIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
+      userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension IncomeRecordQueryObject
     on QueryBuilder<IncomeRecord, IncomeRecord, QFilterCondition> {
   QueryBuilder<IncomeRecord, IncomeRecord, QAfterFilterCondition>
-      servicesElement(FilterQuery<IncomeServiceItem> q) {
+      servicesElement(FilterQuery<IncomeServiceCount> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'services');
     });
@@ -1511,19 +1758,6 @@ extension IncomeRecordQueryLinks
 
 extension IncomeRecordQuerySortBy
     on QueryBuilder<IncomeRecord, IncomeRecord, QSortBy> {
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> sortByClientCount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'clientCount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy>
-      sortByClientCountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'clientCount', Sort.desc);
-    });
-  }
-
   QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> sortByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'date', Sort.asc);
@@ -1572,23 +1806,22 @@ extension IncomeRecordQuerySortBy
       return query.addSortBy(r'totalMinor', Sort.desc);
     });
   }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension IncomeRecordQuerySortThenBy
     on QueryBuilder<IncomeRecord, IncomeRecord, QSortThenBy> {
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> thenByClientCount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'clientCount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy>
-      thenByClientCountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'clientCount', Sort.desc);
-    });
-  }
-
   QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> thenByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'date', Sort.asc);
@@ -1649,16 +1882,22 @@ extension IncomeRecordQuerySortThenBy
       return query.addSortBy(r'totalMinor', Sort.desc);
     });
   }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QAfterSortBy> thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension IncomeRecordQueryWhereDistinct
     on QueryBuilder<IncomeRecord, IncomeRecord, QDistinct> {
-  QueryBuilder<IncomeRecord, IncomeRecord, QDistinct> distinctByClientCount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'clientCount');
-    });
-  }
-
   QueryBuilder<IncomeRecord, IncomeRecord, QDistinct> distinctByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'date');
@@ -1683,6 +1922,13 @@ extension IncomeRecordQueryWhereDistinct
       return query.addDistinctBy(r'totalMinor');
     });
   }
+
+  QueryBuilder<IncomeRecord, IncomeRecord, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
+    });
+  }
 }
 
 extension IncomeRecordQueryProperty
@@ -1690,12 +1936,6 @@ extension IncomeRecordQueryProperty
   QueryBuilder<IncomeRecord, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
-    });
-  }
-
-  QueryBuilder<IncomeRecord, int?, QQueryOperations> clientCountProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'clientCount');
     });
   }
 
@@ -1711,7 +1951,7 @@ extension IncomeRecordQueryProperty
     });
   }
 
-  QueryBuilder<IncomeRecord, List<IncomeServiceItem>, QQueryOperations>
+  QueryBuilder<IncomeRecord, List<IncomeServiceCount>, QQueryOperations>
       servicesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'services');
@@ -1729,6 +1969,12 @@ extension IncomeRecordQueryProperty
       return query.addPropertyName(r'totalMinor');
     });
   }
+
+  QueryBuilder<IncomeRecord, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
+    });
+  }
 }
 
 // **************************************************************************
@@ -1738,29 +1984,34 @@ extension IncomeRecordQueryProperty
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const IncomeServiceItemSchema = Schema(
-  name: r'IncomeServiceItem',
-  id: 6193245509195291664,
+const IncomeServiceCountSchema = Schema(
+  name: r'IncomeServiceCount',
+  id: -7610465337632699282,
   properties: {
-    r'priceMinor': PropertySchema(
+    r'count': PropertySchema(
       id: 0,
+      name: r'count',
+      type: IsarType.long,
+    ),
+    r'priceMinor': PropertySchema(
+      id: 1,
       name: r'priceMinor',
       type: IsarType.long,
     ),
     r'serviceName': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'serviceName',
       type: IsarType.string,
     )
   },
-  estimateSize: _incomeServiceItemEstimateSize,
-  serialize: _incomeServiceItemSerialize,
-  deserialize: _incomeServiceItemDeserialize,
-  deserializeProp: _incomeServiceItemDeserializeProp,
+  estimateSize: _incomeServiceCountEstimateSize,
+  serialize: _incomeServiceCountSerialize,
+  deserialize: _incomeServiceCountDeserialize,
+  deserializeProp: _incomeServiceCountDeserializeProp,
 );
 
-int _incomeServiceItemEstimateSize(
-  IncomeServiceItem object,
+int _incomeServiceCountEstimateSize(
+  IncomeServiceCount object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -1769,29 +2020,31 @@ int _incomeServiceItemEstimateSize(
   return bytesCount;
 }
 
-void _incomeServiceItemSerialize(
-  IncomeServiceItem object,
+void _incomeServiceCountSerialize(
+  IncomeServiceCount object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.priceMinor);
-  writer.writeString(offsets[1], object.serviceName);
+  writer.writeLong(offsets[0], object.count);
+  writer.writeLong(offsets[1], object.priceMinor);
+  writer.writeString(offsets[2], object.serviceName);
 }
 
-IncomeServiceItem _incomeServiceItemDeserialize(
+IncomeServiceCount _incomeServiceCountDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = IncomeServiceItem();
-  object.priceMinor = reader.readLong(offsets[0]);
-  object.serviceName = reader.readString(offsets[1]);
+  final object = IncomeServiceCount();
+  object.count = reader.readLong(offsets[0]);
+  object.priceMinor = reader.readLong(offsets[1]);
+  object.serviceName = reader.readString(offsets[2]);
   return object;
 }
 
-P _incomeServiceItemDeserializeProp<P>(
+P _incomeServiceCountDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -1801,15 +2054,73 @@ P _incomeServiceItemDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readLong(offset)) as P;
+    case 2:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-extension IncomeServiceItemQueryFilter
-    on QueryBuilder<IncomeServiceItem, IncomeServiceItem, QFilterCondition> {
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+extension IncomeServiceCountQueryFilter
+    on QueryBuilder<IncomeServiceCount, IncomeServiceCount, QFilterCondition> {
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
+      countEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
+      countGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
+      countLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
+      countBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'count',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       priceMinorEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1819,7 +2130,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       priceMinorGreaterThan(
     int value, {
     bool include = false,
@@ -1833,7 +2144,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       priceMinorLessThan(
     int value, {
     bool include = false,
@@ -1847,7 +2158,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       priceMinorBetween(
     int lower,
     int upper, {
@@ -1865,7 +2176,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1879,7 +2190,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameGreaterThan(
     String value, {
     bool include = false,
@@ -1895,7 +2206,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameLessThan(
     String value, {
     bool include = false,
@@ -1911,7 +2222,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameBetween(
     String lower,
     String upper, {
@@ -1931,7 +2242,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -1945,7 +2256,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -1959,7 +2270,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1970,7 +2281,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1981,7 +2292,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1991,7 +2302,7 @@ extension IncomeServiceItemQueryFilter
     });
   }
 
-  QueryBuilder<IncomeServiceItem, IncomeServiceItem, QAfterFilterCondition>
+  QueryBuilder<IncomeServiceCount, IncomeServiceCount, QAfterFilterCondition>
       serviceNameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2002,5 +2313,5 @@ extension IncomeServiceItemQueryFilter
   }
 }
 
-extension IncomeServiceItemQueryObject
-    on QueryBuilder<IncomeServiceItem, IncomeServiceItem, QFilterCondition> {}
+extension IncomeServiceCountQueryObject
+    on QueryBuilder<IncomeServiceCount, IncomeServiceCount, QFilterCondition> {}

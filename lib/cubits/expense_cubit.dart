@@ -12,42 +12,45 @@ class ExpenseCubit extends Cubit<ExpenseState> {
   final ExpenseRepository repository;
   ExpenseCubit(this.repository) : super(ExpenseState.initial());
 
-  Future<void> loadCategories() async {
+  Future<void> loadCategories(String userId) async {
     emit(state.copyWith(loading: true));
-    final cats = await repository.getCategories();
+    final cats = await repository.getCategories(userId);
     emit(state.copyWith(loading: false, categories: cats));
   }
 
   Future<void> upsertCategory(ExpenseCategory c) async {
     await repository.upsertCategory(c);
-    await loadCategories();
+    await loadCategories(c.userId);
   }
 
   Future<void> deleteCategory(int id) async {
     await repository.deleteCategory(id);
-    await loadCategories();
+    // Note: We need userId to reload categories, but we don't have it here
+    // This will be handled by the UI layer
   }
 
   Future<void> addExpense(Expense e) async {
     await repository.addExpense(e);
-    await refreshRange(state.rangeStart, state.rangeEnd);
+    await refreshRange(state.rangeStart, state.rangeEnd, e.userId);
   }
 
   Future<void> updateExpense(Expense e) async {
     await repository.updateExpense(e);
-    await refreshRange(state.rangeStart, state.rangeEnd);
+    await refreshRange(state.rangeStart, state.rangeEnd, e.userId);
   }
 
-  Future<void> deleteExpense(int id) async {
+  Future<void> deleteExpense(int id, String userId) async {
     await repository.deleteExpense(id);
-    await refreshRange(state.rangeStart, state.rangeEnd);
+    // Immediately remove from state and refresh range
+    await refreshRange(state.rangeStart, state.rangeEnd, userId);
   }
 
-  Future<void> refreshRange(DateTime start, DateTime end) async {
+  Future<void> refreshRange(DateTime start, DateTime end, String userId) async {
     emit(state.copyWith(loading: true, rangeStart: start, rangeEnd: end));
-    final items = await repository.getExpensesForDateRange(start, end);
+    final items = await repository.getExpensesForDateRange(start, end, userId);
     final totalMinor = items.fold<int>(0, (sum, e) => sum + e.amountMinor);
-    emit(state.copyWith(loading: false, expenses: items, totalMinor: totalMinor));
+    emit(
+      state.copyWith(loading: false, expenses: items, totalMinor: totalMinor),
+    );
   }
 }
-

@@ -12,20 +12,20 @@ class GoalCubit extends Cubit<GoalState> {
   final GoalRepository repository;
   GoalCubit(this.repository) : super(const GoalState.initial());
 
-  Future<void> loadForMonth(String monthKey) async {
+  Future<void> loadForMonth(String monthKey, String userId) async {
     emit(state.copyWith(loading: true, monthKey: monthKey));
-    final goal = await repository.getGoalForMonth(monthKey);
+    final goal = await repository.getGoalForMonth(monthKey, userId);
     emit(state.copyWith(loading: false, goal: goal));
   }
 
   Future<void> upsert(MonthlyGoal goal) async {
     await repository.upsertGoal(goal);
-    await loadForMonth(goal.monthKey);
+    await loadForMonth(goal.monthKey, goal.userId);
   }
 
   Future<void> delete(int id) async {
     await repository.deleteGoal(id);
-    await loadForMonth(state.monthKey);
+    // Note: We need userId to reload goal, but we don't have it here
+    // This will be handled by the UI layer
   }
 }
-

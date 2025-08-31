@@ -14,9 +14,14 @@ class GoalRepository {
     });
   }
 
-  Future<MonthlyGoal?> getGoalForMonth(String monthKey) async {
+  Future<MonthlyGoal?> getGoalForMonth(String monthKey, String userId) async {
     final db = await IsarService.instance.db;
-    return db.monthlyGoals.filter().monthKeyEqualTo(monthKey).findFirst();
+    return db.monthlyGoals
+        .filter()
+        .monthKeyEqualTo(monthKey)
+        .and()
+        .userIdEqualTo(userId)
+        .findFirst();
   }
 
   Future<void> deleteGoal(Id id) async {
@@ -26,4 +31,3 @@ class GoalRepository {
     });
   }
 }
-

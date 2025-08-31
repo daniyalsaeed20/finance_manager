@@ -31,6 +31,11 @@ const TaxPlanSchema = CollectionSchema(
       id: 2,
       name: r'periodKey',
       type: IsarType.string,
+    ),
+    r'userId': PropertySchema(
+      id: 3,
+      name: r'userId',
+      type: IsarType.string,
     )
   },
   estimateSize: _taxPlanEstimateSize,
@@ -54,6 +59,7 @@ int _taxPlanEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.periodKey.length * 3;
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -66,6 +72,7 @@ void _taxPlanSerialize(
   writer.writeDateTime(offsets[0], object.dueDate);
   writer.writeDouble(offsets[1], object.estimatedRate);
   writer.writeString(offsets[2], object.periodKey);
+  writer.writeString(offsets[3], object.userId);
 }
 
 TaxPlan _taxPlanDeserialize(
@@ -79,6 +86,7 @@ TaxPlan _taxPlanDeserialize(
   object.estimatedRate = reader.readDouble(offsets[1]);
   object.id = id;
   object.periodKey = reader.readString(offsets[2]);
+  object.userId = reader.readString(offsets[3]);
   return object;
 }
 
@@ -94,6 +102,8 @@ P _taxPlanDeserializeProp<P>(
     case 1:
       return (reader.readDouble(offset)) as P;
     case 2:
+      return (reader.readString(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -502,6 +512,136 @@ extension TaxPlanQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterFilterCondition> userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension TaxPlanQueryObject
@@ -544,6 +684,18 @@ extension TaxPlanQuerySortBy on QueryBuilder<TaxPlan, TaxPlan, QSortBy> {
   QueryBuilder<TaxPlan, TaxPlan, QAfterSortBy> sortByPeriodKeyDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'periodKey', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterSortBy> sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
     });
   }
 }
@@ -597,6 +749,18 @@ extension TaxPlanQuerySortThenBy
       return query.addSortBy(r'periodKey', Sort.desc);
     });
   }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QAfterSortBy> thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension TaxPlanQueryWhereDistinct
@@ -617,6 +781,13 @@ extension TaxPlanQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'periodKey', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TaxPlan, TaxPlan, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -644,6 +815,12 @@ extension TaxPlanQueryProperty
   QueryBuilder<TaxPlan, String, QQueryOperations> periodKeyProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'periodKey');
+    });
+  }
+
+  QueryBuilder<TaxPlan, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
     });
   }
 }
@@ -677,6 +854,11 @@ const TaxPaymentSchema = CollectionSchema(
     r'note': PropertySchema(
       id: 3,
       name: r'note',
+      type: IsarType.string,
+    ),
+    r'userId': PropertySchema(
+      id: 4,
+      name: r'userId',
       type: IsarType.string,
     )
   },
@@ -712,6 +894,7 @@ int _taxPaymentEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -725,6 +908,7 @@ void _taxPaymentSerialize(
   writer.writeDateTime(offsets[1], object.date);
   writer.writeString(offsets[2], object.method);
   writer.writeString(offsets[3], object.note);
+  writer.writeString(offsets[4], object.userId);
 }
 
 TaxPayment _taxPaymentDeserialize(
@@ -739,6 +923,7 @@ TaxPayment _taxPaymentDeserialize(
   object.id = id;
   object.method = reader.readStringOrNull(offsets[2]);
   object.note = reader.readStringOrNull(offsets[3]);
+  object.userId = reader.readString(offsets[4]);
   return object;
 }
 
@@ -757,6 +942,8 @@ P _taxPaymentDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1308,6 +1495,137 @@ extension TaxPaymentQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition> userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterFilterCondition>
+      userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension TaxPaymentQueryObject
@@ -1363,6 +1681,18 @@ extension TaxPaymentQuerySortBy
   QueryBuilder<TaxPayment, TaxPayment, QAfterSortBy> sortByNoteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'note', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterSortBy> sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
     });
   }
 }
@@ -1428,6 +1758,18 @@ extension TaxPaymentQuerySortThenBy
       return query.addSortBy(r'note', Sort.desc);
     });
   }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QAfterSortBy> thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension TaxPaymentQueryWhereDistinct
@@ -1455,6 +1797,13 @@ extension TaxPaymentQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'note', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TaxPayment, TaxPayment, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1488,6 +1837,12 @@ extension TaxPaymentQueryProperty
   QueryBuilder<TaxPayment, String?, QQueryOperations> noteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'note');
+    });
+  }
+
+  QueryBuilder<TaxPayment, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
     });
   }
 }

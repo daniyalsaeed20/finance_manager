@@ -11,6 +11,9 @@ class TaxPlan {
   late String periodKey; // e.g. 2025-01 for month or 2025-Q1 for quarter
   double estimatedRate = 0.0; // 0.0 to 1.0
   DateTime? dueDate;
+
+  // User ID for data isolation
+  late String userId;
 }
 
 @collection
@@ -20,5 +23,7 @@ class TaxPayment {
   late int amountMinor;
   String? method;
   String? note;
-}
 
+  // User ID for data isolation
+  late String userId;
+}

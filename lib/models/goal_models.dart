@@ -17,5 +17,7 @@ class MonthlyGoal {
   late String monthKey; // e.g. 2025-01
   late int targetAmountMinor;
   List<GoalStrategyItem> strategies = [];
-}
 
+  // User ID for data isolation
+  late String userId;
+}

@@ -36,6 +36,11 @@ const ExpenseCategorySchema = CollectionSchema(
       id: 3,
       name: r'sortOrder',
       type: IsarType.long,
+    ),
+    r'userId': PropertySchema(
+      id: 4,
+      name: r'userId',
+      type: IsarType.string,
     )
   },
   estimateSize: _expenseCategoryEstimateSize,
@@ -65,6 +70,7 @@ int _expenseCategoryEstimateSize(
     }
   }
   bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.userId.length * 3;
   return bytesCount;
 }
 
@@ -78,6 +84,7 @@ void _expenseCategorySerialize(
   writer.writeString(offsets[1], object.iconName);
   writer.writeString(offsets[2], object.name);
   writer.writeLong(offsets[3], object.sortOrder);
+  writer.writeString(offsets[4], object.userId);
 }
 
 ExpenseCategory _expenseCategoryDeserialize(
@@ -92,6 +99,7 @@ ExpenseCategory _expenseCategoryDeserialize(
   object.id = id;
   object.name = reader.readString(offsets[2]);
   object.sortOrder = reader.readLong(offsets[3]);
+  object.userId = reader.readString(offsets[4]);
   return object;
 }
 
@@ -110,6 +118,8 @@ P _expenseCategoryDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 3:
       return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -685,6 +695,142 @@ extension ExpenseCategoryQueryFilter
       ));
     });
   }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterFilterCondition>
+      userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension ExpenseCategoryQueryObject
@@ -746,6 +892,19 @@ extension ExpenseCategoryQuerySortBy
       sortBySortOrderDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortOrder', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterSortBy>
+      sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
     });
   }
 }
@@ -817,6 +976,19 @@ extension ExpenseCategoryQuerySortThenBy
       return query.addSortBy(r'sortOrder', Sort.desc);
     });
   }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QAfterSortBy>
+      thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
 }
 
 extension ExpenseCategoryQueryWhereDistinct
@@ -845,6 +1017,13 @@ extension ExpenseCategoryQueryWhereDistinct
       distinctBySortOrder() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'sortOrder');
+    });
+  }
+
+  QueryBuilder<ExpenseCategory, ExpenseCategory, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -880,6 +1059,12 @@ extension ExpenseCategoryQueryProperty
       return query.addPropertyName(r'sortOrder');
     });
   }
+
+  QueryBuilder<ExpenseCategory, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
+    });
+  }
 }
 
 // coverage:ignore-file
@@ -913,8 +1098,13 @@ const ExpenseSchema = CollectionSchema(
       name: r'note',
       type: IsarType.string,
     ),
-    r'vendor': PropertySchema(
+    r'userId': PropertySchema(
       id: 4,
+      name: r'userId',
+      type: IsarType.string,
+    ),
+    r'vendor': PropertySchema(
+      id: 5,
       name: r'vendor',
       type: IsarType.string,
     )
@@ -945,6 +1135,7 @@ int _expenseEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.userId.length * 3;
   {
     final value = object.vendor;
     if (value != null) {
@@ -964,7 +1155,8 @@ void _expenseSerialize(
   writer.writeLong(offsets[1], object.categoryId);
   writer.writeDateTime(offsets[2], object.date);
   writer.writeString(offsets[3], object.note);
-  writer.writeString(offsets[4], object.vendor);
+  writer.writeString(offsets[4], object.userId);
+  writer.writeString(offsets[5], object.vendor);
 }
 
 Expense _expenseDeserialize(
@@ -979,7 +1171,8 @@ Expense _expenseDeserialize(
   object.date = reader.readDateTime(offsets[2]);
   object.id = id;
   object.note = reader.readStringOrNull(offsets[3]);
-  object.vendor = reader.readStringOrNull(offsets[4]);
+  object.userId = reader.readString(offsets[4]);
+  object.vendor = reader.readStringOrNull(offsets[5]);
   return object;
 }
 
@@ -999,6 +1192,8 @@ P _expenseDeserializeProp<P>(
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1451,6 +1646,136 @@ extension ExpenseQueryFilter
     });
   }
 
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'userId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'userId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'userId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> userIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userId',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Expense, Expense, QAfterFilterCondition> vendorIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1653,6 +1978,18 @@ extension ExpenseQuerySortBy on QueryBuilder<Expense, Expense, QSortBy> {
     });
   }
 
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> sortByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Expense, Expense, QAfterSortBy> sortByVendor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'vendor', Sort.asc);
@@ -1728,6 +2065,18 @@ extension ExpenseQuerySortThenBy
     });
   }
 
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByUserId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterSortBy> thenByUserIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'userId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Expense, Expense, QAfterSortBy> thenByVendor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'vendor', Sort.asc);
@@ -1768,6 +2117,13 @@ extension ExpenseQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Expense, Expense, QDistinct> distinctByUserId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Expense, Expense, QDistinct> distinctByVendor(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1805,6 +2161,12 @@ extension ExpenseQueryProperty
   QueryBuilder<Expense, String?, QQueryOperations> noteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'note');
+    });
+  }
+
+  QueryBuilder<Expense, String, QQueryOperations> userIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'userId');
     });
   }
 

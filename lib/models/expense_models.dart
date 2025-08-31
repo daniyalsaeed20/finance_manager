@@ -13,6 +13,9 @@ class ExpenseCategory {
   int? color;
   String? iconName;
   int sortOrder = 0;
+
+  // User ID for data isolation
+  late String userId;
 }
 
 @collection
@@ -24,5 +27,7 @@ class Expense {
   late int amountMinor; // currency minor units
   String? vendor;
   String? note;
-}
 
+  // User ID for data isolation
+  late String userId;
+}

@@ -56,19 +56,14 @@ dependencies:
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   flutter_secure_storage: ^9.2.2
-  # Local notifications & timezones
-  flutter_local_notifications: ^17.2.3
-  timezone: ^0.9.4
+
   # Charts & exports
   fl_chart: ^0.69.0
   csv: ^6.0.0
   pdf: ^3.11.1
   printing: ^5.13.4
   share_plus: ^10.0.2
-  # Biometrics / App lock
-  local_auth: ^2.3.0
-  crypto: ^3.0.5
-  uuid: ^4.5.1
+
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../repositories/auth_repository.dart';
+import '../../services/user_manager.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -23,7 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
     final auth = context.read<AuthRepository>();
     return Scaffold(
       appBar: AppBar(title: Text(_isSignUp ? 'Create Account' : 'Sign In')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -53,16 +54,22 @@ class _AuthScreenState extends State<AuthScreen> {
                         setState(() => _loading = true);
                         try {
                           if (_isSignUp) {
-                            await auth.signUp(
+                            final user = await auth.signUp(
                               name: _nameController.text.trim(),
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
+                            if (user != null) {
+                              UserManager.instance.setCurrentUserId(user.uid);
+                            }
                           } else {
-                            await auth.signIn(
+                            final user = await auth.signIn(
                               email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
+                            if (user != null) {
+                              UserManager.instance.setCurrentUserId(user.uid);
+                            }
                           }
                           if (context.mounted) context.go('/home');
                         } catch (e) {
@@ -80,12 +87,13 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             TextButton(
               onPressed: () => setState(() => _isSignUp = !_isSignUp),
-              child: Text(_isSignUp ? 'Have an account? Sign in' : 'Create an account'),
-            )
+              child: Text(
+                _isSignUp ? 'Have an account? Sign in' : 'Create an account',
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
