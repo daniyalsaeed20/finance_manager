@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../cubits/income_cubit.dart';
 import '../../cubits/expense_cubit.dart';
 import '../../cubits/goal_cubit.dart';
-import '../../models/income_models.dart';
+import '../../cubits/income_cubit.dart';
 import '../../models/expense_models.dart';
 import '../../models/goal_models.dart';
+import '../../models/income_models.dart';
 import '../../services/user_manager.dart';
-import '../../utils/formatting.dart';
 import '../../utils/amount_input_formatter.dart';
+import '../../utils/formatting.dart';
 
 class BusinessManagementScreen extends StatefulWidget {
   const BusinessManagementScreen({super.key});

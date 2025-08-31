@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../cubits/expense_cubit.dart';
 import '../../models/expense_models.dart';
-import '../../utils/formatting.dart';
-import '../../utils/amount_input_formatter.dart';
 import '../../services/user_manager.dart';
+import '../../utils/amount_input_formatter.dart';
+import '../../utils/formatting.dart';
 
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
