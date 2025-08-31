@@ -150,20 +150,27 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () {
-                  if (_range != null) {
-                    _loadDataForRange();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Reports refreshed!'),
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                      ),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.refresh),
-                tooltip: 'Refresh Reports',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      if (_range != null) {
+                        _loadDataForRange();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Reports refreshed!'),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.refresh),
+                    tooltip: 'Refresh Reports',
+                  ),
+                ],
               ),
               Text(
                 'Select date range',
