@@ -145,33 +145,26 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return BlocProvider.value(
       value: _dashboardCubit,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Financial Reports'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          actions: [
-            IconButton(
-              onPressed: () {
-                if (_range != null) {
-                  _loadDataForRange();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Reports refreshed!'),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.refresh),
-              tooltip: 'Refresh Reports',
-            ),
-          ],
-        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                onPressed: () {
+                  if (_range != null) {
+                    _loadDataForRange();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Reports refreshed!'),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Refresh Reports',
+              ),
               Text(
                 'Select date range',
                 style: Theme.of(context).textTheme.titleMedium,

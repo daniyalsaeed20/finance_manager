@@ -263,8 +263,9 @@ class _ExportedFilesScreenState extends State<ExportedFilesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exported Files'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
