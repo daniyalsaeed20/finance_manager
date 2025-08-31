@@ -185,26 +185,17 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                             context,
                                           ).textTheme.labelMedium,
                                         ),
-                                        FutureBuilder<String>(
-                                          future: formatCurrency(monthlyIncome),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Text(
-                                                snapshot.data!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium
-                                                    ?.copyWith(
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              );
-                                            }
-                                            return const Text('Loading...');
-                                          },
+                                        Text(
+                                          formatCurrencyAmount(monthlyIncome),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -223,28 +214,17 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                             context,
                                           ).textTheme.labelMedium,
                                         ),
-                                        FutureBuilder<String>(
-                                          future: formatCurrency(
-                                            monthlyExpenses,
-                                          ),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Text(
-                                                snapshot.data!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium
-                                                    ?.copyWith(
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              );
-                                            }
-                                            return const Text('Loading...');
-                                          },
+                                        Text(
+                                          formatCurrencyAmount(monthlyExpenses),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -263,29 +243,19 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                             context,
                                           ).textTheme.labelMedium,
                                         ),
-                                        FutureBuilder<String>(
-                                          future: formatCurrency(
+                                        Text(
+                                          formatCurrencyAmount(
                                             monthlyNetProfit,
                                           ),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Text(
-                                                snapshot.data!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium
-                                                    ?.copyWith(
-                                                      color:
-                                                          monthlyNetProfit >= 0
-                                                          ? Colors.green
-                                                          : Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              );
-                                            }
-                                            return const Text('Loading...');
-                                          },
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                color: monthlyNetProfit >= 0
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -302,9 +272,6 @@ class _TaxesScreenState extends State<TaxesScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primaryContainer,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(

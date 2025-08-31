@@ -293,7 +293,7 @@ class _ServicesTabState extends State<_ServicesTab> {
 
   void _editService(ServiceTemplate template) {
     _nameController.text = template.name;
-    _priceController.text = (template.defaultPriceMinor / 100).toString();
+    _priceController.text = template.defaultPriceMinor.toString();
     _editingTemplate = template; // Set the tracking variable
     setState(() {});
   }

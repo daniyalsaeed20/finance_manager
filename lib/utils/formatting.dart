@@ -84,3 +84,40 @@ String formatMonthYear(DateTime date) {
 
 String monthKeyFromDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}';
+
+// Number formatting for K, M, B notation
+String formatNumber(int number) {
+  if (number < 1000) {
+    return number.toString();
+  } else if (number < 1000000) {
+    final k = number / 1000.0;
+    return '${k.toStringAsFixed(k.truncateToDouble() == k ? 0 : 1)}K';
+  } else if (number < 1000000000) {
+    final m = number / 1000000.0;
+    return '${m.toStringAsFixed(m.truncateToDouble() == m ? 0 : 1)}M';
+  } else {
+    final b = number / 1000000000.0;
+    return '${b.toStringAsFixed(b.truncateToDouble() == b ? 0 : 1)}B';
+  }
+}
+
+// Currency-specific number formatting
+String formatCurrencyAmount(int amount) {
+  if (amount < 1000) {
+    return amount.toString();
+  } else if (amount < 1000000) {
+    final k = amount / 1000.0;
+    return '${k.toStringAsFixed(k.truncateToDouble() == k ? 0 : 1)}K';
+  } else if (amount < 1000000000) {
+    final m = amount / 1000000.0;
+    return '${m.toStringAsFixed(m.truncateToDouble() == m ? 0 : 1)}M';
+  } else {
+    final b = amount / 1000000000.0;
+    return '${b.toStringAsFixed(b.truncateToDouble() == b ? 0 : 1)}B';
+  }
+}
+
+// Goal amount formatting (uses formatNumber)
+String formatGoalAmount(int amount) {
+  return formatNumber(amount);
+}

@@ -162,7 +162,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
             // Monthly Goal Management Notice
             Card(
-              color: Colors.blue.shade50,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -172,7 +171,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: Colors.blue.shade700,
+                          color: Theme.of(context).colorScheme.primary,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
@@ -180,7 +179,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                           'Monthly Goal Management',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: Colors.blue.shade700,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -190,7 +189,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     Text(
                       'Monthly goals are now managed in the Business Manager. Go to Business Manager → Monthly Goals to set or modify your savings goals.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.blue.shade700,
+                        color: Theme.of(context).colorScheme.primary,
                         height: 1.4,
                       ),
                     ),
@@ -207,8 +206,12 @@ class _GoalsScreenState extends State<GoalsScreen> {
                         icon: const Icon(Icons.business),
                         label: const Text('Go to Business Manager'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade700,
-                          foregroundColor: Colors.white,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          foregroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onPrimary,
                         ),
                       ),
                     ),
@@ -221,7 +224,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
             // How It Works Tip
             Card(
-              color: Colors.blue.shade50,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -231,7 +233,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       children: [
                         Icon(
                           Icons.lightbulb_outline,
-                          color: Colors.blue.shade700,
+                          color: Theme.of(context).colorScheme.primary,
                           size: 20,
                         ),
                         const SizedBox(width: 8),
@@ -239,7 +241,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                           'How This Screen Works',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: Colors.blue.shade700,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -253,7 +255,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       '• Both values show \$0 when there\'s no surplus\n'
                       '• Strategies help you plan how to achieve your goals',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.blue.shade700,
+                        color: Theme.of(context).colorScheme.primary,
                         height: 1.4,
                       ),
                     ),
@@ -322,7 +324,13 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                     value: progress.clamp(0.0, 1.0),
                                     backgroundColor: Colors.grey[300],
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                      isAchieved ? Colors.green : Colors.blue,
+                                      isAchieved
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
                                     ),
                                     minHeight: 10,
                                   ),
@@ -360,7 +368,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                     children: [
                                       Icon(
                                         Icons.trending_up,
-                                        color: Colors.green,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary,
                                         size: 32,
                                       ),
                                       const SizedBox(height: 8),
@@ -371,23 +381,17 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       const SizedBox(height: 4),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(monthlyIncome),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                      Text(
+                                        formatCurrencyAmount(monthlyIncome),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.tertiary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -402,7 +406,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                     children: [
                                       Icon(
                                         Icons.trending_down,
-                                        color: Colors.red,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
                                         size: 32,
                                       ),
                                       const SizedBox(height: 8),
@@ -413,23 +419,17 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       const SizedBox(height: 4),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(monthlyExpenses),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                      Text(
+                                        formatCurrencyAmount(monthlyExpenses),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.error,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -448,7 +448,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             (monthlyIncome - monthlyExpenses)
                                                     .clamp(0, double.infinity) >
                                                 0
-                                            ? Colors.blue
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
                                             : Colors.grey,
                                         size: 32,
                                       ),
@@ -460,33 +462,30 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       const SizedBox(height: 4),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(
+                                      Text(
+                                        formatCurrencyAmount(
                                           (monthlyIncome - monthlyExpenses)
                                               .clamp(0, double.infinity)
                                               .toInt(),
                                         ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            final savings =
-                                                (monthlyIncome -
-                                                        monthlyExpenses)
-                                                    .clamp(0, double.infinity);
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
-                                                    color: savings > 0
-                                                        ? Colors.blue
-                                                        : Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color:
+                                                  (monthlyIncome -
+                                                              monthlyExpenses)
+                                                          .clamp(
+                                                            0,
+                                                            double.infinity,
+                                                          ) >
+                                                      0
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -512,29 +511,21 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       const SizedBox(height: 4),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(
+                                      Text(
+                                        formatCurrencyAmount(
                                           (monthlyIncome -
                                                   monthlyExpenses -
                                                   goal.targetAmountMinor)
                                               .clamp(0, double.infinity)
                                               .toInt(),
                                         ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
-                                                    color: Colors.orange,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              color: Colors.orange,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -573,14 +564,18 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                   value: monthlyIncome
                                                       .toDouble(),
                                                   title: '', // Remove label
-                                                  color: Colors.green,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.tertiary,
                                                   radius: 60,
                                                 ),
                                                 PieChartSectionData(
                                                   value: monthlyExpenses
                                                       .toDouble(),
                                                   title: '', // Remove label
-                                                  color: Colors.red,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.error,
                                                   radius: 60,
                                                 ),
                                                 PieChartSectionData(
@@ -593,7 +588,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                           )
                                                           .toDouble(),
                                                   title: '', // Remove label
-                                                  color: Colors.blue,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
                                                   radius: 60,
                                                 ),
                                                 PieChartSectionData(
@@ -749,7 +746,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                               double.infinity,
                                                             ) >
                                                         0
-                                                    ? Colors.blue
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
                                                     : Colors.grey,
                                                 width: 25,
                                                 borderRadius:
@@ -764,7 +763,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             barRods: [
                                               BarChartRodData(
                                                 toY: monthlyIncome.toDouble(),
-                                                color: Colors.green,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.tertiary,
                                                 width: 25,
                                                 borderRadius:
                                                     const BorderRadius.vertical(
@@ -778,7 +779,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             barRods: [
                                               BarChartRodData(
                                                 toY: monthlyExpenses.toDouble(),
-                                                color: Colors.red,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.error,
                                                 width: 25,
                                                 borderRadius:
                                                     const BorderRadius.vertical(
@@ -944,7 +947,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                color: Colors.green,
+                color: Theme.of(context).colorScheme.tertiary,
                 shape: BoxShape.circle,
               ),
             ),
@@ -967,7 +970,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.error,
                 shape: BoxShape.circle,
               ),
             ),
@@ -990,7 +993,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               width: 10,
               height: 10,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Theme.of(context).colorScheme.primary,
                 shape: BoxShape.circle,
               ),
             ),

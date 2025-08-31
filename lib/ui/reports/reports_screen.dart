@@ -120,27 +120,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           context,
                                         ).textTheme.labelMedium,
                                       ),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(
+                                      Text(
+                                        formatCurrencyAmount(
                                           state.totalIncomeMinor,
                                         ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge
-                                                  ?.copyWith(
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -160,27 +152,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           context,
                                         ).textTheme.labelMedium,
                                       ),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(
+                                      Text(
+                                        formatCurrencyAmount(
                                           state.totalExpenseMinor,
                                         ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge
-                                                  ?.copyWith(
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -200,25 +184,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           context,
                                         ).textTheme.labelMedium,
                                       ),
-                                      FutureBuilder<String>(
-                                        future: formatCurrency(state.netMinor),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge
-                                                  ?.copyWith(
-                                                    color: state.netMinor < 0
-                                                        ? Colors.red
-                                                        : Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            );
-                                          }
-                                          return const Text('Loading...');
-                                        },
+                                      Text(
+                                        formatCurrencyAmount(state.netMinor),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              color: state.netMinor < 0
+                                                  ? Colors.red
+                                                  : Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -272,7 +248,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     color: Colors.green,
                                     value: income.toDouble(),
                                     title:
-                                        'Income\n${(income / 100).toStringAsFixed(0)}',
+                                        'Income\n${formatCurrencyAmount(income)}',
                                     radius: 60,
                                     titleStyle: const TextStyle(
                                       fontSize: 12,
@@ -285,7 +261,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     color: Colors.red,
                                     value: expenses.toDouble(),
                                     title:
-                                        'Expenses\n${(expenses / 100).toStringAsFixed(0)}',
+                                        'Expenses\n${formatCurrencyAmount(expenses)}',
                                     radius: 60,
                                     titleStyle: const TextStyle(
                                       fontSize: 12,
@@ -360,7 +336,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             service.serviceName,
-            formatCurrencyMinor(service.priceMinor),
+            formatCurrencyAmount(service.priceMinor),
             record.note ?? '',
           ]);
         }
@@ -369,7 +345,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             'Tip',
-            formatCurrencyMinor(record.tipMinor),
+            formatCurrencyAmount(record.tipMinor),
             record.note ?? '',
           ]);
         }
@@ -395,7 +371,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           formatShortDate(expense.date),
           'Expense',
           category.name,
-          formatCurrencyMinor(expense.amountMinor),
+          formatCurrencyAmount(expense.amountMinor),
           expense.note ?? '',
         ]);
       }
@@ -446,7 +422,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             service.serviceName,
-            formatCurrencyMinor(service.priceMinor),
+            formatCurrencyAmount(service.priceMinor),
             record.note ?? '',
           ]);
         }
@@ -455,7 +431,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             'Tip',
-            formatCurrencyMinor(record.tipMinor),
+            formatCurrencyAmount(record.tipMinor),
             record.note ?? '',
           ]);
         }
@@ -481,7 +457,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           formatShortDate(expense.date),
           'Expense',
           category.name,
-          formatCurrencyMinor(expense.amountMinor),
+          formatCurrencyAmount(expense.amountMinor),
           expense.note ?? '',
         ]);
       }

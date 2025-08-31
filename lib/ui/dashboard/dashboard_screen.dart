@@ -227,7 +227,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildNoGoalMessage() {
     return Card(
-      color: Colors.blue.shade50,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -237,14 +236,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Icon(
                   Icons.flag_outlined,
-                  color: Colors.blue.shade700,
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'No Monthly Goal Set',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.blue.shade700,
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -254,7 +253,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Text(
               'Set a monthly savings goal to track your financial progress and stay motivated!',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.blue.shade700,
+                color: Theme.of(context).colorScheme.primary,
                 height: 1.4,
               ),
             ),
@@ -269,8 +268,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: const Icon(Icons.add),
                 label: const Text('Set Monthly Goal'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade700,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ),
@@ -295,9 +294,12 @@ class _KpiCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
-            formatCurrencyHighlighted(
-              amount,
-              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+            Text(
+              formatCurrencyAmount(amount),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

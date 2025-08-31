@@ -158,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   ListTile(
                     title: const Text('Developer'),
-                    subtitle: const Text('Barber & Salon Finance Manager'),
+                    subtitle: const Text('Finance Manager'),
                     leading: const Icon(Icons.person_outline),
                   ),
                 ],

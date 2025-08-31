@@ -100,12 +100,12 @@ class _HomeShellState extends State<HomeShell> {
         case '/home/reports':
           return 'Reports';
         default:
-          return 'Financial Manager';
+          return 'Finance Manager';
       }
     } catch (e) {
       // If GoRouterState is not available yet, return default title
       debugPrint('⚠️ AppBar title update skipped: $e');
-      return 'Financial Manager';
+      return 'Finance Manager';
     }
   }
 
@@ -144,7 +144,7 @@ class _HomeShellState extends State<HomeShell> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Financial Manager',
+                  'Finance Manager',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
