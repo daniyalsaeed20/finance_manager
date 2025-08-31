@@ -36,6 +36,44 @@ subprojects {
                     ext.namespace = "dev.isar.isar_flutter_libs"
                     println("Applied namespace to subproject $name: ${ext.namespace}")
                 }
+                
+                // Add additional configuration to fix resource linking issues
+                ext.buildTypes {
+                    getByName("release") {
+                        isMinifyEnabled = false
+                        isShrinkResources = false
+                    }
+                }
+                
+                ext.lint {
+                    disable += "MissingTranslation"
+                    checkReleaseBuilds = false
+                }
+                
+                // Add packaging options to fix resource conflicts
+                ext.packagingOptions {
+                    resources {
+                        excludes += "/META-INF/{AL2.0,LGPL2.1}"
+                        pickFirsts += "**/libc++_shared.so"
+                    }
+                }
+                
+                // Force specific compile options to avoid resource conflicts
+                ext.compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_11
+                    targetCompatibility = JavaVersion.VERSION_11
+                }
+                
+                // Add specific resource filtering
+                ext.androidResources {
+                    ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~"
+                }
+                
+                // Force specific SDK versions for the subproject
+                ext.compileSdk = 34
+                ext.defaultConfig {
+                    targetSdk = 34
+                }
             }
         }
     }

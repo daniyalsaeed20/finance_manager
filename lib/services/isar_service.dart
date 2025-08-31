@@ -1,14 +1,13 @@
 // isar_service.dart
 // Centralized Isar initialization, schema registration, and common helpers.
 
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 
-import '../models/income_models.dart';
 import '../models/expense_models.dart';
-import '../models/tax_models.dart';
 import '../models/goal_models.dart';
+import '../models/income_models.dart';
+import '../models/tax_models.dart';
 
 class IsarService {
   IsarService._();
