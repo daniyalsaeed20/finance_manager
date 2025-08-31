@@ -96,7 +96,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          label, 
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ],
     );
   }
@@ -506,24 +512,40 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                       getTitlesWidget: (value, meta) {
                                         switch (value.toInt()) {
                                           case 0:
-                                            return const Text(
+                                            return Text(
                                               'Inc',
-                                              style: TextStyle(fontSize: 10),
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Theme.of(context).colorScheme.onSurface,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             );
                                           case 1:
-                                            return const Text(
+                                            return Text(
                                               'Exp',
-                                              style: TextStyle(fontSize: 10),
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Theme.of(context).colorScheme.onSurface,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             );
                                           case 2:
-                                            return const Text(
+                                            return Text(
                                               'Net',
-                                              style: TextStyle(fontSize: 10),
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Theme.of(context).colorScheme.onSurface,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             );
                                           case 3:
-                                            return const Text(
+                                            return Text(
                                               'Tax',
-                                              style: TextStyle(fontSize: 10),
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Theme.of(context).colorScheme.onSurface,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             );
                                           default:
                                             return const Text('');
@@ -544,10 +566,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           4,
                                       reservedSize: 50,
                                       getTitlesWidget: (value, meta) {
-                                        return Text(
-                                          formatCurrencySync(value.toInt()),
-                                          style: const TextStyle(fontSize: 10),
-                                        );
+                                                                                 return Text(
+                                           formatCurrencySync(value.toInt()),
+                                           style: TextStyle(
+                                             fontSize: 10,
+                                             color: Theme.of(context).colorScheme.onSurface,
+                                             fontWeight: FontWeight.w500,
+                                           ),
+                                         );
                                       },
                                     ),
                                   ),
@@ -555,9 +581,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 borderData: FlBorderData(
                                   show: true,
                                   border: Border.all(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.outline.withOpacity(0.5),
+                                    color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                                   ),
                                 ),
                                 minX: 0,
@@ -660,10 +684,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         return LineTooltipItem(
                                           '$label\n${formatCurrencySync(touchedSpot.y.toInt())}',
                                           TextStyle(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                            color: Theme.of(context).colorScheme.onSurface,
                                             fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            shadows: [
+                                              Shadow(
+                                                offset: const Offset(0, 1),
+                                                blurRadius: 2,
+                                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.3),
+                                              ),
+                                            ],
                                           ),
                                         );
                                       }).toList();
@@ -885,13 +915,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           (c) => c.id == expense.categoryId,
           orElse: () => ExpenseCategory()..name = 'Unknown',
         );
-                  pdfData.add([
-            formatShortDate(expense.date),
-            'Expense',
-            category.name,
-            formatCurrencySync(expense.amountMinor),
-            expense.note ?? '',
-          ]);
+        pdfData.add([
+          formatShortDate(expense.date),
+          'Expense',
+          category.name,
+          formatCurrencySync(expense.amountMinor),
+          expense.note ?? '',
+        ]);
       }
 
       // Generate and save PDF
