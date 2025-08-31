@@ -97,7 +97,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ),
         const SizedBox(width: 4),
         Text(
-          label, 
+          label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w500,
@@ -516,7 +516,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               'Inc',
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: Theme.of(context).colorScheme.onSurface,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             );
@@ -525,7 +527,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               'Exp',
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: Theme.of(context).colorScheme.onSurface,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             );
@@ -534,7 +538,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               'Net',
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: Theme.of(context).colorScheme.onSurface,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             );
@@ -543,7 +549,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                               'Tax',
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: Theme.of(context).colorScheme.onSurface,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             );
@@ -566,14 +574,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           4,
                                       reservedSize: 50,
                                       getTitlesWidget: (value, meta) {
-                                                                                 return Text(
-                                           formatCurrencySync(value.toInt()),
-                                           style: TextStyle(
-                                             fontSize: 10,
-                                             color: Theme.of(context).colorScheme.onSurface,
-                                             fontWeight: FontWeight.w500,
-                                           ),
-                                         );
+                                        return Text(
+                                          formatCurrencySync(value.toInt()),
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),
@@ -581,7 +591,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 borderData: FlBorderData(
                                   show: true,
                                   border: Border.all(
-                                    color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline.withOpacity(0.3),
                                   ),
                                 ),
                                 minX: 0,
@@ -681,17 +693,39 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           default:
                                             label = '';
                                         }
+                                        // Get the color that matches the line
+                                        Color tooltipColor;
+                                        switch (touchedSpot.x.toInt()) {
+                                          case 0:
+                                            tooltipColor = Theme.of(context).colorScheme.tertiary;
+                                            break;
+                                          case 1:
+                                            tooltipColor = Theme.of(context).colorScheme.error;
+                                            break;
+                                          case 2:
+                                            tooltipColor = Theme.of(context).colorScheme.primary;
+                                            break;
+                                          case 3:
+                                            tooltipColor = Theme.of(context).colorScheme.secondary;
+                                            break;
+                                          default:
+                                            tooltipColor = Theme.of(context).colorScheme.primary;
+                                        }
+                                        
                                         return LineTooltipItem(
                                           '$label\n${formatCurrencySync(touchedSpot.y.toInt())}',
                                           TextStyle(
-                                            color: Theme.of(context).colorScheme.onSurface,
+                                            color: tooltipColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                             shadows: [
                                               Shadow(
                                                 offset: const Offset(0, 1),
                                                 blurRadius: 2,
-                                                color: Theme.of(context).colorScheme.shadow.withOpacity(0.3),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .shadow
+                                                    .withOpacity(0.3),
                                               ),
                                             ],
                                           ),
