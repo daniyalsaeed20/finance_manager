@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share_plus/share_plus.dart';
+
 import 'package:fl_chart/fl_chart.dart';
-import 'dart:io';
 
 import '../../cubits/dashboard_cubit.dart';
 import '../../models/expense_models.dart';
@@ -13,6 +12,7 @@ import '../../repositories/goal_repository.dart';
 import '../../services/export_service.dart';
 import '../../services/user_manager.dart';
 import '../../utils/formatting.dart';
+import 'package:go_router/go_router.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -24,8 +24,6 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> {
   DateTimeRange? _range;
   double _taxRate = 15.0; // Default tax rate as per MVP
-  File? _currentFile;
-  bool _showFileViewer = false;
   late DashboardCubit _dashboardCubit;
 
   @override
@@ -728,81 +726,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
 
-                // File Viewer
-                if (_showFileViewer && _currentFile != null) ...[
-                  const SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Generated Report',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _showFileViewer = false;
-                                    _currentFile = null;
-                                  });
-                                },
-                                icon: const Icon(Icons.close),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'File: ${_currentFile!.path.split('/').last}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () => _viewFile(_currentFile!),
-                                  icon: const Icon(Icons.visibility),
-                                  label: const Text('View'),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    foregroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () => _shareFile(_currentFile!),
-                                  icon: const Icon(Icons.share),
-                                  label: const Text('Share'),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.secondary,
-                                    foregroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.onSecondary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                // View Exported Files Button
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.push('/home/exported-files'),
+                    icon: const Icon(Icons.folder_open),
+                    label: const Text('View Exported Files'),
                   ),
-                ],
+                ),
               ],
             ],
           ),
@@ -815,9 +749,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
     if (_range == null) return;
 
     try {
-      // Get the dashboard state to access repositories
-      final dashboardCubit = context.read<DashboardCubit>();
-
       // Prepare CSV data
       final List<List<dynamic>> csvData = [
         ['Date', 'Type', 'Category/Services', 'Amount', 'Notes'],
@@ -878,13 +809,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
       // Generate and save CSV
       final filename =
-          'financial_report_${formatShortDate(_range!.start)}_to_${formatShortDate(_range!.end)}.csv';
-      final file = await ExportService.instance.exportCsv(filename, csvData);
-
-      setState(() {
-        _currentFile = file;
-        _showFileViewer = true;
-      });
+          'CSV-${formatShortDate(_range!.start)}_to_${formatShortDate(_range!.end)}.csv';
+      await ExportService.instance.exportCsv(filename, csvData);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -893,6 +819,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
+
+        // Navigate to exported files screen
+        context.push('/home/exported-files');
       }
     } catch (e) {
       if (mounted) {
@@ -907,9 +836,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
     if (_range == null) return;
 
     try {
-      final cubit = context.read<DashboardCubit>();
-      final state = cubit.state;
-
       // Prepare PDF data
       final List<List<String>> pdfData = [
         ['Date', 'Type', 'Category/Services', 'Amount', 'Notes'],
@@ -970,19 +896,61 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
       // Generate and save PDF
       final filename =
-          'financial_report_${formatShortDate(_range!.start)}_to_${formatShortDate(_range!.end)}.pdf';
+          'PDF-${formatShortDate(_range!.start)}_to_${formatShortDate(_range!.end)}.pdf';
       final title =
-          'Financial Report\n${formatShortDate(_range!.start)} - ${formatShortDate(_range!.end)}';
-      final file = await ExportService.instance.exportPdf(
+          '${formatShortDate(_range!.start)} - ${formatShortDate(_range!.end)}';
+
+      // Get the current dashboard state for additional data
+      final dashboardCubit = context.read<DashboardCubit>();
+      final state = dashboardCubit.state;
+
+      // Calculate tax and after-tax profit
+      final estimatedTax = (state.netMinor * _taxRate / 100).round();
+      final afterTaxProfit = state.netMinor - estimatedTax;
+
+      // Get goals data for the PDF
+      final goalRepo = GoalRepository();
+      final monthKey =
+          '${_range!.start.year}-${_range!.start.month.toString().padLeft(2, '0')}';
+      final goal = await goalRepo.getGoalForMonth(
+        monthKey,
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+
+      List<Map<String, dynamic>> goalsData = [];
+      if (goal != null) {
+        // Calculate progress based on current income vs target
+        final currentIncome = state.totalIncomeMinor;
+        final progress = goal.targetAmountMinor > 0
+            ? ((currentIncome / goal.targetAmountMinor) * 100)
+                  .clamp(0, 100)
+                  .round()
+            : 0;
+
+        goalsData = [
+          {
+            'name': 'Monthly Income Goal',
+            'targetAmount': formatCurrencyAmount(goal.targetAmountMinor),
+            'progress': progress,
+          },
+        ];
+      }
+
+      // Prepare additional data for PDF
+      final additionalData = {
+        'totalIncome': formatCurrencyAmount(state.totalIncomeMinor),
+        'totalExpenses': formatCurrencyAmount(state.totalExpenseMinor),
+        'netProfit': formatCurrencyAmount(state.netMinor),
+        'afterTax': formatCurrencyAmount(afterTaxProfit),
+        'goals': goalsData,
+      };
+
+      await ExportService.instance.exportPdf(
         filename,
         title,
         pdfData,
+        additionalData,
       );
-
-      setState(() {
-        _currentFile = file;
-        _showFileViewer = true;
-      });
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -991,65 +959,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
+
+        // Navigate to exported files screen
+        context.push('/home/exported-files');
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
-      }
-    }
-  }
-
-  Future<void> _viewFile(File file) async {
-    // For now, we'll just show a dialog with file info
-    // In a real app, you'd integrate with a PDF/CSV viewer
-    final fileSize = await file.length();
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('File Preview'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('File: ${file.path.split('/').last}'),
-            Text('Size: ${(fileSize / 1024).toStringAsFixed(2)} KB'),
-            Text('Path: ${file.path}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Close'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _shareFile(file);
-            },
-            child: Text('Share'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _shareFile(File file) async {
-    try {
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text:
-            'Financial Report ${formatShortDate(_range!.start)} - ${formatShortDate(_range!.end)}',
-      );
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Share failed: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
       }
     }
   }

@@ -204,6 +204,18 @@ class _HomeShellState extends State<HomeShell> {
               context.push('/home/taxes');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.folder_open_outlined),
+            title: const Text('Exported Files'),
+            onTap: () {
+              debugPrint('📁 Drawer: Navigating to Exported Files');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/exported-files');
+            },
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_outlined),

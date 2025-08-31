@@ -12,6 +12,7 @@ import 'ui/income/edit_income_screen.dart';
 import 'ui/expenses/expenses_screen.dart';
 import 'ui/expenses/edit_expense_screen.dart';
 import 'ui/reports/reports_screen.dart';
+import 'ui/reports/exported_files_screen.dart';
 import 'ui/goals/goals_screen.dart';
 import 'ui/taxes/taxes_screen.dart';
 import 'ui/business/business_management_screen.dart';
@@ -149,6 +150,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/home/business',
       builder: (context, state) => const BusinessManagementScreen(),
+    ),
+    GoRoute(
+      path: '/home/exported-files',
+      builder: (context, state) => const ExportedFilesScreen(),
     ),
   ],
 );
