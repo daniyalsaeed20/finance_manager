@@ -14,8 +14,14 @@ class GoalCubit extends Cubit<GoalState> {
 
   Future<void> loadForMonth(String monthKey, String userId) async {
     emit(state.copyWith(loading: true, monthKey: monthKey));
-    final goal = await repository.getGoalForMonth(monthKey, userId);
+    final goal = await repository.getGoalForMonthWithFallback(monthKey, userId);
     emit(state.copyWith(loading: false, goal: goal));
+  }
+
+  Future<void> loadAllGoals(String userId) async {
+    emit(state.copyWith(loading: true));
+    final goals = await repository.getAllGoalsForUser(userId);
+    emit(state.copyWith(loading: false, allGoals: goals));
   }
 
   Future<void> upsert(MonthlyGoal goal) async {

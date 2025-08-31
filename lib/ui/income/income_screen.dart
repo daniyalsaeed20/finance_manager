@@ -404,7 +404,7 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
-                              formatCurrencyMinor(template.defaultPriceMinor),
+                              formatCurrencySync(template.defaultPriceMinor),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const SizedBox(height: 8),
@@ -480,7 +480,7 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('${entry.key} x${entry.value}'),
-                                  Text(formatCurrencyMinor(serviceTotal)),
+                                  Text(formatCurrencySync(serviceTotal)),
                                 ],
                               ),
                             );
@@ -491,22 +491,14 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Total Services:'),
-                            FutureBuilder<String>(
-                              future: formatCurrency(_calculateServicesTotal()),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data!,
-                                    style: TextStyle(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                }
-                                return const Text('Loading...');
-                              },
+                            Text(
+                              formatCurrencySync(_calculateServicesTotal()),
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -778,23 +770,13 @@ class _IncomeRecordTile extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
-                    FutureBuilder<String>(
-                      future: formatCurrency(
-                        service.priceMinor * service.count,
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data!,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          );
-                        }
-                        return const Text('Loading...');
-                      },
+                    Text(
+                      formatCurrencySync(service.priceMinor * service.count),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ],
                 ),
@@ -809,21 +791,13 @@ class _IncomeRecordTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Tip', style: Theme.of(context).textTheme.bodyMedium),
-                    FutureBuilder<String>(
-                      future: formatCurrency(record.tipMinor),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data!,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          );
-                        }
-                        return const Text('Loading...');
-                      },
+                    Text(
+                      formatCurrencySync(record.tipMinor),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ],
                 ),
@@ -845,21 +819,13 @@ class _IncomeRecordTile extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                FutureBuilder<String>(
-                  future: formatCurrency(record.totalMinor),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(
-                        snapshot.data!,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      );
-                    }
-                    return const Text('Loading...');
-                  },
+                Text(
+                  formatCurrencySync(record.totalMinor),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),

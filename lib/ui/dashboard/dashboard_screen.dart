@@ -295,7 +295,7 @@ class _KpiCard extends StatelessWidget {
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
             Text(
-              formatCurrencyAmount(amount),
+              formatCurrencySync(amount),
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,

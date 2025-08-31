@@ -186,7 +186,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                           ).textTheme.labelMedium,
                                         ),
                                         Text(
-                                          formatCurrencyAmount(monthlyIncome),
+                                          formatCurrencySync(monthlyIncome),
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium
@@ -215,7 +215,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                           ).textTheme.labelMedium,
                                         ),
                                         Text(
-                                          formatCurrencyAmount(monthlyExpenses),
+                                          formatCurrencySync(monthlyExpenses),
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium
@@ -244,9 +244,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                           ).textTheme.labelMedium,
                                         ),
                                         Text(
-                                          formatCurrencyAmount(
-                                            monthlyNetProfit,
-                                          ),
+                                          formatCurrencySync(monthlyNetProfit),
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium
@@ -283,25 +281,17 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                     context,
                                   ).textTheme.titleMedium,
                                 ),
-                                FutureBuilder<String>(
-                                  future: formatCurrency(estimatedTax),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Text(
-                                        snapshot.data!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimaryContainer,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      );
-                                    }
-                                    return const Text('Loading...');
-                                  },
+                                Text(
+                                  formatCurrencySync(estimatedTax),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ],
                             ),
@@ -547,7 +537,7 @@ class _TaxPaymentTile extends StatelessWidget {
           ],
         ),
         trailing: Text(
-          formatCurrencyMinor(payment.amountMinor),
+          formatCurrencySync(payment.amountMinor),
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),

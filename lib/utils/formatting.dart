@@ -20,6 +20,11 @@ Future<String> formatCurrency(int minorAmount) async {
   return await CurrencyService.formatAmount(minorAmount);
 }
 
+// Synchronous method using cached currency
+String formatCurrencySync(int minorAmount) {
+  return CurrencyService.formatAmountSync(minorAmount);
+}
+
 // Method to create highlighted currency text widget
 Widget formatCurrencyHighlighted(int minorAmount, {double? fontSize}) {
   return FutureBuilder<String>(
@@ -103,20 +108,14 @@ String formatNumber(int number) {
 
 // Currency-specific number formatting (converts from minor units to dollars first)
 String formatCurrencyAmount(int amountMinor) {
-  // Convert from minor units (cents) to dollars
-  final amount = amountMinor / 100.0;
-
-  // Always show with 2 decimal places for currency
-  return '\$${amount.toStringAsFixed(2)}';
+  // Use the currency service for proper formatting
+  return CurrencyService.formatAmountSync(amountMinor);
 }
 
 // Goal amount formatting (converts from minor units to dollars first)
 String formatGoalAmount(int amountMinor) {
-  // Convert from minor units (cents) to dollars
-  final amount = amountMinor / 100.0;
-
-  // Always show with 2 decimal places for currency
-  return '\$${amount.toStringAsFixed(2)}';
+  // Use the currency service for proper formatting
+  return CurrencyService.formatAmountSync(amountMinor);
 }
 
 // Number formatting without currency symbol (converts from minor units to dollars first)

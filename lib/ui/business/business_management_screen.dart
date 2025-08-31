@@ -216,15 +216,7 @@ class _ServicesTabState extends State<_ServicesTab> {
                         margin: const EdgeInsets.only(bottom: 8.0),
                         child: ListTile(
                           title: Text(template.name),
-                          subtitle: FutureBuilder<String>(
-                            future: formatCurrency(template.defaultPriceMinor),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text('Price: ${snapshot.data}');
-                              }
-                              return const Text('Price: Loading...');
-                            },
-                          ),
+                          subtitle: Text('Price: ${formatCurrencySync(template.defaultPriceMinor)}'),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -857,18 +849,11 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                                     ).textTheme.labelMedium,
                                   ),
                                   const SizedBox(height: 4),
-                                  FutureBuilder<String>(
-                                    future: formatCurrency(
-                                      state.goal!.targetAmountMinor,
-                                    ),
-                                    builder: (context, snapshot) {
-                                      return Text(
-                                        snapshot.data ?? 'Loading...',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleLarge,
-                                      );
-                                    },
+                                  Text(
+                                    formatCurrencySync(state.goal!.targetAmountMinor),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
                                   ),
                                 ],
                               ),

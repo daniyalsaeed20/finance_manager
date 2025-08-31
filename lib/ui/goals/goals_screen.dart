@@ -44,6 +44,15 @@ class _GoalsScreenState extends State<GoalsScreen> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push('/home/goals/history');
+            },
+            icon: const Icon(Icons.history),
+            tooltip: 'View Goal History',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -467,7 +476,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        formatCurrencyAmount(
+                                        formatCurrencySync(
                                           (monthlyIncome - monthlyExpenses)
                                               .clamp(0, double.infinity)
                                               .toInt(),

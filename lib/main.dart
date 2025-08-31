@@ -20,6 +20,7 @@ import 'repositories/income_repository.dart';
 import 'repositories/tax_repository.dart';
 import 'services/isar_service.dart';
 import 'services/user_manager.dart';
+import 'services/currency_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,9 @@ void main() async {
   // Initialize local DB
   await IsarService.instance.db;
 
+  // Initialize currency service
+  await CurrencyService.initialize();
+  
   runApp(const AppRoot());
 }
 

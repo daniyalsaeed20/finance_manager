@@ -114,24 +114,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
-                  FutureBuilder<Currency>(
-                    future: CurrencyService.getUserCurrency(),
+                  StreamBuilder<Currency>(
+                    stream: CurrencyService.currencyStream,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final currentCurrency = snapshot.data!;
-                        return ListTile(
-                          title: Text('Current Currency'),
-                          subtitle: Text(
-                            '${currentCurrency.name} (${currentCurrency.symbol})',
-                          ),
-                          trailing: const Icon(Icons.currency_exchange),
-                          onTap: () => _showCurrencySelector(),
-                        );
-                      }
-                      return const ListTile(
-                        title: Text('Current Currency'),
-                        subtitle: Text('Loading...'),
-                        trailing: Icon(Icons.currency_exchange),
+                      return FutureBuilder<Currency>(
+                        future: CurrencyService.getUserCurrency(),
+                        builder: (context, asyncSnapshot) {
+                          final currentCurrency = snapshot.data ?? asyncSnapshot.data;
+                          if (currentCurrency != null) {
+                            return ListTile(
+                              title: const Text('Current Currency'),
+                              subtitle: Text(
+                                '${currentCurrency.name} (${currentCurrency.symbol})',
+                              ),
+                              trailing: const Icon(Icons.currency_exchange),
+                              onTap: () => _showCurrencySelector(),
+                            );
+                          }
+                          return const ListTile(
+                            title: Text('Current Currency'),
+                            subtitle: Text('Loading...'),
+                            trailing: Icon(Icons.currency_exchange),
+                          );
+                        },
                       );
                     },
                   ),

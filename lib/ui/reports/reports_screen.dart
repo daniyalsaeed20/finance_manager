@@ -282,7 +282,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       Text(
-                                        formatCurrencyAmount(
+                                        formatCurrencySync(
                                           state.totalIncomeMinor,
                                         ),
                                         style: Theme.of(context)
@@ -314,7 +314,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       Text(
-                                        formatCurrencyAmount(
+                                        formatCurrencySync(
                                           state.totalExpenseMinor,
                                         ),
                                         style: Theme.of(context)
@@ -351,7 +351,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       Text(
-                                        formatCurrencyAmount(state.netMinor),
+                                        formatCurrencySync(state.netMinor),
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge
@@ -385,7 +385,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         ).textTheme.labelMedium,
                                       ),
                                       Text(
-                                        formatCurrencyAmount(afterTaxProfit),
+                                        formatCurrencySync(afterTaxProfit),
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge
@@ -545,7 +545,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                       reservedSize: 50,
                                       getTitlesWidget: (value, meta) {
                                         return Text(
-                                          formatCurrencyAmount(value.toInt()),
+                                          formatCurrencySync(value.toInt()),
                                           style: const TextStyle(fontSize: 10),
                                         );
                                       },
@@ -658,7 +658,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                             label = '';
                                         }
                                         return LineTooltipItem(
-                                          '$label\n${formatCurrencyAmount(touchedSpot.y.toInt())}',
+                                          '$label\n${formatCurrencySync(touchedSpot.y.toInt())}',
                                           TextStyle(
                                             color: Theme.of(
                                               context,
@@ -767,7 +767,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             service.serviceName,
-            formatCurrencyAmount(service.priceMinor),
+            formatCurrencySync(service.priceMinor),
             record.note ?? '',
           ]);
         }
@@ -776,7 +776,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             'Tip',
-            formatCurrencyAmount(record.tipMinor),
+            formatCurrencySync(record.tipMinor),
             record.note ?? '',
           ]);
         }
@@ -802,7 +802,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           formatShortDate(expense.date),
           'Expense',
           category.name,
-          formatCurrencyAmount(expense.amountMinor),
+          formatCurrencySync(expense.amountMinor),
           expense.note ?? '',
         ]);
       }
@@ -854,7 +854,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             service.serviceName,
-            formatCurrencyAmount(service.priceMinor),
+            formatCurrencySync(service.priceMinor),
             record.note ?? '',
           ]);
         }
@@ -863,7 +863,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             formatShortDate(record.date),
             'Income',
             'Tip',
-            formatCurrencyAmount(record.tipMinor),
+            formatCurrencySync(record.tipMinor),
             record.note ?? '',
           ]);
         }
@@ -885,13 +885,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           (c) => c.id == expense.categoryId,
           orElse: () => ExpenseCategory()..name = 'Unknown',
         );
-        pdfData.add([
-          formatShortDate(expense.date),
-          'Expense',
-          category.name,
-          formatCurrencyAmount(expense.amountMinor),
-          expense.note ?? '',
-        ]);
+                  pdfData.add([
+            formatShortDate(expense.date),
+            'Expense',
+            category.name,
+            formatCurrencySync(expense.amountMinor),
+            expense.note ?? '',
+          ]);
       }
 
       // Generate and save PDF
@@ -930,7 +930,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         goalsData = [
           {
             'name': 'Monthly Income Goal',
-            'targetAmount': formatCurrencyAmount(goal.targetAmountMinor),
+            'targetAmount': formatCurrencySync(goal.targetAmountMinor),
             'progress': progress,
           },
         ];
@@ -938,10 +938,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
       // Prepare additional data for PDF
       final additionalData = {
-        'totalIncome': formatCurrencyAmount(state.totalIncomeMinor),
-        'totalExpenses': formatCurrencyAmount(state.totalExpenseMinor),
-        'netProfit': formatCurrencyAmount(state.netMinor),
-        'afterTax': formatCurrencyAmount(afterTaxProfit),
+        'totalIncome': formatCurrencySync(state.totalIncomeMinor),
+        'totalExpenses': formatCurrencySync(state.totalExpenseMinor),
+        'netProfit': formatCurrencySync(state.netMinor),
+        'afterTax': formatCurrencySync(afterTaxProfit),
         'goals': goalsData,
       };
 
