@@ -169,68 +169,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
               ),
             ),
 
-            // Monthly Goal Management Notice
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Monthly Goal Management',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Monthly goals are now managed in the Business Manager. Go to Business Manager → Monthly Goals to set or modify your savings goals.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          debugPrint(
-                            '🎯 Goals: Navigating to Business Manager (from card)',
-                          );
-                          context.push('/home/business');
-                        },
-                        icon: const Icon(Icons.business),
-                        label: const Text('Go to Business Manager'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          foregroundColor: Theme.of(
-                            context,
-                          ).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
             // How It Works Tip
             Card(
               child: Padding(
@@ -331,17 +269,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                   // Progress Bar
                                   LinearProgressIndicator(
                                     value: progress.clamp(0.0, 1.0),
-                                    backgroundColor: Theme.of(
+                                     backgroundColor: Theme.of(
                                       context,
-                                    ).colorScheme.surfaceVariant,
+                                    ).colorScheme.secondary,
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                      isAchieved
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
+                                      Theme.of(context).colorScheme.primary,
                                     ),
                                     minHeight: 10,
                                   ),
@@ -716,17 +648,17 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                                     default:
                                                       label = '';
                                                   }
-                                                                                                     return BarTooltipItem(
-                                                     '$label\n${formatCurrencySync(rod.toY.round())}',
-                                                     TextStyle(
-                                                       color: Theme.of(
-                                                         context,
-                                                       ).colorScheme.onSurface,
-                                                       fontWeight:
-                                                           FontWeight.bold,
-                                                       fontSize: 12,
-                                                     ),
-                                                   );
+                                                  return BarTooltipItem(
+                                                    '$label\n${formatCurrencySync(rod.toY.round())}',
+                                                    TextStyle(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.onSurface,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                  );
                                                 },
                                           ),
                                         ),

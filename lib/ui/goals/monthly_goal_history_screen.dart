@@ -12,7 +12,8 @@ class MonthlyGoalHistoryScreen extends StatefulWidget {
   const MonthlyGoalHistoryScreen({super.key});
 
   @override
-  State<MonthlyGoalHistoryScreen> createState() => _MonthlyGoalHistoryScreenState();
+  State<MonthlyGoalHistoryScreen> createState() =>
+      _MonthlyGoalHistoryScreenState();
 }
 
 class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
@@ -94,14 +95,19 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
               children: [
                 Text(
                   _formatMonthYear(goal.monthKey),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -115,9 +121,9 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Goal Amount
             Row(
               children: [
@@ -146,9 +152,9 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Achievement Progress
             BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, dashboardState) {
@@ -156,23 +162,23 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                 final monthParts = monthKey.split('-');
                 final year = int.parse(monthParts[0]);
                 final month = int.parse(monthParts[1]);
-                
+
                 // Calculate income for this specific month
                 final monthStart = DateTime(year, month, 1);
                 final monthEnd = DateTime(year, month + 1, 0, 23, 59, 59);
-                
+
                 // Use the total income from dashboard state if it matches the month
                 // Otherwise, we'll need to load data for this specific month
                 int monthlyIncome = 0;
-                if (dashboardState.rangeStart.year == year && 
+                if (dashboardState.rangeStart.year == year &&
                     dashboardState.rangeStart.month == month) {
                   monthlyIncome = dashboardState.totalIncomeMinor;
                 }
-                
+
                 final progress = monthlyIncome / goal.targetAmountMinor;
                 final percentage = (progress * 100).clamp(0.0, 100.0);
                 final isAchieved = monthlyIncome >= goal.targetAmountMinor;
-                
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -180,8 +186,8 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                       children: [
                         Icon(
                           Icons.trending_up,
-                          color: isAchieved 
-                              ? Colors.green 
+                          color: isAchieved
+                              ? Colors.green
                               : Theme.of(context).colorScheme.primary,
                           size: 20,
                         ),
@@ -193,28 +199,31 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                         const Spacer(),
                         Text(
                           '${percentage.toStringAsFixed(1)}%',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: isAchieved ? Colors.green : Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: isAchieved
+                                    ? Colors.green
+                                    : Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     // Progress Bar
                     LinearProgressIndicator(
                       value: progress.clamp(0.0, 1.0),
-                      backgroundColor: Colors.grey[300],
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        isAchieved ? Colors.green : Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.primary,
                       ),
                       minHeight: 8,
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     // Income vs Goal
                     Row(
                       children: [
@@ -227,16 +236,18 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                           builder: (context, snapshot) {
                             return Text(
                               snapshot.data ?? 'Loading...',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w500),
                             );
                           },
                         ),
                         const Spacer(),
                         if (isAchieved)
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
@@ -256,13 +267,13 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                 );
               },
             ),
-            
+
             // Strategies Section
             if (goal.strategies.isNotEmpty) ...[
               const SizedBox(height: 16),
               const Divider(),
               const SizedBox(height: 8),
-              
+
               Row(
                 children: [
                   Icon(
@@ -279,33 +290,38 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 8),
-              
-              ...goal.strategies.map((strategy) => Padding(
-                padding: const EdgeInsets.only(left: 28, bottom: 4),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        strategy.title,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+
+              ...goal.strategies.map(
+                (strategy) => Padding(
+                  padding: const EdgeInsets.only(left: 28, bottom: 4),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          shape: BoxShape.circle,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          strategy.title,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.8),
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )),
+              ),
             ],
           ],
         ),
@@ -317,12 +333,22 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
     final parts = monthKey.split('-');
     final year = int.parse(parts[0]);
     final month = int.parse(parts[1]);
-    
+
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
-    
+
     return '${months[month - 1]} $year';
   }
 }

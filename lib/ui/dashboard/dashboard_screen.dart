@@ -204,12 +204,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Progress Bar
             LinearProgressIndicator(
               value: progress.clamp(0.0, 1.0),
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isAchieved
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.primary,
-              ),
+               backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.secondary,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Theme.of(context).colorScheme.primary,
+                                    ),
               minHeight: 10,
             ),
 
