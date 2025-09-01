@@ -1,7 +1,7 @@
 # Goal Tracking Feature
 
 ## Overview
-The Goal Tracking feature allows barbers and salon owners to set monthly income goals and track their progress toward achieving them. It provides motivation through visual progress indicators and helps users stay focused on their financial targets.
+The Goal Tracking feature allows users to set monthly income goals and track their progress toward achieving them. It provides motivation through visual progress indicators and helps users stay focused on their financial targets.
 
 ## Key Components
 
@@ -25,7 +25,7 @@ The Goal Tracking feature allows barbers and salon owners to set monthly income 
 **Purpose**: Individual strategies or action items for achieving monthly goals.
 
 **Key Properties**:
-- `title`: Strategy description (e.g., "Increase client base", "Raise service prices")
+- `title`: Strategy description (e.g., "Increase freelance work", "Diversify income sources")
 
 **Important Implementation Details**:
 - Embedded objects within monthly goals

@@ -1,12 +1,12 @@
 # Business Management Feature
 
 ## Overview
-The Business Management feature provides barbers and salon owners with centralized tools to manage their business operations. It includes service template management, expense category management, and monthly goal setting in a unified interface for efficient business administration.
+The Business Management feature provides users with centralized tools to manage their personal finance operations. It includes income template management, expense category management, and monthly goal setting in a unified interface for efficient personal finance administration.
 
 ## Key Components
 
 ### 1. Business Management Screen (`BusinessManagementScreen`)
-**Purpose**: Centralized interface for all business management operations.
+**Purpose**: Centralized interface for all personal finance management operations.
 
 **Key Features**:
 - Tabbed interface for organized management
@@ -19,7 +19,7 @@ The Business Management feature provides barbers and salon owners with centraliz
 - TabController for organized interface
 - Three main tabs: Services, Categories, Monthly Goals
 - Consistent navigation and user experience
-- Integrated with all business-related repositories
+- Integrated with all finance-related repositories
 
 ### 2. Services Tab (`_ServicesTab`)
 **Purpose**: Management interface for service templates.

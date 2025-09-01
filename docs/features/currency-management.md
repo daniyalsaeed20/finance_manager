@@ -1,7 +1,7 @@
 # Currency Management Feature
 
 ## Overview
-The Currency Management feature provides comprehensive currency support for the barber and salon finance app. It enables users to select their preferred currency, formats all monetary values consistently throughout the app, and provides real-time currency updates across all screens.
+The Currency Management feature provides comprehensive currency support for the Quaestor personal finance app. It enables users to select their preferred currency, formats all monetary values consistently throughout the app, and provides real-time currency updates across all screens.
 
 ## Key Components
 

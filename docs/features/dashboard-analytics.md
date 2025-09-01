@@ -1,7 +1,7 @@
 # Dashboard Analytics Feature
 
 ## Overview
-The Dashboard Analytics feature provides barbers and salon owners with a comprehensive overview of their financial performance. It aggregates data from income, expenses, goals, and taxes to present key performance indicators (KPIs) and visual analytics for informed decision-making.
+The Dashboard Analytics feature provides users with a comprehensive overview of their personal financial performance. It aggregates data from income, expenses, goals, and taxes to present key performance indicators (KPIs) and visual analytics for informed financial decision-making.
 
 ## Key Components
 

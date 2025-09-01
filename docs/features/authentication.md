@@ -1,7 +1,7 @@
 # Authentication Feature
 
 ## Overview
-The Authentication feature provides secure user authentication and session management for the barber and salon finance app. It integrates with Firebase Authentication to provide email/password authentication, user session management, and secure data isolation between users.
+The Authentication feature provides secure user authentication and session management for the Quaestor personal finance app. It integrates with Firebase Authentication to provide email/password authentication, user session management, and secure data isolation between users.
 
 ## Key Components
 

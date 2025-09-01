@@ -1,7 +1,7 @@
 # Income Tracking Feature
 
 ## Overview
-The Income Tracking feature is the core functionality that allows barbers and salon owners to log their daily income from services and tips. It provides a comprehensive system for managing service templates, recording daily transactions, and tracking income over time.
+The Income Tracking feature is the core functionality that allows users to log their daily income from various sources and tips. It provides a comprehensive system for managing income templates, recording daily transactions, and tracking income over time.
 
 ## Key Components
 
@@ -10,7 +10,7 @@ The Income Tracking feature is the core functionality that allows barbers and sa
 
 **Key Properties**:
 - `id`: Auto-incrementing unique identifier
-- `name`: Service name (e.g., "Haircut", "Beard Trim", "Shampoo")
+- `name`: Service name (e.g., "Consultation", "Project Work", "Freelance")
 - `defaultPriceMinor`: Price stored in minor currency units (cents) to avoid floating-point precision issues
 - `active`: Boolean flag to enable/disable services
 - `sortOrder`: Custom ordering for display

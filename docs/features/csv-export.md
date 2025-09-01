@@ -1,7 +1,7 @@
 # CSV Export Feature
 
 ## Overview
-The CSV Export feature enables barbers and salon owners to export their financial data in CSV format for external use, accounting software integration, or backup purposes. It provides comprehensive data export with customizable date ranges and detailed transaction information.
+The CSV Export feature enables users to export their financial data in CSV format for external use, accounting software integration, or backup purposes. It provides comprehensive data export with customizable date ranges and detailed transaction information.
 
 ## Key Components
 

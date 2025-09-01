@@ -1,7 +1,7 @@
-# Barber & Salon Finance Manager - Documentation
+# Quaestor - Documentation
 
 ## Overview
-This documentation provides comprehensive information about the Barber & Salon Finance Manager mobile application. The app is designed specifically for independent barbers and small salon owners to track their financial performance, manage business operations, and achieve their financial goals.
+This documentation provides comprehensive information about Quaestor, a powerful personal finance management mobile application. The app is designed to help individuals track their financial performance, manage personal finances, and achieve their financial goals with the tagline "Money, in order."
 
 ## Documentation Structure
 
@@ -135,7 +135,7 @@ Secure user authentication and session management:
 1. Download the app from Google Play Store or Apple App Store
 2. Create an account or sign in
 3. Set your preferred currency
-4. Create service templates for your business
+4. Create service templates for your income sources
 5. Start tracking income and expenses
 6. Set monthly goals and monitor progress
 
@@ -189,4 +189,4 @@ This project is proprietary software. All rights reserved.
 
 ---
 
-**Note**: This documentation is comprehensive and covers all aspects of the Barber & Salon Finance Manager application. Each section provides detailed information for users, developers, and deployment teams.
+**Note**: This documentation is comprehensive and covers all aspects of the Quaestor personal finance management application. Each section provides detailed information for users, developers, and deployment teams.

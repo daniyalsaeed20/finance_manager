@@ -1,16 +1,16 @@
 # Expense Tracking Feature
 
 ## Overview
-The Expense Tracking feature enables barbers and salon owners to record and categorize their business expenses. It provides a comprehensive system for managing expense categories, logging daily expenses, and tracking spending patterns over time.
+The Expense Tracking feature enables users to record and categorize their personal expenses. It provides a comprehensive system for managing expense categories, logging daily expenses, and tracking spending patterns over time.
 
 ## Key Components
 
 ### 1. Expense Categories (`ExpenseCategory`)
-**Purpose**: Categorization system for organizing different types of business expenses.
+**Purpose**: Categorization system for organizing different types of personal expenses.
 
 **Key Properties**:
 - `id`: Auto-incrementing unique identifier
-- `name`: Category name (e.g., "Rent", "Supplies", "Utilities", "Marketing")
+- `name`: Category name (e.g., "Rent", "Groceries", "Utilities", "Entertainment")
 - `color`: ARGB color integer for visual identification
 - `iconName`: Icon identifier for UI display
 - `sortOrder`: Custom ordering for display

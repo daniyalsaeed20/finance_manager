@@ -1,14 +1,14 @@
-# Barber & Salon Finance Manager - Project Overview
+# Quaestor - Project Overview
 
 ## Project Summary
-The Barber & Salon Finance Manager is a comprehensive mobile application designed specifically for independent barbers and small salon owners to track their financial performance, manage business operations, and achieve their financial goals. Built with Flutter, the app provides an offline-first experience with local data storage, ensuring user privacy and data security.
+Quaestor is a comprehensive personal finance management mobile application designed to help individuals track their financial performance, manage personal finances, and achieve their financial goals. Built with Flutter, the app provides an offline-first experience with local data storage, ensuring user privacy and data security. The app's tagline is "Money, in order."
 
 ## Core Philosophy
 - **Offline-First**: All data stored locally on device for privacy and reliability
-- **User-Centric**: Designed specifically for barbers and salon owners
+- **User-Centric**: Designed specifically for personal finance management
 - **Simple & Efficient**: Quick daily use with minimal taps required
 - **Privacy-Focused**: No external data transmission or cloud storage
-- **Professional**: Clean, modern design optimized for business use
+- **Professional**: Clean, modern design optimized for personal use
 
 ## Technical Architecture
 

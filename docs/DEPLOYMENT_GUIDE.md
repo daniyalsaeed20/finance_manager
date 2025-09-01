@@ -1,7 +1,7 @@
-# Barber & Salon Finance Manager - Deployment Guide
+# Quaestor - Deployment Guide
 
 ## Overview
-This comprehensive deployment guide provides step-by-step instructions for preparing and submitting the Barber & Salon Finance Manager app to both the Google Play Store and Apple App Store. The guide covers all necessary configurations, file preparations, and submission processes.
+This comprehensive deployment guide provides step-by-step instructions for preparing and submitting the Quaestor personal finance management app to both the Google Play Store and Apple App Store. The guide covers all necessary configurations, file preparations, and submission processes.
 
 ## Prerequisites
 
@@ -46,8 +46,8 @@ This comprehensive deployment guide provides step-by-step instructions for prepa
 
 #### 1.1 Update pubspec.yaml
 ```yaml
-name: barber_and_salon_app
-description: "Professional finance manager for barbers and salon owners"
+name: quaestor
+description: "Personal finance management app - Money, in order"
 version: 1.0.0+1
 ```
 

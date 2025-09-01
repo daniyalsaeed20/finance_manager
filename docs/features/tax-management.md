@@ -1,7 +1,7 @@
 # Tax Management Feature
 
 ## Overview
-The Tax Management feature provides barbers and salon owners with tools to estimate and track their tax obligations. It calculates estimated taxes based on net profit and allows users to record tax payments for comprehensive tax planning.
+The Tax Management feature provides users with tools to estimate and track their tax obligations. It calculates estimated taxes based on net profit and allows users to record tax payments for comprehensive tax planning.
 
 ## Key Components
 
