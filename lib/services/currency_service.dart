@@ -7,17 +7,17 @@ import 'dart:async';
 
 class CurrencyService {
   static const String _currencyKey = 'user_currency';
-  
+
   // Stream controller for real-time currency updates
   static final StreamController<Currency> _currencyController =
       StreamController<Currency>.broadcast();
-  
+
   // Stream for currency changes
   static Stream<Currency> get currencyStream => _currencyController.stream;
-  
+
   // Cache for current currency to avoid async calls
   static Currency? _cachedCurrency;
-  
+
   // Comprehensive list of currencies with symbols and names
   static const List<Currency> _currencies = [
     Currency(code: 'USD', symbol: '\$', name: 'US Dollar'),
@@ -92,7 +92,11 @@ class CurrencyService {
     Currency(code: 'MDL', symbol: 'L', name: 'Moldovan Leu'),
     Currency(code: 'UAH', symbol: '₴', name: 'Ukrainian Hryvnia'),
     Currency(code: 'RSD', symbol: 'дин.', name: 'Serbian Dinar'),
-    Currency(code: 'BAM', symbol: 'KM', name: 'Bosnia-Herzegovina Convertible Mark'),
+    Currency(
+      code: 'BAM',
+      symbol: 'KM',
+      name: 'Bosnia-Herzegovina Convertible Mark',
+    ),
     Currency(code: 'ALL', symbol: 'L', name: 'Albanian Lek'),
     Currency(code: 'MKD', symbol: 'ден', name: 'Macedonian Denar'),
     Currency(code: 'XOF', symbol: 'CFA', name: 'West African CFA Franc'),
@@ -162,12 +166,12 @@ class CurrencyService {
   // Search currencies by name or code
   static List<Currency> searchCurrencies(String query) {
     if (query.isEmpty) return _currencies;
-    
+
     final lowercaseQuery = query.toLowerCase();
     return _currencies.where((currency) {
       return currency.name.toLowerCase().contains(lowercaseQuery) ||
-             currency.code.toLowerCase().contains(lowercaseQuery) ||
-             currency.symbol.toLowerCase().contains(lowercaseQuery);
+          currency.code.toLowerCase().contains(lowercaseQuery) ||
+          currency.symbol.toLowerCase().contains(lowercaseQuery);
     }).toList();
   }
 
@@ -177,9 +181,10 @@ class CurrencyService {
     final currencyCode = prefs.getString(_currencyKey) ?? 'USD';
     final currency = _currencies.firstWhere(
       (currency) => currency.code == currencyCode,
-      orElse: () => _currencies.firstWhere((currency) => currency.code == 'USD'),
+      orElse: () =>
+          _currencies.firstWhere((currency) => currency.code == 'USD'),
     );
-    
+
     // Cache the currency for synchronous access
     _cachedCurrency = currency;
     return currency;
@@ -194,13 +199,14 @@ class CurrencyService {
   static Future<void> setUserCurrency(String currencyCode) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_currencyKey, currencyCode);
-    
+
     // Get the new currency and notify listeners
     final newCurrency = _currencies.firstWhere(
       (currency) => currency.code == currencyCode,
-      orElse: () => _currencies.firstWhere((currency) => currency.code == 'USD'),
+      orElse: () =>
+          _currencies.firstWhere((currency) => currency.code == 'USD'),
     );
-    
+
     _cachedCurrency = newCurrency;
     _currencyController.add(newCurrency);
   }
@@ -209,46 +215,49 @@ class CurrencyService {
   static Future<String> formatAmount(int minorAmount) async {
     final currency = await getUserCurrency();
     final amount = minorAmount / 100.0;
-    
+
     final format = NumberFormat.currency(
       symbol: currency.symbol,
       decimalDigits: 2,
       locale: 'en_US', // Use English locale for consistent formatting
     );
-    
+
     return format.format(amount);
   }
 
   // Format amount with specific currency
   static String formatAmountWithCurrency(int minorAmount, Currency currency) {
     final amount = minorAmount / 100.0;
-    
+
     final format = NumberFormat.currency(
       symbol: currency.symbol,
       decimalDigits: 2,
       locale: 'en_US',
     );
-    
+
     return format.format(amount);
   }
 
   // Format amount with current currency synchronously
   static String formatAmountSync(int minorAmount) {
-    final currency = _cachedCurrency ?? _currencies.firstWhere((c) => c.code == 'USD');
+    final currency =
+        _cachedCurrency ?? _currencies.firstWhere((c) => c.code == 'USD');
     final amount = minorAmount / 100.0;
-    
+
     final format = NumberFormat.currency(
       symbol: currency.symbol,
       decimalDigits: 2,
       locale: 'en_US',
     );
-    
+
     return format.format(amount);
   }
 
   // Initialize currency service and load cached currency
   static Future<void> initialize() async {
-    await getUserCurrency(); // This will cache the currency
+    final currency = await getUserCurrency(); // This will cache the currency
+    // Emit the initial currency to the stream so StreamBuilder widgets get the initial value
+    _currencyController.add(currency);
   }
 
   // Dispose method to clean up resources

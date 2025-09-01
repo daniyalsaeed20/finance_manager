@@ -6,6 +6,7 @@ import '../../cubits/dashboard_cubit.dart';
 import '../../cubits/goal_cubit.dart';
 import '../../models/goal_models.dart';
 import '../../services/user_manager.dart';
+import '../../services/currency_service.dart';
 import '../../utils/formatting.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -187,16 +188,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FutureBuilder<String>(
-              future: formatCurrency(goal.targetAmountMinor),
+            StreamBuilder<Currency>(
+              stream: CurrencyService.currencyStream,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                // Use stream data if available, otherwise fall back to cached currency
+                final currency =
+                    snapshot.data ?? CurrencyService.getCurrentCurrencySync();
+                if (currency != null) {
                   return Text(
-                    'Monthly Goal: ${snapshot.data}',
+                    'Monthly Goal: ${CurrencyService.formatAmountWithCurrency(goal.targetAmountMinor, currency)}',
                     style: Theme.of(context).textTheme.titleLarge,
                   );
                 }
-                return const Text('Monthly Goal: Loading...');
+                // Fallback to async method if no currency available
+                return FutureBuilder<String>(
+                  future: formatCurrency(goal.targetAmountMinor),
+                  builder: (context, asyncSnapshot) {
+                    if (asyncSnapshot.hasData) {
+                      return Text(
+                        'Monthly Goal: ${asyncSnapshot.data}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      );
+                    }
+                    return const Text('Monthly Goal: Loading...');
+                  },
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -204,12 +220,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Progress Bar
             LinearProgressIndicator(
               value: progress.clamp(0.0, 1.0),
-               backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.secondary,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Theme.of(context).colorScheme.primary,
-                                    ),
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.primary,
+              ),
               minHeight: 10,
             ),
 
@@ -294,12 +308,30 @@ class _KpiCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: Theme.of(context).textTheme.titleMedium),
-            Text(
-              formatCurrencySync(amount),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
+            StreamBuilder<Currency>(
+              stream: CurrencyService.currencyStream,
+              builder: (context, snapshot) {
+                // Use stream data if available, otherwise fall back to cached currency
+                final currency =
+                    snapshot.data ?? CurrencyService.getCurrentCurrencySync();
+                if (currency != null) {
+                  return Text(
+                    CurrencyService.formatAmountWithCurrency(amount, currency),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }
+                // Fallback to sync method if no currency available
+                return Text(
+                  formatCurrencySync(amount),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
           ],
         ),
