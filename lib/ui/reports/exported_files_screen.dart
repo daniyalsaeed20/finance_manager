@@ -407,11 +407,10 @@ class _ExportedFilesScreenState extends State<ExportedFilesScreen> {
                           value: 'delete',
                           child: Row(
                             children: [
-                              Icon(Icons.delete, color: Colors.red),
+                              Icon(Icons.delete),
                               SizedBox(width: 8),
                               Text(
                                 'Delete',
-                                style: TextStyle(color: Colors.red),
                               ),
                             ],
                           ),

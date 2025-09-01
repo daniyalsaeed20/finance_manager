@@ -5,59 +5,101 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../theme_layout_builder.dart';
 
+/// Quaestor — Dark Theme
+/// - Brand gold: #D6B25E
+/// - Brand navy (background): #0B0F13
+/// Notes:
+/// • Gold is used as PRIMARY; text/icons on gold are dark for contrast.
+/// • Surfaces are navy-tinted charcoals to preserve a premium, minimal feel.
+/// • Neutrals favor cool blue-grays for subtle separation on dark.
+
 class DarkTheme {
-  // Dark theme colors
-  final Color primaryColor = Color(0xFFFF8A50);
-  final Color onPrimaryColor = Color(0xFF000000);
-  final Color primaryContainerColor = Color(0xFFC1693C);
-  final Color onPrimaryContainerColor = Color(0xFFFFDAD1);
-  final Color primaryFixedColor = Color(0xFFFFCCBC);
-  final Color primaryFixedDimColor = Color(0xFFC1693C);
-  final Color onPrimaryFixedColor = Color(0xFF000000);
-  final Color onPrimaryFixedVariantColor = Color(0xFFFFE0B2);
+  // === Brand Core ===
+  final Color primaryColor = const Color(0xFFD6B25E); // Gold
+  final Color onPrimaryColor = const Color(
+    0xFF0B0F13,
+  ); // Dark (navy/near-black)
 
-  final Color secondaryColor = Color(0xFFBDBDBD);
-  final Color onSecondaryColor = Color(0xFF000000);
-  final Color secondaryContainerColor = Color(0xFF424242);
-  final Color onSecondaryContainerColor = Color(0xFFF5F5F5);
-  final Color secondaryFixedColor = Color(0xFF9E9E9E);
-  final Color secondaryFixedDimColor = Color(0xFF616161);
-  final Color onSecondaryFixedColor = Color(0xFFFFFFFF);
-  final Color onSecondaryFixedVariantColor = Color(0xFFBDBDBD);
+  // Slightly darker, desaturated gold for containers/tonal fills
+  final Color primaryContainerColor = const Color(0xFF3E3214);
+  final Color onPrimaryContainerColor = const Color(0xFFF5E7C2);
 
-  final Color tertiaryColor = Color(0xFF4DB6AC);
-  final Color onTertiaryColor = Color(0xFF000000);
-  final Color tertiaryContainerColor = Color(0xFF004D40);
-  final Color onTertiaryContainerColor = Color(0xFFA7FFEB);
-  final Color tertiaryFixedColor = Color(0xFF80CBC4);
-  final Color tertiaryFixedDimColor = Color(0xFF004D40);
-  final Color onTertiaryFixedColor = Color(0xFFFFFFFF);
-  final Color onTertiaryFixedVariantColor = Color(0xFFB2DFDB);
+  // Fixed tones (Material 3): light/pale golds for tonal surfaces
+  final Color primaryFixedColor = const Color(0xFFF0E3BE);
+  final Color primaryFixedDimColor = const Color(0xFFC4A964);
+  final Color onPrimaryFixedColor = const Color(0xFF0B0F13);
+  final Color onPrimaryFixedVariantColor = const Color(0xFF162028);
 
-  final Color errorColor = Color(0xFFF2B8B5);
-  final Color onErrorColor = Color(0xFF601410);
-  final Color errorContainerColor = Color(0xFF8C1D18);
-  final Color onErrorContainerColor = Color(0xFFF9DEDC);
+  // === Secondary (cool slate to complement gold & navy) ===
+  final Color secondaryColor = const Color(0xFF8A96A5);
+  final Color onSecondaryColor = const Color(0xFF0B0F13);
+  final Color secondaryContainerColor = const Color(0xFF2B3540);
+  final Color onSecondaryContainerColor = const Color(0xFFD7DEE6);
+  final Color secondaryFixedColor = const Color(0xFFC4CCD6);
+  final Color secondaryFixedDimColor = const Color(0xFF8A96A5);
+  final Color onSecondaryFixedColor = const Color(0xFF0B0F13);
+  final Color onSecondaryFixedVariantColor = const Color(0xFF162028);
 
-  final Color surfaceColor = Color(0xFF121212);
-  final Color onSurfaceColor = Color(0xFFE0E0E0);
-  final Color surfaceDimColor = Color(0xFF1E1E1E);
-  final Color surfaceBrightColor = Color(0xFF2C2C2C);
-  final Color surfaceContainerLowestColor = Color(0xFF1A1A1A);
-  final Color surfaceContainerLowColor = Color(0xFF2A2A2A);
-  final Color surfaceContainerColor = Color(0xFF2E2E2E);
-  final Color surfaceContainerHighColor = Color(0xFF373737);
-  final Color surfaceContainerHighestColor = Color(0xFF424242);
-  final Color onSurfaceVariantColor = Color(0xFF9E9E9E);
+  // === Tertiary (teal for positive/analytics accents; used sparingly) ===
+  final Color tertiaryColor = const Color(0xFF66B2A3);
+  final Color onTertiaryColor = const Color(0xFF0B0F13);
+  final Color tertiaryContainerColor = const Color(0xFF143B36);
+  final Color onTertiaryContainerColor = const Color(0xFFD6F2EB);
+  final Color tertiaryFixedColor = const Color(0xFFBFE3DB);
+  final Color tertiaryFixedDimColor = const Color(0xFF66B2A3);
+  final Color onTertiaryFixedColor = const Color(0xFF0B0F13);
+  final Color onTertiaryFixedVariantColor = const Color(0xFF162028);
 
-  final Color outlineColor = Color(0xFF757575);
-  final Color outlineVariantColor = Color(0xFF616161);
-  final Color shadowColor = Color(0xFF000000);
-  final Color scrimColor = Color(0xFF000000);
-  final Color inverseSurfaceColor = Color(0xFFE0E0E0);
-  final Color onInverseSurfaceColor = Color(0xFF121212);
-  final Color inversePrimaryColor = Color(0xFFFFAB91);
-  final Color surfaceTintColor = Color(0xFFFF8A50);
+  // === Error (Material dark defaults; readable on dark) ===
+  final Color errorColor = const Color(0xFFF2B8B5);
+  final Color onErrorColor = const Color(0xFF601410);
+  final Color errorContainerColor = const Color(0xFF8C1D18);
+  final Color onErrorContainerColor = const Color(0xFFF9DEDC);
+
+  // === Surfaces (navy-tinted charcoals) ===
+  // Base background matches app icon backdrop
+  final Color surfaceColor = const Color(0xFF0B0F13);
+  final Color onSurfaceColor = const Color(
+    0xFFE6E9ED,
+  ); // Primary text/icons on dark
+  final Color surfaceDimColor = const Color(0xFF090D11);
+  final Color surfaceBrightColor = const Color(0xFF12181D);
+
+  // Tonal containers for elevation steps - Enhanced contrast for better card visibility
+  final Color surfaceContainerLowestColor = const Color(
+    0xFF0B0F13,
+  ); // same as bg
+  final Color surfaceContainerLowColor = const Color(0xFF10151B);
+  final Color surfaceContainerColor = const Color(
+    0xFF1A2128,
+  ); // Increased contrast for cards
+  final Color surfaceContainerHighColor = const Color(
+    0xFF1E2730,
+  ); // Enhanced contrast
+  final Color surfaceContainerHighestColor = const Color(
+    0xFF232C38,
+  ); // Maximum contrast
+
+  // Muted label/secondary content on dark
+  final Color onSurfaceVariantColor = const Color(0xFFA7B0BA);
+
+  // === System strokes & effects ===
+  final Color outlineColor = const Color(
+    0xFF4A5568,
+  ); // Enhanced outline for better card boundaries
+  final Color outlineVariantColor = const Color(
+    0xFF374151,
+  ); // Enhanced variant outline
+  final Color shadowColor = const Color(0xFF000000);
+  final Color scrimColor = const Color(0xFF000000);
+
+  // Inverse surfaces (used in chips/tooltips etc.)
+  final Color inverseSurfaceColor = const Color(0xFFE6E9ED);
+  final Color onInverseSurfaceColor = const Color(0xFF0B0F13);
+  final Color inversePrimaryColor = const Color(
+    0xFFB99439,
+  ); // deeper gold for inverse
+  final Color surfaceTintColor = const Color(0xFFD6B25E); // tint = primary
 
   ColorScheme colorScheme() => ColorScheme(
     brightness: Brightness.dark,
@@ -109,13 +151,15 @@ class DarkTheme {
     surfaceTint: surfaceTintColor,
   );
 
+  // Keep layout scales; these already work nicely with a minimalist look
   final layout = ThemeLayoutBuilder(
     radius: 12.0.r,
     spacing: 16.0.w,
     buttonHeight: 48.0.h,
     iconSize: 24.0.r,
     borderWidth: 2.0.w,
-    cardElevation: 2.0,
+    cardElevation:
+        4.0, // Increased elevation for better card visibility in dark mode
     dialogRadius: 12.0.r,
     tilePaddingH: 16.0.w,
     tilePaddingV: 8.0.h,

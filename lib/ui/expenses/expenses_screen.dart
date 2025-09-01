@@ -122,18 +122,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextButton.icon(
                 onPressed: () => context.push('/home/business'),
-                icon: Icon(
-                  Icons.category,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 18,
-                ),
-                label: Text(
-                  'Manage Categories',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                icon: const Icon(Icons.category, size: 18),
+                label: Text(kManageCategoriesLabel),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -183,9 +173,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 }
 
                 if (state.expenses.isEmpty) {
-                  return const Center(
-                    child: Text(kNoExpensesLabel),
-                  );
+                  return const Center(child: Text(kNoExpensesLabel));
                 }
 
                 return Column(
@@ -337,9 +325,6 @@ class _AddExpenseFormState extends State<_AddExpenseForm> {
                         });
                       },
                       child: Card(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : null,
                         child: Container(
                           padding: const EdgeInsets.all(12.0),
                           child: Column(
@@ -355,11 +340,7 @@ class _AddExpenseFormState extends State<_AddExpenseForm> {
                               ),
                               if (isSelected) ...[
                                 const SizedBox(height: 4),
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 16,
-                                ),
+                                const Icon(Icons.check_circle, size: 16),
                               ],
                             ],
                           ),
@@ -534,10 +515,9 @@ class _ExpenseRecordTile extends StatelessWidget {
             if (snapshot.hasData) {
               return Text(
                 snapshot.data!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
               );
             }
             return const Text('Loading...');

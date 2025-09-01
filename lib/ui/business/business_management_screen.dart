@@ -66,9 +66,6 @@ class _BusinessManagementScreenState extends State<BusinessManagementScreen>
             },
           ),
           title: Text(kBusinessManagementLabel),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          foregroundColor: Theme.of(context).colorScheme.onSurface,
-          elevation: 0,
           bottom: TabBar(
             controller: _tabController,
             tabs: [
@@ -137,7 +134,6 @@ class _ServicesTabState extends State<_ServicesTab> {
                       Text(
                         'Add the services you offer to your clients. These will appear when adding income records.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -168,9 +164,7 @@ class _ServicesTabState extends State<_ServicesTab> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => _cancelEdit(),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
-                                ),
+                                style: ElevatedButton.styleFrom(),
                                 child: const Text('Cancel'),
                               ),
                             ),
@@ -217,7 +211,9 @@ class _ServicesTabState extends State<_ServicesTab> {
                         margin: const EdgeInsets.only(bottom: 8.0),
                         child: ListTile(
                           title: Text(template.name),
-                          subtitle: Text('Price: ${formatCurrencySync(template.defaultPriceMinor)}'),
+                          subtitle: Text(
+                            'Price: ${formatCurrencySync(template.defaultPriceMinor)}',
+                          ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -233,7 +229,6 @@ class _ServicesTabState extends State<_ServicesTab> {
                               IconButton(
                                 onPressed: () => _deleteService(template),
                                 icon: const Icon(Icons.delete),
-                                color: Colors.red,
                               ),
                             ],
                           ),
@@ -336,8 +331,11 @@ class _ServicesTabState extends State<_ServicesTab> {
               context.read<IncomeCubit>().loadTemplates(userId);
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: Text(kDeleteLabel2),
           ),
         ],
       ),
@@ -393,7 +391,6 @@ class _CategoriesTabState extends State<_CategoriesTab> {
                       Text(
                         'Add expense categories to organize your business expenses. These will appear when adding expense records.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -412,9 +409,7 @@ class _CategoriesTabState extends State<_CategoriesTab> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => _cancelEdit(),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
-                                ),
+                                style: ElevatedButton.styleFrom(),
                                 child: const Text('Cancel'),
                               ),
                             ),
@@ -472,7 +467,6 @@ class _CategoriesTabState extends State<_CategoriesTab> {
                               IconButton(
                                 onPressed: () => _deleteCategory(category),
                                 icon: const Icon(Icons.delete),
-                                color: Colors.red,
                               ),
                             ],
                           ),
@@ -556,8 +550,11 @@ class _CategoriesTabState extends State<_CategoriesTab> {
               context.read<ExpenseCubit>().loadCategories(userId);
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: Text(kDeleteLabel2),
           ),
         ],
       ),
@@ -664,7 +661,6 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                       Text(
                         'Set a monthly savings goal that will apply to all future months. Once set, this goal will continue until modified.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -851,7 +847,9 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    formatCurrencySync(state.goal!.targetAmountMinor),
+                                    formatCurrencySync(
+                                      state.goal!.targetAmountMinor,
+                                    ),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleLarge,
@@ -890,9 +888,9 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                           const SizedBox(height: 8),
                           ...state.goal!.strategies.map(
                             (strategy) => ListTile(
-                              leading: const Icon(
+                              leading: Icon(
                                 Icons.check_circle,
-                                color: Colors.green,
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                               title: Text(strategy.title),
                               dense: true,
@@ -929,10 +927,7 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                         Text(
                           'You haven\'t set a monthly savings goal yet. Use the form above to set your first goal.',
                           style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: Colors.grey[600],
-                                fontStyle: FontStyle.italic,
-                              ),
+                              ?.copyWith(fontStyle: FontStyle.italic),
                         ),
                       ],
                     ),

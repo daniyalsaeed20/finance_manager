@@ -141,15 +141,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     // Monthly Summary Cards
                     _KpiCard(
-                      title: 'Income',
+                      title: kIncomeLabel2,
                       amount: dashboardState.totalIncomeMinor,
                     ),
                     _KpiCard(
-                      title: 'Expenses',
+                      title: kExpensesLabel2,
                       amount: dashboardState.totalExpenseMinor,
                     ),
                     _KpiCard(
-                      title: 'Net Profit',
+                      title: kNetProfitLabel,
                       amount: dashboardState.netMinor,
                     ),
 
@@ -166,7 +166,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     const Spacer(),
                     Text(
-                      'Tip: Use the arrows to navigate between months and track your progress over time.',
+                      kDashboardTipLabel,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -221,10 +221,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Progress Bar
             LinearProgressIndicator(
               value: progress.clamp(0.0, 1.0),
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).colorScheme.primary,
-              ),
               minHeight: 10,
             ),
 
@@ -266,7 +262,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Set a monthly savings goal to track your financial progress and stay motivated!',
+              kSetMonthlySavingsGoalLabel,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 height: 1.4,
@@ -282,10 +278,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
                 icon: const Icon(Icons.add),
                 label: Text(kSetMonthlyGoalLabel),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
               ),
             ),
           ],
@@ -319,7 +311,6 @@ class _KpiCard extends StatelessWidget {
                   return Text(
                     CurrencyService.formatAmountWithCurrency(amount, currency),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   );
@@ -327,10 +318,9 @@ class _KpiCard extends StatelessWidget {
                 // Fallback to sync method if no currency available
                 return Text(
                   formatCurrencySync(amount),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 );
               },
             ),

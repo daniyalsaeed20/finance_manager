@@ -39,12 +39,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(kTaxPlanningLabel),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text(kTaxPlanningLabel)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -251,8 +246,12 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                               .titleMedium
                                               ?.copyWith(
                                                 color: monthlyNetProfit >= 0
-                                                    ? Colors.green
-                                                    : Colors.red,
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.tertiary
+                                                    : Theme.of(
+                                                        context,
+                                                      ).colorScheme.error,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
@@ -284,9 +283,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
                                 ),
                                 Text(
                                   formatCurrencySync(estimatedTax),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
+                                  style: Theme.of(context).textTheme.titleLarge
                                       ?.copyWith(
                                         color: Theme.of(
                                           context,
@@ -652,12 +649,15 @@ class _EditTaxPaymentDialogState extends State<_EditTaxPaymentDialog> {
         ),
         ElevatedButton(
           onPressed: () => _updateTaxPayment(),
-          child: const Text('Update'),
+          child: Text(kUpdateLabel),
         ),
         ElevatedButton(
           onPressed: () => _deleteTaxPayment(),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-          child: const Text('Delete'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.error,
+            foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+          child: Text(kDeleteLabel2),
         ),
       ],
     );
@@ -708,8 +708,11 @@ class _EditTaxPaymentDialogState extends State<_EditTaxPaymentDialog> {
               Navigator.pop(context); // Close confirmation dialog
               Navigator.pop(context); // Close edit dialog
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: Text(kDeleteLabel2),
           ),
         ],
       ),

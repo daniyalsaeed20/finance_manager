@@ -33,9 +33,6 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(kMonthlyGoalHistoryLabel),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(), // Navigate back to goals screen
@@ -48,21 +45,23 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
           }
 
           if (goalState.allGoals.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.flag_outlined, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
+                  const Icon(Icons.flag_outlined, size: 64),
+                  const SizedBox(height: 16),
                   Text(
                     kNoMonthlyGoalsSetLabel,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     kSetFirstMonthlyGoalLabel,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -188,7 +187,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                         Icon(
                           Icons.trending_up,
                           color: isAchieved
-                              ? Colors.green
+                              ? Theme.of(context).colorScheme.tertiary
                               : Theme.of(context).colorScheme.primary,
                           size: 20,
                         ),
@@ -203,7 +202,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 color: isAchieved
-                                    ? Colors.green
+                                    ? Theme.of(context).colorScheme.tertiary
                                     : Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -250,17 +249,17 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
+                              color: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Text(
-                              '✓ Achieved',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                                          child: Text(
+                                '✓ Achieved',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
                           ),
                       ],
                     ),

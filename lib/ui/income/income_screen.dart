@@ -122,18 +122,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextButton.icon(
                 onPressed: () => context.push('/home/business'),
-                icon: Icon(
-                  Icons.work,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 18,
-                ),
-                label: Text(
-                  'Manage Services',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                icon: const Icon(Icons.work, size: 18),
+                label: Text(kManageServicesLabel),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -183,9 +173,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 }
 
                 if (state.incomeRecords.isEmpty) {
-                  return const Center(
-                    child: Text(kNoIncomeRecordsLabel),
-                  );
+                  return const Center(child: Text(kNoIncomeRecordsLabel));
                 }
 
                 return Column(
@@ -491,15 +479,11 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Total Services:'),
+                            Text(kTotalServicesLabel),
                             Text(
                               formatCurrencySync(_calculateServicesTotal()),
-                              style: TextStyle(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -773,11 +757,9 @@ class _IncomeRecordTile extends StatelessWidget {
                     ),
                     Text(
                       formatCurrencySync(service.priceMinor * service.count),
-                      style: Theme.of(context).textTheme.bodyMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -791,14 +773,15 @@ class _IncomeRecordTile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Tip', style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      kTipLabel2,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     Text(
                       formatCurrencySync(record.tipMinor),
-                      style: Theme.of(context).textTheme.bodyMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -822,11 +805,9 @@ class _IncomeRecordTile extends StatelessWidget {
                 ),
                 Text(
                   formatCurrencySync(record.totalMinor),
-                  style: Theme.of(context).textTheme.titleMedium
-                      ?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -835,11 +816,10 @@ class _IncomeRecordTile extends StatelessWidget {
             if (record.note != null) ...[
               const SizedBox(height: 8),
               Text(
-                'Note: ${record.note}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey[600],
-                ),
+                '$kNoteLabel2${record.note}',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
               ),
             ],
           ],

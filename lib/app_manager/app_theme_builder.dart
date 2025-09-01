@@ -251,9 +251,13 @@ class AppThemeBuilder {
   );
 
   CardThemeData _cardTheme() => CardThemeData(
-    color: colorScheme.surface,
+    color: colorScheme.surfaceContainer, // Use surfaceContainer for better contrast
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(layout.radius),
+      side: BorderSide(
+        color: colorScheme.outline.withOpacity(0.3), // Subtle border for better card definition
+        width: 0.5,
+      ),
     ),
     elevation: layout.cardElevation,
     shadowColor: colorScheme.shadow,

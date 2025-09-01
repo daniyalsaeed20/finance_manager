@@ -21,9 +21,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(kSettingsLabel),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
         actions: [
           IconButton(
             onPressed: _showLogoutDialog,
@@ -112,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(height: 8),
                   Text(
                     kChooseCurrencyLabel,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 16),
                   StreamBuilder<Currency>(
@@ -197,7 +194,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context.go('/auth'); // Navigate to auth screen
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
             child: Text(kLogoutLabel),
           ),
         ],

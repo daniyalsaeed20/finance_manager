@@ -42,9 +42,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(kFinancialGoalsAnalyticsLabel),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -228,9 +225,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     final monthlyExpenses = dashboardState.totalExpenseMinor;
 
                     if (goal == null) {
-                      return const Center(
-                        child: Text(kNoGoalSetLabel),
-                      );
+                      return const Center(child: Text(kNoGoalSetLabel));
                     }
 
                     final progress = monthlyIncome / goal.targetAmountMinor;
@@ -270,7 +265,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                   // Progress Bar
                                   LinearProgressIndicator(
                                     value: progress.clamp(0.0, 1.0),
-                                     backgroundColor: Theme.of(
+                                    backgroundColor: Theme.of(
                                       context,
                                     ).colorScheme.secondary,
                                     valueColor: AlwaysStoppedAnimation<Color>(

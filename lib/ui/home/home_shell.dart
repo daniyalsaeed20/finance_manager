@@ -106,7 +106,7 @@ class _HomeShellState extends State<HomeShell> {
     } catch (e) {
       // If GoRouterState is not available yet, return default title
       debugPrint('⚠️ AppBar title update skipped: $e');
-      return 'Finance Manager';
+      return kAppName;
     }
   }
 
@@ -145,14 +145,14 @@ class _HomeShellState extends State<HomeShell> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Finance Manager',
+                  kAppName,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  'Manage your business finances',
+                  kAppTagline,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
@@ -162,7 +162,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           ListTile(
             leading: const Icon(Icons.dashboard_outlined),
-            title: const Text('Dashboard'),
+            title: Text(kDashboardLabel),
             onTap: () {
               Navigator.pop(context);
               context.go('/home/dashboard');
@@ -171,7 +171,7 @@ class _HomeShellState extends State<HomeShell> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.flag_outlined),
-            title: const Text('Goals'),
+            title: Text(kGoalsLabel),
             onTap: () {
               debugPrint('🎯 Drawer: Navigating to Goals');
               // Track that drawer was open when navigating
@@ -239,12 +239,7 @@ class _HomeShellState extends State<HomeShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text(_getAppBarTitle()),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text(_getAppBarTitle())),
       drawer: _buildDrawer(),
       onDrawerChanged: (isOpened) {
         // Track when drawer is manually opened/closed

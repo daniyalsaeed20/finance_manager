@@ -5,7 +5,8 @@ Make use if this file to store text that is used in the app, any meesage, name o
 // App Branding
 const String kAppName = 'Quaestor';
 const String kAppTagline = 'Money, in order';
-const String kAppDescription = 'Personal finance management app for tracking income, expenses, taxes and goals.';
+const String kAppDescription =
+    'Personal finance management app for tracking income, expenses, taxes and goals.';
 
 // Navigation Labels
 const String kDashboardLabel = 'Dashboard';
@@ -56,7 +57,8 @@ const String kDarkThemeLabel = 'Dark Theme';
 const String kSystemThemeLabel = 'System Theme';
 const String kCurrencyLabel = 'Currency';
 const String kLogoutLabel = 'Logout';
-const String kChooseCurrencyLabel = 'Choose your preferred currency for displaying amounts throughout the app.';
+const String kChooseCurrencyLabel =
+    'Choose your preferred currency for displaying amounts throughout the app.';
 const String kCurrentCurrencyLabel = 'Current Currency';
 const String kSelectCurrencyLabel = 'Select Currency';
 
@@ -69,7 +71,8 @@ const String kDeveloperName = 'Quaestor Team';
 
 // Dialog Actions
 const String kCancelLabel2 = 'Cancel';
-const String kLogoutConfirmLabel = 'Are you sure you want to logout? All data will remain on this device.';
+const String kLogoutConfirmLabel =
+    'Are you sure you want to logout? All data will remain on this device.';
 
 // Tax Screen
 const String kTaxPlanningLabel = 'Tax Planning';
@@ -79,7 +82,8 @@ const String kFinancialGoalsAnalyticsLabel = 'Financial Goals & Analytics';
 const String kViewGoalHistoryLabel = 'View Goal History';
 const String kMonthlyGoalHistoryLabel = 'Monthly Goal History';
 const String kNoMonthlyGoalsSetLabel = 'No Monthly Goals Set';
-const String kSetFirstMonthlyGoalLabel = 'Set your first monthly goal to start tracking your progress!';
+const String kSetFirstMonthlyGoalLabel =
+    'Set your first monthly goal to start tracking your progress!';
 
 // Auth Screen
 const String kCreateAccountLabel = 'Create Account';
@@ -108,6 +112,29 @@ const String kAddServiceLabel = 'Add Service';
 const String kRemoveServiceLabel = 'Remove Service';
 const String kSaveChangesLabel = 'Save Changes';
 const String kDeleteRecordLabel = 'Delete Record';
-const String kDeleteConfirmLabel = 'Are you sure you want to delete this record?';
+const String kDeleteConfirmLabel =
+    'Are you sure you want to delete this record?';
+
+// Dashboard
+const String kIncomeLabel2 = 'Income';
+const String kExpensesLabel2 = 'Expenses';
+const String kNetProfitLabel = 'Net Profit';
+const String kDashboardTipLabel =
+    'Tip: Use the arrows to navigate between months and track your progress over time.';
+const String kSetMonthlySavingsGoalLabel =
+    'Set a monthly savings goal to track your financial progress and stay motivated!';
+
+// Income Screen
+const String kManageServicesLabel = 'Manage Services';
+const String kTotalServicesLabel = 'Total Services:';
+const String kTipLabel2 = 'Tip';
+const String kNoteLabel2 = 'Note:';
+
+// Expenses Screen
+const String kManageCategoriesLabel = 'Manage Categories';
+
+// Tax Screen
+const String kUpdateLabel = 'Update';
+const String kDeleteLabel2 = 'Delete';
 
 // String get name => 'Name';

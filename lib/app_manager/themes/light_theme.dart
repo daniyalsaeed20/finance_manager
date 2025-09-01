@@ -5,109 +5,130 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../theme_layout_builder.dart';
 
+/// Quaestor — Light Theme
+/// - Brand gold: #D6B25E  (primary)
+/// - Brand navy: #0B0F13  (text/secondary)
+/// - Soft light canvas for elegance & readability.
+
 class LightTheme {
-  final Color primaryColor = Color(0xFFFF5724);
-  final Color onPrimaryColor = Color(0xFFFFFFFF);
-  final Color primaryContainerColor = Color(0xFFFBE9E7);
-  final Color onPrimaryContainerColor = Color(0xFFBF360C);
-  final Color primaryFixedColor = Color(0xFFFBE9E7);
-  final Color primaryFixedDimColor = Color(0xFFFFCCBC);
-  final Color onPrimaryFixedColor = Color(0xFFBF360C);
-  final Color onPrimaryFixedVariantColor = Color(0xFFD84315);
+  // === Brand Core ===
+  final Color primaryColor = const Color(0xFFD6B25E); // Gold
+  final Color onPrimaryColor = const Color(0xFF0B0F13); // Dark navy text on gold
 
-  final Color secondaryColor = Color(0xFF757575);
-  final Color onSecondaryColor = Color(0xFFFFFFFF);
-  final Color secondaryContainerColor = Color(0xFFEEEEEE);
-  final Color onSecondaryContainerColor = Color(0xFF000000);
-  final Color secondaryFixedColor = Color(0xFFEEEEEE);
-  final Color secondaryFixedDimColor = Color(0xFFBDBDBD);
-  final Color onSecondaryFixedColor = Color(0xFF000000);
-  final Color onSecondaryFixedVariantColor = Color(0xFF616161);
+  // Pale gold container with readable on-color
+  final Color primaryContainerColor = const Color(0xFFF5E7C2);
+  final Color onPrimaryContainerColor = const Color(0xFF3E3214);
 
-  final Color tertiaryColor = Color(0xFF00796B);
-  final Color onTertiaryColor = Color(0xFFFFFFFF);
-  final Color tertiaryContainerColor = Color(0xFFE0F2F1);
-  final Color onTertiaryContainerColor = Color(0xFF004D40);
-  final Color tertiaryFixedColor = Color(0xFFE0F2F1);
-  final Color tertiaryFixedDimColor = Color(0xFFB2DFDB);
-  final Color onTertiaryFixedColor = Color(0xFF004D40);
-  final Color onTertiaryFixedVariantColor = Color(0xFF00695C);
+  // Fixed tones (Material 3)
+  final Color primaryFixedColor = const Color(0xFFF0E3BE);
+  final Color primaryFixedDimColor = const Color(0xFFC4A964);
+  final Color onPrimaryFixedColor = const Color(0xFF0B0F13);
+  final Color onPrimaryFixedVariantColor = const Color(0xFF162028);
 
-  final Color errorColor = Color(0xFFB00020);
-  final Color onErrorColor = Color(0xFFFFFFFF);
-  final Color errorContainerColor = Color(0xFFF9DEDC);
-  final Color onErrorContainerColor = Color(0xFF410E0B);
+  // === Secondary (brand navy for subtle emphasis) ===
+  final Color secondaryColor = const Color(0xFF0B0F13);
+  final Color onSecondaryColor = const Color(0xFFF0F3F6);
+  final Color secondaryContainerColor = const Color(0xFFE6EAEE);
+  final Color onSecondaryContainerColor = const Color(0xFF13202A);
+  final Color secondaryFixedColor = const Color(0xFFE6EAEE);
+  final Color secondaryFixedDimColor = const Color(0xFFC4CCD6);
+  final Color onSecondaryFixedColor = const Color(0xFF13202A);
+  final Color onSecondaryFixedVariantColor = const Color(0xFF2B3540);
 
-  final Color surfaceColor = Color(0xFFFFFFFF);
-  final Color onSurfaceColor = Color(0xFF000000);
-  final Color surfaceDimColor = Color(0xFFF5F5F5);
-  final Color surfaceBrightColor = Color(0xFFFFFFFF);
-  final Color surfaceContainerLowestColor = Color(0xFFF5F5F5);
-  final Color surfaceContainerLowColor = Color(0xFFFAFAFA);
-  final Color surfaceContainerColor = Color(0xFFFFFFFF);
-  final Color surfaceContainerHighColor = Color(0xFFFFFFFF);
-  final Color surfaceContainerHighestColor = Color(0xFFFFFFFF);
-  final Color onSurfaceVariantColor = Color(0x8A000000);
+  // === Tertiary (teal for analytics/positive accents) ===
+  final Color tertiaryColor = const Color(0xFF2F9C8E);
+  final Color onTertiaryColor = const Color(0xFFFFFFFF);
+  final Color tertiaryContainerColor = const Color(0xFFD6F2EB);
+  final Color onTertiaryContainerColor = const Color(0xFF0B2F2A);
+  final Color tertiaryFixedColor = const Color(0xFFD6F2EB);
+  final Color tertiaryFixedDimColor = const Color(0xFFBFE3DB);
+  final Color onTertiaryFixedColor = const Color(0xFF0B2F2A);
+  final Color onTertiaryFixedVariantColor = const Color(0xFF16534C);
 
-  final Color outlineColor = Color(0xFF757575);
-  final Color outlineVariantColor = Color(0xFF9E9E9E);
-  final Color shadowColor = Color(0xFF000000);
-  final Color scrimColor = Color(0xFF000000);
-  final Color inverseSurfaceColor = Color(0xFF313033);
-  final Color onInverseSurfaceColor = Color(0xFFFBEEE9);
-  final Color inversePrimaryColor = Color(0xFFFFB68F);
-  final Color surfaceTintColor = Color(0xFFFF5724);
+  // === Error (Material light defaults) ===
+  final Color errorColor = const Color(0xFFB00020);
+  final Color onErrorColor = const Color(0xFFFFFFFF);
+  final Color errorContainerColor = const Color(0xFFF9DEDC);
+  final Color onErrorContainerColor = const Color(0xFF410E0B);
+
+  // === Surfaces (soft light canvas) ===
+  final Color surfaceColor = const Color(0xFFF7F8FA); // app background
+  final Color onSurfaceColor = const Color(0xFF0B0F13); // primary text/icons
+  final Color surfaceDimColor = const Color(0xFFF1F3F5);
+  final Color surfaceBrightColor = const Color(0xFFFFFFFF);
+
+  final Color surfaceContainerLowestColor = const Color(0xFFF2F4F6);
+  final Color surfaceContainerLowColor = const Color(0xFFF7F8FA);
+  final Color surfaceContainerColor = const Color(0xFFFFFFFF);      // cards
+  final Color surfaceContainerHighColor = const Color(0xFFFFFFFF);
+  final Color surfaceContainerHighestColor = const Color(0xFFFFFFFF);
+
+  // Muted labels / subtitles
+  final Color onSurfaceVariantColor = const Color(0xFF6B7580);
+
+  // === Strokes & effects ===
+  final Color outlineColor = const Color(0xFFCDD3D9);
+  final Color outlineVariantColor = const Color(0xFFE2E7EB);
+  final Color shadowColor = const Color(0xFF000000);
+  final Color scrimColor = const Color(0xFF000000);
+
+  // Inverse surfaces (for chips/tooltips on light)
+  final Color inverseSurfaceColor = const Color(0xFF1A2128);
+  final Color onInverseSurfaceColor = const Color(0xFFE6E9ED);
+  final Color inversePrimaryColor = const Color(0xFFB99439); // deeper gold for inverse
+  final Color surfaceTintColor = const Color(0xFFD6B25E);
 
   ColorScheme colorScheme() => ColorScheme(
-    brightness: Brightness.light,
-    primary: primaryColor,
-    onPrimary: onPrimaryColor,
-    primaryContainer: primaryContainerColor,
-    onPrimaryContainer: onPrimaryContainerColor,
-    primaryFixed: primaryFixedColor,
-    primaryFixedDim: primaryFixedDimColor,
-    onPrimaryFixed: onPrimaryFixedColor,
-    onPrimaryFixedVariant: onPrimaryFixedVariantColor,
-    secondary: secondaryColor,
-    onSecondary: onSecondaryColor,
-    secondaryContainer: secondaryContainerColor,
-    onSecondaryContainer: onSecondaryContainerColor,
-    secondaryFixed: secondaryFixedColor,
-    secondaryFixedDim: secondaryFixedDimColor,
-    onSecondaryFixed: onSecondaryFixedColor,
-    onSecondaryFixedVariant: onSecondaryFixedVariantColor,
-    tertiary: tertiaryColor,
-    onTertiary: onTertiaryColor,
-    tertiaryContainer: tertiaryContainerColor,
-    onTertiaryContainer: onTertiaryContainerColor,
-    tertiaryFixed: tertiaryFixedColor,
-    tertiaryFixedDim: tertiaryFixedDimColor,
-    onTertiaryFixed: onTertiaryFixedColor,
-    onTertiaryFixedVariant: onTertiaryFixedVariantColor,
-    error: errorColor,
-    onError: onErrorColor,
-    errorContainer: errorContainerColor,
-    onErrorContainer: onErrorContainerColor,
-    surface: surfaceColor,
-    onSurface: onSurfaceColor,
-    surfaceDim: surfaceDimColor,
-    surfaceBright: surfaceBrightColor,
-    surfaceContainerLowest: surfaceContainerLowestColor,
-    surfaceContainerLow: surfaceContainerLowColor,
-    surfaceContainer: surfaceContainerColor,
-    surfaceContainerHigh: surfaceContainerHighColor,
-    surfaceContainerHighest: surfaceContainerHighestColor,
-    onSurfaceVariant: onSurfaceVariantColor,
-    outline: outlineColor,
-    outlineVariant: outlineVariantColor,
-    shadow: shadowColor,
-    scrim: scrimColor,
-    inverseSurface: inverseSurfaceColor,
-    onInverseSurface: onInverseSurfaceColor,
-    inversePrimary: inversePrimaryColor,
-    surfaceTint: surfaceTintColor,
-  );
+        brightness: Brightness.light,
+        primary: primaryColor,
+        onPrimary: onPrimaryColor,
+        primaryContainer: primaryContainerColor,
+        onPrimaryContainer: onPrimaryContainerColor,
+        primaryFixed: primaryFixedColor,
+        primaryFixedDim: primaryFixedDimColor,
+        onPrimaryFixed: onPrimaryFixedColor,
+        onPrimaryFixedVariant: onPrimaryFixedVariantColor,
+        secondary: secondaryColor,
+        onSecondary: onSecondaryColor,
+        secondaryContainer: secondaryContainerColor,
+        onSecondaryContainer: onSecondaryContainerColor,
+        secondaryFixed: secondaryFixedColor,
+        secondaryFixedDim: secondaryFixedDimColor,
+        onSecondaryFixed: onSecondaryFixedColor,
+        onSecondaryFixedVariant: onSecondaryFixedVariantColor,
+        tertiary: tertiaryColor,
+        onTertiary: onTertiaryColor,
+        tertiaryContainer: tertiaryContainerColor,
+        onTertiaryContainer: onTertiaryContainerColor,
+        tertiaryFixed: tertiaryFixedColor,
+        tertiaryFixedDim: tertiaryFixedDimColor,
+        onTertiaryFixed: onTertiaryFixedColor,
+        onTertiaryFixedVariant: onTertiaryFixedVariantColor,
+        error: errorColor,
+        onError: onErrorColor,
+        errorContainer: errorContainerColor,
+        onErrorContainer: onErrorContainerColor,
+        surface: surfaceColor,
+        onSurface: onSurfaceColor,
+        surfaceDim: surfaceDimColor,
+        surfaceBright: surfaceBrightColor,
+        surfaceContainerLowest: surfaceContainerLowestColor,
+        surfaceContainerLow: surfaceContainerLowColor,
+        surfaceContainer: surfaceContainerColor,
+        surfaceContainerHigh: surfaceContainerHighColor,
+        surfaceContainerHighest: surfaceContainerHighestColor,
+        onSurfaceVariant: onSurfaceVariantColor,
+        outline: outlineColor,
+        outlineVariant: outlineVariantColor,
+        shadow: shadowColor,
+        scrim: scrimColor,
+        inverseSurface: inverseSurfaceColor,
+        onInverseSurface: onInverseSurfaceColor,
+        inversePrimary: inversePrimaryColor,
+        surfaceTint: surfaceTintColor,
+      );
 
+  // Layout tokens unchanged (already minimal & balanced)
   final layout = ThemeLayoutBuilder(
     radius: 12.0.r,
     spacing: 16.0.w,
