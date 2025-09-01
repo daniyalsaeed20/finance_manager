@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../strings.dart';
 
@@ -7,6 +8,7 @@ import '../../services/user_manager.dart';
 import '../../services/currency_service.dart';
 import '../app_theme.dart';
 import '../theme_cubit/theme_cubit.dart';
+import '../../utils/branding.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -32,6 +34,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // App Logo Section
+          Card(
+            child: Branding.logo(width: 200.w, height: 200.h, context: context),
+          ),
+
+          const SizedBox(height: 16),
+
           // Theme Settings
           Card(
             child: Padding(
@@ -118,7 +127,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       return FutureBuilder<Currency>(
                         future: CurrencyService.getUserCurrency(),
                         builder: (context, asyncSnapshot) {
-                          final currentCurrency = snapshot.data ?? asyncSnapshot.data;
+                          final currentCurrency =
+                              snapshot.data ?? asyncSnapshot.data;
                           if (currentCurrency != null) {
                             return ListTile(
                               title: Text(kCurrentCurrencyLabel),
@@ -129,11 +139,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               onTap: () => _showCurrencySelector(),
                             );
                           }
-                            return ListTile(
-                              title: Text(kCurrentCurrencyLabel),
-                              subtitle: const Text('Loading...'),
-                              trailing: const Icon(Icons.currency_exchange),
-                            );
+                          return ListTile(
+                            title: Text(kCurrentCurrencyLabel),
+                            subtitle: const Text('Loading...'),
+                            trailing: const Icon(Icons.currency_exchange),
+                          );
                         },
                       );
                     },
@@ -152,7 +162,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(kAboutLabel, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    kAboutLabel,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 16),
                   ListTile(
                     title: Text(kVersionLabel),
@@ -178,9 +191,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(kLogoutLabel),
-        content: Text(
-          kLogoutConfirmLabel,
-        ),
+        content: Text(kLogoutConfirmLabel),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../strings.dart';
+import '../../utils/branding.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key, required this.child});
@@ -133,32 +135,9 @@ class _HomeShellState extends State<HomeShell> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.account_balance_wallet,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  kAppName,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  kAppTagline,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ],
-            ),
+            child: Branding.logo(context: context),
           ),
           ListTile(
             leading: const Icon(Icons.dashboard_outlined),

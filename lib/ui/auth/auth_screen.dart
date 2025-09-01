@@ -5,6 +5,7 @@ import '../../strings.dart';
 
 import '../../repositories/auth_repository.dart';
 import '../../services/user_manager.dart';
+import '../../utils/branding.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -29,6 +30,26 @@ class _AuthScreenState extends State<AuthScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // App Logo
+            const SizedBox(height: 32),
+            Branding.logoLargeWidget(context),
+            const SizedBox(height: 24),
+            Text(
+              kAppName,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              kAppTagline,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
             if (_isSignUp)
               TextField(
                 controller: _nameController,

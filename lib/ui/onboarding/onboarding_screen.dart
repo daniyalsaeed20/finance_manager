@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../strings.dart';
+import '../../utils/branding.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -15,6 +16,9 @@ class OnboardingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
+              // App Logo
+              Branding.logoLargeWidget(context),
+              const SizedBox(height: 24),
               Text(
                 kAppName,
                 style: Theme.of(context).textTheme.headlineLarge,
