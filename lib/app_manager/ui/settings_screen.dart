@@ -199,10 +199,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
+              final navigator = Navigator.of(context);
+              final router = GoRouter.of(context);
               await UserManager.instance.signOut();
               if (mounted) {
-                Navigator.pop(context); // Close dialog
-                context.go('/auth'); // Navigate to auth screen
+                navigator.pop(); // Close dialog
+                router.go('/auth'); // Navigate to auth screen
               }
             },
             style: ElevatedButton.styleFrom(
@@ -302,9 +304,10 @@ class _CurrencySelectorDialogState extends State<_CurrencySelectorDialog> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     onTap: () async {
+                      final navigator = Navigator.of(context);
                       await CurrencyService.setUserCurrency(currency.code);
                       if (mounted) {
-                        Navigator.pop(context);
+                        navigator.pop();
                         setState(() {}); // Refresh the settings screen
                       }
                     },

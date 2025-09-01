@@ -10,7 +10,7 @@ class IncomeState extends Equatable {
   final bool dashboardRefreshNeeded;
   final DateTime? dashboardRefreshMonth;
 
-  IncomeState({
+  const IncomeState({
     required this.loading,
     required this.templates,
     required this.incomeRecords,

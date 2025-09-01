@@ -94,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           icon: const Icon(Icons.chevron_left),
                         ),
                         Text(
-                          '${_selectedMonth.month == DateTime.now().month && _selectedMonth.year == DateTime.now().month ? kThisMonthLabel : formatMonthYear(_selectedMonth)}',
+                          _selectedMonth.month == DateTime.now().month && _selectedMonth.year == DateTime.now().month ? kThisMonthLabel : formatMonthYear(_selectedMonth),
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         IconButton(
@@ -181,7 +181,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildGoalProgressWidget(MonthlyGoal goal, int monthlyIncome) {
     final progress = monthlyIncome / goal.targetAmountMinor;
-    final isAchieved = monthlyIncome >= goal.targetAmountMinor;
 
     return Card(
       child: Padding(

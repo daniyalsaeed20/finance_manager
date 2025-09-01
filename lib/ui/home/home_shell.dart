@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../strings.dart';
 import '../../utils/branding.dart';
@@ -135,7 +134,7 @@ class _HomeShellState extends State<HomeShell> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.surface,
             ),
             child: Branding.logo(context: context),
           ),

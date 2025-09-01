@@ -3,6 +3,7 @@
 
 import 'package:isar/isar.dart';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 
 import '../models/expense_models.dart';
 import '../services/isar_service.dart';
@@ -77,9 +78,9 @@ class ExpenseRepository {
     final from = DateTime(start.year, start.month, start.day);
     final to = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
 
-    print('🔍 ExpenseRepo: Querying from $from to $to for user $userId');
-    print('🔍 ExpenseRepo: Original start: $start, Original end: $end');
-    print('🔍 ExpenseRepo: Adjusted from: $from, Adjusted to: $to');
+    debugPrint('🔍 ExpenseRepo: Querying from $from to $to for user $userId');
+    debugPrint('🔍 ExpenseRepo: Original start: $start, Original end: $end');
+    debugPrint('🔍 ExpenseRepo: Adjusted from: $from, Adjusted to: $to');
 
     // First, let's see all records for this user to debug
     final allUserRecords = await db.expenses
@@ -87,13 +88,15 @@ class ExpenseRepository {
         .userIdEqualTo(userId)
         .findAll();
 
-    print('🔍 ExpenseRepo: Total records for user: ${allUserRecords.length}');
+    debugPrint(
+      '🔍 ExpenseRepo: Total records for user: ${allUserRecords.length}',
+    );
     for (int i = 0; i < allUserRecords.length; i++) {
       final record = allUserRecords[i];
       final isInRange =
           record.date.isAfter(from.subtract(const Duration(seconds: 1))) &&
           record.date.isBefore(to.add(const Duration(seconds: 1)));
-      print(
+      debugPrint(
         '🔍 ExpenseRepo: Record $i - Date: ${record.date}, Is in range: $isInRange',
       );
     }
@@ -108,7 +111,9 @@ class ExpenseRepository {
         .dateLessThan(to.add(const Duration(seconds: 1)))
         .findAll();
 
-    print('🔍 ExpenseRepo: Found ${results.length} expense records in range');
+    debugPrint(
+      '🔍 ExpenseRepo: Found ${results.length} expense records in range',
+    );
     return results;
   }
 

@@ -107,7 +107,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
-                    ).colorScheme.primary.withOpacity(0.1),
+                    ).colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -163,9 +163,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                 final year = int.parse(monthParts[0]);
                 final month = int.parse(monthParts[1]);
 
-                // Calculate income for this specific month
-                final monthStart = DateTime(year, month, 1);
-                final monthEnd = DateTime(year, month + 1, 0, 23, 59, 59);
+                // Parse month and year from monthKey
 
                 // Use the total income from dashboard state if it matches the month
                 // Otherwise, we'll need to load data for this specific month
@@ -249,7 +247,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
+                              color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                                                           child: Text(
@@ -314,7 +312,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                               ?.copyWith(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.onSurface.withOpacity(0.8),
+                                ).colorScheme.onSurface.withValues(alpha: 0.8),
                               ),
                         ),
                       ),

@@ -229,7 +229,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     }
 
                     final progress = monthlyIncome / goal.targetAmountMinor;
-                    final isAchieved = monthlyIncome >= goal.targetAmountMinor;
 
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -767,7 +766,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .outline
-                                                .withOpacity(0.3),
+                                                .withValues(alpha: 0.3),
                                           ),
                                         ),
                                         barGroups: [
@@ -967,16 +966,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
     // Add 30% padding and ensure it's at least 1.0 to avoid division by zero
     return (maxValue * 1.3).clamp(1.0, double.infinity);
-  }
-
-  String _formatAxisValue(double value) {
-    if (value >= 1000000) {
-      return '\$${(value / 1000000).toStringAsFixed(1)}m';
-    } else if (value >= 1000) {
-      return '\$${(value / 1000).toStringAsFixed(1)}k';
-    } else {
-      return '\$${value.toStringAsFixed(0)}';
-    }
   }
 
   Widget _buildPieChartLegend(

@@ -206,7 +206,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
       initialDatePickerMode: DatePickerMode.year,
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       setState(() {
         _selectedMonth = DateTime(picked.year, picked.month);
       });
@@ -221,7 +221,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   Future<void> _editIncomeRecord(IncomeRecord record) async {
     final result = await context.push('/home/income/edit/${record.id}');
-    if (result == true) {
+    if (result == true && mounted) {
       // Refresh data when returning from edit screen
       final userId = UserManager.instance.currentUserId;
       context.read<IncomeCubit>().refreshRange(
@@ -264,23 +264,23 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
     final currentMonth = DateTime.now();
     final selectedMonth = widget.selectedMonth;
 
-    print('_updateDefaultDate called');
-    print('Current month: ${currentMonth.month}/${currentMonth.year}');
-    print('Selected month: ${selectedMonth.month}/${selectedMonth.year}');
-    print('Previous _selectedDate: $_selectedDate');
+    debugPrint('_updateDefaultDate called');
+    debugPrint('Current month: ${currentMonth.month}/${currentMonth.year}');
+    debugPrint('Selected month: ${selectedMonth.month}/${selectedMonth.year}');
+    debugPrint('Previous _selectedDate: $_selectedDate');
 
     if (selectedMonth.month == currentMonth.month &&
         selectedMonth.year == currentMonth.year) {
       // If viewing current month, use current date
       _selectedDate = DateTime.now();
-      print('Using current date: ${_selectedDate}');
+      debugPrint('Using current date: $_selectedDate');
     } else {
       // If viewing different month, use first day of that month
       _selectedDate = DateTime(selectedMonth.year, selectedMonth.month, 1);
-      print('Using first day of selected month: ${_selectedDate}');
+      debugPrint('Using first day of selected month: $_selectedDate');
     }
 
-    print('New _selectedDate: $_selectedDate');
+    debugPrint('New _selectedDate: $_selectedDate');
 
     // Reset service counts when month changes - but do it after a frame to ensure templates are loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -289,31 +289,35 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
   }
 
   void _resetServiceCounts() {
-    print('_resetServiceCounts called');
-    print('Previous _serviceCounts: $_serviceCounts');
+    debugPrint('_resetServiceCounts called');
+    debugPrint('Previous _serviceCounts: $_serviceCounts');
 
     _serviceCounts.clear();
     // Reinitialize with current templates
     final state = context.read<IncomeCubit>().state;
     final activeTemplates = state.templates.where((t) => t.active).toList();
 
-    print('Active templates: ${activeTemplates.map((t) => t.name).toList()}');
+    debugPrint(
+      'Active templates: ${activeTemplates.map((t) => t.name).toList()}',
+    );
 
     for (final template in activeTemplates) {
       _serviceCounts[template.name] = 0;
     }
 
-    print('New _serviceCounts: $_serviceCounts');
+    debugPrint('New _serviceCounts: $_serviceCounts');
     setState(() {});
   }
 
   void _initializeServiceCounts(List<ServiceTemplate> templates) {
-    print('_initializeServiceCounts called with ${templates.length} templates');
+    debugPrint(
+      '_initializeServiceCounts called with ${templates.length} templates',
+    );
     if (_serviceCounts.isEmpty) {
       for (final template in templates) {
         _serviceCounts[template.name] = 0;
       }
-      print('Initialized _serviceCounts: $_serviceCounts');
+      debugPrint('Initialized _serviceCounts: $_serviceCounts');
       setState(() {});
     }
   }
@@ -321,7 +325,7 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print(
+    debugPrint(
       'didChangeDependencies called for month: ${widget.selectedMonth.month}/${widget.selectedMonth.year}',
     );
     // Update date when dependencies change (e.g., month navigation)
@@ -546,10 +550,10 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
         _serviceCounts.values.any((count) => count > 0);
 
     // Debug information
-    print('_canSubmit: $canSubmit');
-    print('_serviceCounts: $_serviceCounts');
-    print('_serviceCounts.isEmpty: ${_serviceCounts.isEmpty}');
-    print(
+    debugPrint('_canSubmit: $canSubmit');
+    debugPrint('_serviceCounts: $_serviceCounts');
+    debugPrint('_serviceCounts.isEmpty: ${_serviceCounts.isEmpty}');
+    debugPrint(
       '_serviceCounts.values.any((count) => count > 0): ${_serviceCounts.values.any((count) => count > 0)}',
     );
 
@@ -570,10 +574,10 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
   }
 
   void _addIncome() {
-    print('_addIncome called');
-    print('_serviceCounts: $_serviceCounts');
-    print('_selectedDate: $_selectedDate');
-    print('Can submit: ${_canSubmit()}');
+    debugPrint('_addIncome called');
+    debugPrint('_serviceCounts: $_serviceCounts');
+    debugPrint('_selectedDate: $_selectedDate');
+    debugPrint('Can submit: ${_canSubmit()}');
 
     final tip = double.tryParse(_tipController.text) ?? 0;
     final tipMinor = (tip * 100).round();
@@ -652,17 +656,17 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
             : '${existingRecord.note ?? ''}${existingRecord.note != null ? ' | ' : ''}${_tipController.text}';
 
       // Update the existing record
-      print('Updating existing income record:');
-      print('  ID: ${mergedRecord.id}');
-      print('  Date: ${mergedRecord.date}');
-      print('  Services count: ${mergedRecord.services.length}');
-      print('  Tip: ${mergedRecord.tipMinor}');
-      print('  Note: ${mergedRecord.note}');
-      print('  UserId: ${mergedRecord.userId}');
+      debugPrint('Updating existing income record:');
+      debugPrint('  ID: ${mergedRecord.id}');
+      debugPrint('  Date: ${mergedRecord.date}');
+      debugPrint('  Services count: ${mergedRecord.services.length}');
+      debugPrint('  Tip: ${mergedRecord.tipMinor}');
+      debugPrint('  Note: ${mergedRecord.note}');
+      debugPrint('  UserId: ${mergedRecord.userId}');
 
-      print('Calling cubit.updateIncome...');
+      debugPrint('Calling cubit.updateIncome...');
       context.read<IncomeCubit>().updateIncome(mergedRecord);
-      print('cubit.updateIncome called successfully');
+      debugPrint('cubit.updateIncome called successfully');
     } else {
       // Create new record
       final record = IncomeRecord()
@@ -672,16 +676,16 @@ class _AddIncomeFormState extends State<_AddIncomeForm> {
         ..note = _noteController.text.isEmpty ? null : _noteController.text
         ..userId = userId;
 
-      print('Creating new income record:');
-      print('  Date: ${record.date}');
-      print('  Services count: ${record.services.length}');
-      print('  Tip: ${record.tipMinor}');
-      print('  Note: ${record.note}');
-      print('  UserId: ${record.userId}');
+      debugPrint('Creating new income record:');
+      debugPrint('  Date: ${record.date}');
+      debugPrint('  Services count: ${record.services.length}');
+      debugPrint('  Tip: ${record.tipMinor}');
+      debugPrint('  Note: ${record.note}');
+      debugPrint('  UserId: ${record.userId}');
 
-      print('Calling cubit.addIncome...');
+      debugPrint('Calling cubit.addIncome...');
       context.read<IncomeCubit>().addIncome(record);
-      print('cubit.addIncome called successfully');
+      debugPrint('cubit.addIncome called successfully');
     }
 
     // Reset form

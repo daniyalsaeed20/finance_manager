@@ -8,7 +8,7 @@ class ExpenseState extends Equatable {
   final DateTime rangeStart;
   final DateTime rangeEnd;
 
-  ExpenseState({
+  const ExpenseState({
     required this.loading,
     required this.categories,
     required this.expenses,
@@ -18,12 +18,12 @@ class ExpenseState extends Equatable {
   });
 
   ExpenseState.initial()
-      : loading = false,
-        categories = const [],
-        expenses = const [],
-        totalMinor = 0,
-        rangeStart = DateTime(2000, 1, 1),
-        rangeEnd = DateTime(2099, 12, 31);
+    : loading = false,
+      categories = const [],
+      expenses = const [],
+      totalMinor = 0,
+      rangeStart = DateTime(2000, 1, 1),
+      rangeEnd = DateTime(2099, 12, 31);
 
   ExpenseState copyWith({
     bool? loading,
@@ -44,6 +44,12 @@ class ExpenseState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [loading, categories, expenses, totalMinor, rangeStart, rangeEnd];
+  List<Object?> get props => [
+    loading,
+    categories,
+    expenses,
+    totalMinor,
+    rangeStart,
+    rangeEnd,
+  ];
 }
-

@@ -2,7 +2,6 @@
 // CSV and PDF export generation
 
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';

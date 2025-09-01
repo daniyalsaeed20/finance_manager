@@ -210,7 +210,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       initialDatePickerMode: DatePickerMode.year,
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       setState(() {
         _selectedMonth = DateTime(picked.year, picked.month);
       });
@@ -225,7 +225,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   Future<void> _editExpenseRecord(Expense expense) async {
     final result = await context.push('/home/expenses/edit/${expense.id}');
-    if (result == true) {
+    if (result == true && mounted) {
       // Refresh data when returning from edit screen
       final userId = UserManager.instance.currentUserId;
       context.read<ExpenseCubit>().refreshRange(
@@ -424,8 +424,8 @@ class _AddExpenseFormState extends State<_AddExpenseForm> {
   void _addExpense() {
     final userId = UserManager.instance.currentUserId;
 
-    // Ensure we always have a valid date, fallback to current date if needed
-    final expenseDate = _date ?? DateTime.now();
+    // Use the selected date
+    final expenseDate = _date;
 
     final expense = Expense()
       ..date = expenseDate

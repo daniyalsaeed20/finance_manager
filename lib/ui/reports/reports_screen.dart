@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../strings.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 
@@ -45,11 +44,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     _range = DateTimeRange(start: startOfMonth, end: endOfMonth);
 
-    print('🔍 Reports: Setting date range in initState');
-    print('🔍 Reports: Current date: $now');
-    print('🔍 Reports: Range start: ${_range!.start}');
-    print('🔍 Reports: Range end: ${_range!.end}');
-    print(
+    debugPrint('🔍 Reports: Setting date range in initState');
+    debugPrint('🔍 Reports: Current date: $now');
+    debugPrint('🔍 Reports: Range start: ${_range!.start}');
+    debugPrint('🔍 Reports: Range end: ${_range!.end}');
+    debugPrint(
       '🔍 Reports: DashboardCubit created with hash: ${_dashboardCubit.hashCode}',
     );
 
@@ -123,26 +122,28 @@ class _ReportsScreenState extends State<ReportsScreen> {
   void _loadDataForRange() {
     if (_range != null) {
       final userId = UserManager.instance.currentUserId;
-      print(
+      debugPrint(
         '🔍 Reports: Loading data for range: ${_range!.start} to ${_range!.end}',
       );
-      print(
+      debugPrint(
         '🔍 Reports: Start date details: year=${_range!.start.year}, month=${_range!.start.month}, day=${_range!.start.day}',
       );
-      print(
+      debugPrint(
         '🔍 Reports: End date details: year=${_range!.end.year}, month=${_range!.end.month}, day=${_range!.end.day}',
       );
-      print('🔍 Reports: User ID: $userId');
-      print(
+      debugPrint('🔍 Reports: User ID: $userId');
+      debugPrint(
         '🔍 Reports: Firebase current user: ${FirebaseAuth.instance.currentUser?.uid}',
       );
-      print(
+      debugPrint(
         '🔍 Reports: UserManager isSignedIn: ${UserManager.instance.isSignedIn}',
       );
 
       // Use the instance variable directly
-      print('🔍 Reports: About to call loadForRange on DashboardCubit');
-      print('🔍 Reports: DashboardCubit instance: ${_dashboardCubit.hashCode}');
+      debugPrint('🔍 Reports: About to call loadForRange on DashboardCubit');
+      debugPrint(
+        '🔍 Reports: DashboardCubit instance: ${_dashboardCubit.hashCode}',
+      );
       _dashboardCubit.loadForRange(_range!.start, _range!.end, userId);
     }
   }
@@ -483,17 +484,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   verticalInterval: 1,
                                   getDrawingHorizontalLine: (value) {
                                     return FlLine(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.outline.withOpacity(0.3),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline
+                                          .withValues(alpha: 0.3),
                                       strokeWidth: 1,
                                     );
                                   },
                                   getDrawingVerticalLine: (value) {
                                     return FlLine(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.outline.withOpacity(0.3),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline
+                                          .withValues(alpha: 0.3),
                                       strokeWidth: 1,
                                     );
                                   },
@@ -592,9 +595,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 borderData: FlBorderData(
                                   show: true,
                                   border: Border.all(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.outline.withOpacity(0.3),
+                                    color: Theme.of(context).colorScheme.outline
+                                        .withValues(alpha: 0.3),
                                   ),
                                 ),
                                 minX: 0,
@@ -663,9 +665,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     ),
                                     belowBarData: BarAreaData(
                                       show: true,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary.withOpacity(0.1),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.1),
                                     ),
                                   ),
                                 ],
@@ -675,7 +678,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     tooltipRoundedRadius: 8,
                                     tooltipPadding: const EdgeInsets.all(8),
                                     tooltipMargin: 8,
-                                    getTooltipColor: (touchedSpot) => Theme.of(context).colorScheme.surface,
+                                    getTooltipColor: (touchedSpot) =>
+                                        Theme.of(context).colorScheme.surface,
                                     getTooltipItems: (touchedSpots) {
                                       return touchedSpots.map((touchedSpot) {
                                         String label;
@@ -698,7 +702,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         return LineTooltipItem(
                                           '$label\n${formatCurrencySync(touchedSpot.y.toInt())}',
                                           TextStyle(
-                                            color: Theme.of(context).colorScheme.onSurface,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                           ),
@@ -873,6 +879,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
     if (_range == null) return;
 
     try {
+      // Store context-dependent values before async operations
+      final dashboardCubit = context.read<DashboardCubit>();
+      final state = dashboardCubit.state;
+
       // Prepare PDF data
       final List<List<String>> pdfData = [
         ['Date', 'Type', 'Category/Services', 'Amount', 'Notes'],
@@ -937,9 +947,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       final title =
           '${formatShortDate(_range!.start)} - ${formatShortDate(_range!.end)}';
 
-      // Get the current dashboard state for additional data
-      final dashboardCubit = context.read<DashboardCubit>();
-      final state = dashboardCubit.state;
+      // Dashboard state is already available from above
 
       // Calculate tax and after-tax profit
       final estimatedTax = (state.netMinor * _taxRate / 100).round();

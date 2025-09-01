@@ -49,12 +49,8 @@ class _BusinessManagementScreenState extends State<BusinessManagementScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        debugPrint('🏢 Business: WillPopScope triggered');
-        // Always allow popping back to previous screen
-        return true;
-      },
+    return PopScope(
+      canPop: true,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -107,11 +103,6 @@ class _ServicesTabState extends State<_ServicesTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<IncomeCubit, IncomeState>(
       builder: (context, state) {
-        // Safety check for state
-        if (state == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -234,8 +225,7 @@ class _ServicesTabState extends State<_ServicesTab> {
                           ),
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
             ],
           ),
         );
@@ -325,11 +315,13 @@ class _ServicesTabState extends State<_ServicesTab> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await context.read<IncomeCubit>().removeTemplate(template.id);
+              final navigator = Navigator.of(context);
+              final cubit = context.read<IncomeCubit>();
+              await cubit.removeTemplate(template.id);
               // Reload templates to update the UI
               final userId = UserManager.instance.currentUserId;
-              context.read<IncomeCubit>().loadTemplates(userId);
-              Navigator.pop(context);
+              cubit.loadTemplates(userId);
+              navigator.pop();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
@@ -364,11 +356,6 @@ class _CategoriesTabState extends State<_CategoriesTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<ExpenseCubit, ExpenseState>(
       builder: (context, state) {
-        // Safety check for state
-        if (state == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -472,8 +459,7 @@ class _CategoriesTabState extends State<_CategoriesTab> {
                           ),
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
             ],
           ),
         );
@@ -544,11 +530,13 @@ class _CategoriesTabState extends State<_CategoriesTab> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await context.read<ExpenseCubit>().deleteCategory(category.id);
+              final navigator = Navigator.of(context);
+              final cubit = context.read<ExpenseCubit>();
+              await cubit.deleteCategory(category.id);
               // Reload categories to update the UI
               final userId = UserManager.instance.currentUserId;
-              context.read<ExpenseCubit>().loadCategories(userId);
-              Navigator.pop(context);
+              cubit.loadCategories(userId);
+              navigator.pop();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
@@ -603,14 +591,11 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
     return BlocBuilder<GoalCubit, GoalState>(
       builder: (context, state) {
         // Debug information
-        print(
+        debugPrint(
           'GoalState: loading=${state.loading}, monthKey=${state.monthKey}, goal=${state.goal}',
         );
 
-        // Safety check for state
-        if (state == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
+
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -783,7 +768,6 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: _saveGoal,
-                                child: const Text('Set Goal'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Theme.of(
                                     context,
@@ -792,6 +776,7 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                                     context,
                                   ).colorScheme.onPrimary,
                                 ),
+                                child: const Text('Set Goal'),
                               ),
                             ),
                           ] else ...[
@@ -799,7 +784,6 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => _startEditing(state.goal!),
-                                child: const Text('Edit Goal'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Theme.of(
                                     context,
@@ -808,6 +792,7 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                                     context,
                                   ).colorScheme.onPrimary,
                                 ),
+                                child: const Text('Edit Goal'),
                               ),
                             ),
                           ],
@@ -880,7 +865,7 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        if (state.goal!.strategies.length > 0) ...[
+                        if (state.goal!.strategies.isNotEmpty) ...[
                           Text(
                             'Strategy List:',
                             style: Theme.of(context).textTheme.labelMedium,
@@ -942,7 +927,7 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
   }
 
   void _startEditing(MonthlyGoal goal) {
-    print(
+    debugPrint(
       'Starting to edit goal: ${goal.targetAmountMinor}, monthKey: ${goal.monthKey}',
     );
     setState(() {
@@ -951,8 +936,8 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
       _strategies.clear();
       _strategies.addAll(goal.strategies.map((s) => s.title));
     });
-    print(
-      'Form populated: amount=${_amountController.text}, strategies=${_strategies}',
+    debugPrint(
+      'Form populated: amount=$_amountController.text, strategies=$_strategies',
     );
   }
 
@@ -1008,11 +993,11 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
     // Convert to minor units (cents)
     final amountMinor = (amount * 100).round();
 
-    print(
-      'Updating goal: amount=$amount, amountMinor=$amountMinor, strategies=${_strategies}',
+    debugPrint(
+      'Updating goal: amount=$amount, amountMinor=$amountMinor, strategies=$_strategies',
     );
-    print(
-      'Original goal: ${_editingGoal!.targetAmountMinor}, monthKey: ${_editingGoal!.monthKey}',
+    debugPrint(
+      'Original goal: $_editingGoal!.targetAmountMinor, monthKey: $_editingGoal!.monthKey',
     );
 
     final updatedGoal = _editingGoal!
@@ -1021,8 +1006,8 @@ class _MonthlyGoalsTabState extends State<_MonthlyGoalsTab> {
           .map((s) => GoalStrategyItem()..title = s)
           .toList();
 
-    print(
-      'Updated goal: ${updatedGoal.targetAmountMinor}, monthKey: ${updatedGoal.monthKey}',
+    debugPrint(
+      'Updated goal: $updatedGoal.targetAmountMinor, monthKey: $updatedGoal.monthKey',
     );
 
     context.read<GoalCubit>().upsert(updatedGoal);

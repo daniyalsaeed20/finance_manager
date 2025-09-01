@@ -3,6 +3,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import '../models/income_models.dart';
 import '../repositories/income_repository.dart';
 
@@ -30,27 +31,27 @@ class IncomeCubit extends Cubit<IncomeState> {
   }
 
   Future<void> addIncome(IncomeRecord record) async {
-    print('IncomeCubit.addIncome called with record: ${record.id}');
+    debugPrint('IncomeCubit.addIncome called with record: ${record.id}');
     try {
       await repository.addIncomeRecord(record);
-      print('IncomeCubit.addIncome: record saved successfully');
+      debugPrint('IncomeCubit.addIncome: record saved successfully');
       await refreshRange(state.rangeStart, state.rangeEnd, record.userId);
-      print('IncomeCubit.addIncome: range refreshed successfully');
+      debugPrint('IncomeCubit.addIncome: range refreshed successfully');
     } catch (e) {
-      print('IncomeCubit.addIncome error: $e');
+      debugPrint('IncomeCubit.addIncome error: $e');
       rethrow;
     }
   }
 
   Future<void> updateIncome(IncomeRecord record) async {
-    print('IncomeCubit.updateIncome called with record: ${record.id}');
+    debugPrint('IncomeCubit.updateIncome called with record: ${record.id}');
     try {
       await repository.updateIncomeRecord(record);
-      print('IncomeCubit.updateIncome: record updated successfully');
+      debugPrint('IncomeCubit.updateIncome: record updated successfully');
       await refreshRange(state.rangeStart, state.rangeEnd, record.userId);
-      print('IncomeCubit.updateIncome: range refreshed successfully');
+      debugPrint('IncomeCubit.updateIncome: range refreshed successfully');
     } catch (e) {
-      print('IncomeCubit.updateIncome error: $e');
+      debugPrint('IncomeCubit.updateIncome error: $e');
       rethrow;
     }
   }
@@ -62,13 +63,13 @@ class IncomeCubit extends Cubit<IncomeState> {
   }
 
   Future<void> refreshRange(DateTime start, DateTime end, String userId) async {
-    print(
+    debugPrint(
       'IncomeCubit.refreshRange called: ${start.toIso8601String()} to ${end.toIso8601String()}',
     );
     emit(state.copyWith(loading: true, rangeStart: start, rangeEnd: end));
     try {
       final items = await repository.getIncomeForDateRange(start, end, userId);
-      print('IncomeCubit.refreshRange: got ${items.length} items');
+      debugPrint('IncomeCubit.refreshRange: got ${items.length} items');
       final totalMinor = items.fold<int>(0, (sum, r) => sum + r.totalMinor);
       emit(
         state.copyWith(
@@ -77,9 +78,9 @@ class IncomeCubit extends Cubit<IncomeState> {
           totalMinor: totalMinor,
         ),
       );
-      print('IncomeCubit.refreshRange: state updated successfully');
+      debugPrint('IncomeCubit.refreshRange: state updated successfully');
     } catch (e) {
-      print('IncomeCubit.refreshRange error: $e');
+      debugPrint('IncomeCubit.refreshRange error: $e');
       emit(state.copyWith(loading: false));
       rethrow;
     }

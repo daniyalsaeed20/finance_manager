@@ -4,7 +4,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:printing/printing.dart';
 import 'package:csv/csv.dart';
-import '../../strings.dart';
 
 class ExportedFilesScreen extends StatefulWidget {
   const ExportedFilesScreen({super.key});
@@ -409,9 +408,7 @@ class _ExportedFilesScreenState extends State<ExportedFilesScreen> {
                             children: [
                               Icon(Icons.delete),
                               SizedBox(width: 8),
-                              Text(
-                                'Delete',
-                              ),
+                              Text('Delete'),
                             ],
                           ),
                         ),

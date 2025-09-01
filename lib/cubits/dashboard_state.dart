@@ -9,7 +9,7 @@ class DashboardState extends Equatable {
   final int netMinor;
   final int goalAmountMinor;
 
-  DashboardState({
+  const DashboardState({
     required this.loading,
     required this.rangeStart,
     required this.rangeEnd,

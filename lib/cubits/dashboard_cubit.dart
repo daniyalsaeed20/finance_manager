@@ -4,6 +4,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 
 import '../repositories/income_repository.dart';
 import '../repositories/expense_repository.dart';
@@ -42,16 +43,16 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   Future<void> _loadData(DateTime start, DateTime end, String userId) async {
     if (_isLoading) {
-      print('🔍 DashboardCubit: Already loading data, skipping...');
+      debugPrint('🔍 DashboardCubit: Already loading data, skipping...');
       return;
     }
 
     _isLoading = true;
     try {
-      print('🔍 DashboardCubit: Loading data for range: $start to $end');
-      print('🔍 DashboardCubit: User ID: $userId');
-      print('🔍 DashboardCubit: Start date: ${start.toString()}');
-      print('🔍 DashboardCubit: End date: ${end.toString()}');
+      debugPrint('🔍 DashboardCubit: Loading data for range: $start to $end');
+      debugPrint('🔍 DashboardCubit: User ID: $userId');
+      debugPrint('🔍 DashboardCubit: Start date: ${start.toString()}');
+      debugPrint('🔍 DashboardCubit: End date: ${end.toString()}');
 
       // Load all data concurrently
       final results = await Future.wait([
@@ -64,21 +65,25 @@ class DashboardCubit extends Cubit<DashboardState> {
       final expenses = results[1] as List;
       final goal = results[2];
 
-      print('🔍 DashboardCubit: Found ${income.length} income records');
-      print('🔍 DashboardCubit: Found ${expenses.length} expense records');
-      print('🔍 DashboardCubit: Goal: ${goal?.targetAmountMinor ?? 'None'}');
+      debugPrint('🔍 DashboardCubit: Found ${income.length} income records');
+      debugPrint('🔍 DashboardCubit: Found ${expenses.length} expense records');
+      debugPrint(
+        '🔍 DashboardCubit: Goal: ${goal?.targetAmountMinor ?? 'None'}',
+      );
 
       // Debug: Print first few records
       if (income.isNotEmpty) {
-        print('🔍 DashboardCubit: First income record: ${income.first}');
+        debugPrint('🔍 DashboardCubit: First income record: ${income.first}');
       }
       if (expenses.isNotEmpty) {
-        print('🔍 DashboardCubit: First expense record: ${expenses.first}');
+        debugPrint(
+          '🔍 DashboardCubit: First expense record: ${expenses.first}',
+        );
       }
 
       _updateState(income, expenses, goal);
     } catch (e) {
-      print('❌ DashboardCubit: Error loading data: $e');
+      debugPrint('❌ DashboardCubit: Error loading data: $e');
       emit(state.copyWith(loading: false));
     } finally {
       _isLoading = false;
@@ -110,14 +115,14 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   void _updateState(List income, List expenses, dynamic goal) {
-    print(
+    debugPrint(
       '🔍 DashboardCubit: _updateState called with ${income.length} income and ${expenses.length} expense records',
     );
 
     // Debug each income record
     for (int i = 0; i < income.length; i++) {
       final record = income[i];
-      print(
+      debugPrint(
         '🔍 DashboardCubit: Income record $i - totalMinor: ${record.totalMinor}, type: ${record.runtimeType}, date: ${record.date}',
       );
     }
@@ -125,7 +130,7 @@ class DashboardCubit extends Cubit<DashboardState> {
     // Debug each expense record
     for (int i = 0; i < expenses.length; i++) {
       final record = expenses[i];
-      print(
+      debugPrint(
         '🔍 DashboardCubit: Expense record $i - amountMinor: ${record.amountMinor}, type: ${record.runtimeType}, date: ${record.date}',
       );
     }
@@ -141,13 +146,13 @@ class DashboardCubit extends Cubit<DashboardState> {
     final netMinor = totalIncomeMinor - totalExpenseMinor;
     final goalAmountMinor = goal?.targetAmountMinor ?? 0;
 
-    print(
+    debugPrint(
       '🔍 DashboardCubit: Calculated totals - Income: $totalIncomeMinor, Expenses: $totalExpenseMinor, Net: $netMinor, Goal: $goalAmountMinor',
     );
-    print(
+    debugPrint(
       '🔍 DashboardCubit: Raw income values: ${income.map((r) => r.totalMinor).toList()}',
     );
-    print(
+    debugPrint(
       '🔍 DashboardCubit: Raw expense values: ${expenses.map((r) => r.amountMinor).toList()}',
     );
 
@@ -159,7 +164,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       goalAmountMinor: goalAmountMinor,
     );
 
-    print(
+    debugPrint(
       '🔍 DashboardCubit: Emitting new state: ${newState.totalIncomeMinor}, ${newState.totalExpenseMinor}, ${newState.netMinor}',
     );
 
