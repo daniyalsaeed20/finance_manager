@@ -164,7 +164,7 @@ class MyApp extends StatelessWidget {
             return RepositoryProvider(
               create: (context) => AuthRepository(),
               child: MaterialApp.router(
-                title: 'Finance Manager',
+                title: 'Quaestor',
                 theme: themeData,
                 darkTheme: ThemeData.dark(),
                 themeMode: ThemeMode.light,

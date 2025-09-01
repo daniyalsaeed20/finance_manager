@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -15,20 +16,26 @@ class OnboardingScreen extends StatelessWidget {
             children: [
               const Spacer(),
               Text(
-                'Finance Manager',
+                kAppName,
                 style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Text(
-                'Track income, expenses, taxes and goals in seconds.',
+                kAppTagline,
                 style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                kAppDescription,
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const Spacer(),
               ElevatedButton(
                 onPressed: () => context.go('/auth'),
-                child: const Text('Get Started'),
+                child: const Text(kGetStartedLabel),
               ),
             ],
           ),

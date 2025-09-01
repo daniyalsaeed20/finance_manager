@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/goal_cubit.dart';
 import '../../cubits/dashboard_cubit.dart';
@@ -31,7 +32,7 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Monthly Goal History'),
+        title: Text(kMonthlyGoalHistoryLabel),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,
@@ -54,12 +55,12 @@ class _MonthlyGoalHistoryScreenState extends State<MonthlyGoalHistoryScreen> {
                   Icon(Icons.flag_outlined, size: 64, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
-                    'No Monthly Goals Set',
+                    kNoMonthlyGoalsSetLabel,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Set your first monthly goal to start tracking your progress!',
+                    kSetFirstMonthlyGoalLabel,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey),
                   ),

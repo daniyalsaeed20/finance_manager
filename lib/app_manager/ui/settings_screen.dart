@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../services/user_manager.dart';
 import '../../services/currency_service.dart';
@@ -19,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(kSettingsLabel),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,
@@ -27,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           IconButton(
             onPressed: _showLogoutDialog,
             icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
+            tooltip: kLogoutLabel,
           ),
         ],
       ),
@@ -42,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Appearance',
+                    kAppearanceLabel,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
@@ -51,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       return Column(
                         children: [
                           ListTile(
-                            title: const Text('Light Theme'),
+                            title: Text(kLightThemeLabel),
                             leading: Radio<AppThemeType>(
                               value: AppThemeType.light,
                               groupValue: state,
@@ -63,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           ),
                           ListTile(
-                            title: const Text('Dark Theme'),
+                            title: Text(kDarkThemeLabel),
                             leading: Radio<AppThemeType>(
                               value: AppThemeType.dark,
                               groupValue: state,
@@ -75,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           ),
                           ListTile(
-                            title: const Text('System Theme'),
+                            title: Text(kSystemThemeLabel),
                             leading: Radio<AppThemeType>(
                               value: AppThemeType.system,
                               groupValue: state,
@@ -105,13 +106,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Currency',
+                    kCurrencyLabel,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Choose your preferred currency for displaying amounts throughout the app.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  Text(
+                    kChooseCurrencyLabel,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
                   StreamBuilder<Currency>(
@@ -123,7 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           final currentCurrency = snapshot.data ?? asyncSnapshot.data;
                           if (currentCurrency != null) {
                             return ListTile(
-                              title: const Text('Current Currency'),
+                              title: Text(kCurrentCurrencyLabel),
                               subtitle: Text(
                                 '${currentCurrency.name} (${currentCurrency.symbol})',
                               ),
@@ -131,11 +132,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               onTap: () => _showCurrencySelector(),
                             );
                           }
-                          return const ListTile(
-                            title: Text('Current Currency'),
-                            subtitle: Text('Loading...'),
-                            trailing: Icon(Icons.currency_exchange),
-                          );
+                            return ListTile(
+                              title: Text(kCurrentCurrencyLabel),
+                              subtitle: const Text('Loading...'),
+                              trailing: const Icon(Icons.currency_exchange),
+                            );
                         },
                       );
                     },
@@ -154,16 +155,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('About', style: Theme.of(context).textTheme.titleMedium),
+                  Text(kAboutLabel, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 16),
                   ListTile(
-                    title: const Text('Version'),
-                    subtitle: const Text('1.0.0'),
+                    title: Text(kVersionLabel),
+                    subtitle: Text(kAppVersion),
                     leading: const Icon(Icons.info_outline),
                   ),
                   ListTile(
-                    title: const Text('Developer'),
-                    subtitle: const Text('Finance Manager'),
+                    title: Text(kDeveloperLabel),
+                    subtitle: Text(kDeveloperName),
                     leading: const Icon(Icons.person_outline),
                   ),
                 ],
@@ -179,14 +180,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text(
-          'Are you sure you want to logout? All data will remain on this device.',
+        title: Text(kLogoutLabel),
+        content: Text(
+          kLogoutConfirmLabel,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(kCancelLabel2),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -197,7 +198,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Logout'),
+            child: Text(kLogoutLabel),
           ),
         ],
       ),
@@ -258,7 +259,7 @@ class _CurrencySelectorDialogState extends State<_CurrencySelectorDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Select Currency',
+                  kSelectCurrencyLabel,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(

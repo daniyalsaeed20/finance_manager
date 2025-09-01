@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key, required this.child});
@@ -92,15 +93,15 @@ class _HomeShellState extends State<HomeShell> {
       switch (location) {
         case '/home':
         case '/home/dashboard':
-          return 'Dashboard';
+          return kDashboardLabel;
         case '/home/income':
-          return 'Income';
+          return kIncomeLabel;
         case '/home/expenses':
-          return 'Expenses';
+          return kExpensesLabel;
         case '/home/reports':
-          return 'Reports';
+          return kReportsLabel;
         default:
-          return 'Finance Manager';
+          return kAppName;
       }
     } catch (e) {
       // If GoRouterState is not available yet, return default title
@@ -182,7 +183,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           ListTile(
             leading: const Icon(Icons.business_outlined),
-            title: const Text('Business Manager'),
+            title: const Text(kBusinessManagerLabel),
             onTap: () {
               debugPrint('🏢 Drawer: Navigating to Business Manager');
               // Track that drawer was open when navigating
@@ -194,7 +195,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           ListTile(
             leading: const Icon(Icons.calculate_outlined),
-            title: const Text('Taxes'),
+            title: const Text(kTaxesLabel),
             onTap: () {
               debugPrint('🧮 Drawer: Navigating to Taxes');
               // Track that drawer was open when navigating
@@ -206,7 +207,7 @@ class _HomeShellState extends State<HomeShell> {
           ),
           ListTile(
             leading: const Icon(Icons.folder_open_outlined),
-            title: const Text('Exported Files'),
+            title: const Text(kExportedFilesLabel),
             onTap: () {
               debugPrint('📁 Drawer: Navigating to Exported Files');
               // Track that drawer was open when navigating
@@ -219,7 +220,7 @@ class _HomeShellState extends State<HomeShell> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
+            title: const Text(kSettingsLabel),
             onTap: () {
               debugPrint('⚙️ Drawer: Navigating to Settings');
               // Track that drawer was open when navigating
@@ -259,19 +260,19 @@ class _HomeShellState extends State<HomeShell> {
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.dashboard_outlined),
-                  label: 'Dashboard',
+                  label: kDashboardLabel,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.attach_money_outlined),
-                  label: 'Income',
+                  label: kIncomeLabel,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt_long_outlined),
-                  label: 'Expenses',
+                  label: kExpensesLabel,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.assessment_outlined),
-                  label: 'Reports',
+                  label: kReportsLabel,
                 ),
               ],
             )

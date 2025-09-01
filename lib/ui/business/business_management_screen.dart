@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/expense_cubit.dart';
 import '../../cubits/goal_cubit.dart';
@@ -64,16 +65,16 @@ class _BusinessManagementScreenState extends State<BusinessManagementScreen>
               context.pop();
             },
           ),
-          title: const Text('Business Management'),
+          title: Text(kBusinessManagementLabel),
           backgroundColor: Theme.of(context).colorScheme.surface,
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           elevation: 0,
           bottom: TabBar(
             controller: _tabController,
-            tabs: const [
-              Tab(text: 'Services', icon: Icon(Icons.work)),
-              Tab(text: 'Categories', icon: Icon(Icons.category)),
-              Tab(text: 'Monthly Goals', icon: Icon(Icons.flag)),
+            tabs: [
+              Tab(text: kServicesLabel, icon: const Icon(Icons.work)),
+              Tab(text: kCategoriesLabel, icon: const Icon(Icons.category)),
+              Tab(text: kMonthlyGoalsLabel, icon: const Icon(Icons.flag)),
             ],
           ),
         ),

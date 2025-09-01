@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/dashboard_cubit.dart';
 import '../../cubits/goal_cubit.dart';
@@ -40,7 +41,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Financial Goals & Analytics'),
+        title: Text(kFinancialGoalsAnalyticsLabel),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,
@@ -50,7 +51,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               context.push('/home/goals/history');
             },
             icon: const Icon(Icons.history),
-            tooltip: 'View Goal History',
+            tooltip: kViewGoalHistoryLabel,
           ),
         ],
       ),
@@ -228,7 +229,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
                     if (goal == null) {
                       return const Center(
-                        child: Text('No goal set for this month'),
+                        child: Text(kNoGoalSetLabel),
                       );
                     }
 

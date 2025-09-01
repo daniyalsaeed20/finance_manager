@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/expense_cubit.dart';
 import '../../models/expense_models.dart';
@@ -183,7 +184,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
                 if (state.expenses.isEmpty) {
                   return const Center(
-                    child: Text('No expenses for this month'),
+                    child: Text(kNoExpensesLabel),
                   );
                 }
 

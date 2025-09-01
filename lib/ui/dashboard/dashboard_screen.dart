@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/dashboard_cubit.dart';
 import '../../cubits/goal_cubit.dart';
@@ -93,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           icon: const Icon(Icons.chevron_left),
                         ),
                         Text(
-                          '${_selectedMonth.month == DateTime.now().month && _selectedMonth.year == DateTime.now().year ? 'This Month' : formatMonthYear(_selectedMonth)}',
+                          '${_selectedMonth.month == DateTime.now().month && _selectedMonth.year == DateTime.now().month ? kThisMonthLabel : formatMonthYear(_selectedMonth)}',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         IconButton(
@@ -196,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     snapshot.data ?? CurrencyService.getCurrentCurrencySync();
                 if (currency != null) {
                   return Text(
-                    'Monthly Goal: ${CurrencyService.formatAmountWithCurrency(goal.targetAmountMinor, currency)}',
+                    '$kMonthlyGoalLabel: ${CurrencyService.formatAmountWithCurrency(goal.targetAmountMinor, currency)}',
                     style: Theme.of(context).textTheme.titleLarge,
                   );
                 }
@@ -206,11 +207,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   builder: (context, asyncSnapshot) {
                     if (asyncSnapshot.hasData) {
                       return Text(
-                        'Monthly Goal: ${asyncSnapshot.data}',
+                        '$kMonthlyGoalLabel: ${asyncSnapshot.data}',
                         style: Theme.of(context).textTheme.titleLarge,
                       );
                     }
-                    return const Text('Monthly Goal: Loading...');
+                    return Text('$kMonthlyGoalLabel: Loading...');
                   },
                 );
               },
@@ -255,7 +256,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'No Monthly Goal Set',
+                  kNoMonthlyGoalSetLabel,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
@@ -280,7 +281,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   context.push('/home/goals');
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('Set Monthly Goal'),
+                label: Text(kSetMonthlyGoalLabel),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,

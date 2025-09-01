@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/income_cubit.dart';
 import '../../models/income_models.dart';
@@ -70,13 +71,13 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
   Widget build(BuildContext context) {
     if (_record == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Edit Income')),
+        appBar: AppBar(title: Text(kEditIncomeLabel)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Income')),
+      appBar: AppBar(title: Text(kEditIncomeLabel)),
       body: BlocBuilder<IncomeCubit, IncomeState>(
         builder: (context, state) {
           final activeTemplates = state.templates
@@ -90,7 +91,7 @@ class _EditIncomeScreenState extends State<EditIncomeScreen> {
               children: [
                 // Date picker
                 ListTile(
-                  title: const Text('Date'),
+                  title: Text(kDateLabel),
                   subtitle: Text(formatShortDate(_selectedDate)),
                   trailing: const Icon(Icons.calendar_today),
                   onTap: () => _selectDate(),

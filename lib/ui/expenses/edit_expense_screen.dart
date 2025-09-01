@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../cubits/expense_cubit.dart';
 import '../../models/expense_models.dart';
@@ -75,13 +76,13 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
   Widget build(BuildContext context) {
     if (_expense == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Edit Expense')),
+        appBar: AppBar(title: Text(kEditExpenseLabel)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Expense')),
+      appBar: AppBar(title: Text(kEditExpenseLabel)),
       body: BlocBuilder<ExpenseCubit, ExpenseState>(
         builder: (context, state) {
           return SingleChildScrollView(
@@ -91,7 +92,7 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
               children: [
                 // Date picker
                 ListTile(
-                  title: const Text('Date'),
+                  title: Text(kDateLabel),
                   subtitle: Text(
                     _date != null ? formatShortDate(_date!) : 'Select date',
                   ),

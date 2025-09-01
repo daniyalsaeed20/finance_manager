@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../strings.dart';
 
 import '../../cubits/dashboard_cubit.dart';
 import '../../cubits/tax_cubit.dart';
@@ -39,7 +40,7 @@ class _TaxesScreenState extends State<TaxesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tax Planning'),
+        title: Text(kTaxPlanningLabel),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,

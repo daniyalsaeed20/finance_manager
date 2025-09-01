@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../strings.dart';
 
 import '../../repositories/auth_repository.dart';
 import '../../services/user_manager.dart';
@@ -23,7 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     final auth = context.read<AuthRepository>();
     return Scaffold(
-      appBar: AppBar(title: Text(_isSignUp ? 'Create Account' : 'Sign In')),
+      appBar: AppBar(title: Text(_isSignUp ? kCreateAccountLabel : kSignInLabel)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -31,17 +32,17 @@ class _AuthScreenState extends State<AuthScreen> {
             if (_isSignUp)
               TextField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: kNameLabel),
               ),
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(labelText: kEmailLabel),
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(labelText: kPasswordLabel),
               obscureText: true,
             ),
             const SizedBox(height: 20),
@@ -75,20 +76,20 @@ class _AuthScreenState extends State<AuthScreen> {
                         } catch (e) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Auth error: $e')),
+                              SnackBar(content: Text('$kAuthErrorLabel$e')),
                             );
                           }
                         } finally {
                           if (mounted) setState(() => _loading = false);
                         }
                       },
-                child: Text(_isSignUp ? 'Sign Up' : 'Sign In'),
+                child: Text(_isSignUp ? kSignUpLabel : kSignInLabel),
               ),
             ),
             TextButton(
               onPressed: () => setState(() => _isSignUp = !_isSignUp),
               child: Text(
-                _isSignUp ? 'Have an account? Sign in' : 'Create an account',
+                _isSignUp ? kHaveAccountLabel : kCreateAccountPromptLabel,
               ),
             ),
           ],
