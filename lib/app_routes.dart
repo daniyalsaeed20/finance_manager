@@ -17,6 +17,7 @@ import 'ui/goals/goals_screen.dart';
 import 'ui/goals/monthly_goal_history_screen.dart';
 import 'ui/taxes/taxes_screen.dart';
 import 'ui/business/business_management_screen.dart';
+import 'ui/savings/savings_screen.dart';
 import 'app_manager/ui/settings_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -117,6 +118,10 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: '/home/reports',
           builder: (context, state) => const ReportsScreen(),
+        ),
+        GoRoute(
+          path: '/home/savings',
+          builder: (context, state) => const SavingsScreen(),
         ),
       ],
     ),

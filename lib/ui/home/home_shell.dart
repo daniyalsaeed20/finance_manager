@@ -61,6 +61,9 @@ class _HomeShellState extends State<HomeShell> {
         case '/home/reports':
           if (_index != 3) setState(() => _index = 3);
           break;
+        case '/home/savings':
+          if (_index != 4) setState(() => _index = 4);
+          break;
       }
     } catch (e) {
       // If GoRouterState is not available yet, just skip the update
@@ -85,6 +88,9 @@ class _HomeShellState extends State<HomeShell> {
       case 3:
         context.go('/home/reports');
         break;
+      case 4:
+        context.go('/home/savings');
+        break;
     }
   }
 
@@ -101,6 +107,8 @@ class _HomeShellState extends State<HomeShell> {
           return kExpensesLabel;
         case '/home/reports':
           return kReportsLabel;
+        case '/home/savings':
+          return 'Savings';
         default:
           return kAppName;
       }
@@ -119,7 +127,8 @@ class _HomeShellState extends State<HomeShell> {
           location == '/home/dashboard' ||
           location == '/home/income' ||
           location == '/home/expenses' ||
-          location == '/home/reports';
+          location == '/home/reports' ||
+          location == '/home/savings';
     } catch (e) {
       // If GoRouterState is not available yet, show bottom navigation by default
       debugPrint('⚠️ Bottom navigation check skipped: $e');
@@ -195,6 +204,18 @@ class _HomeShellState extends State<HomeShell> {
               context.push('/home/exported-files');
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.savings_outlined),
+            title: const Text('Savings'),
+            onTap: () {
+              debugPrint('💰 Drawer: Navigating to Savings');
+              // Track that drawer was open when navigating
+              _wasDrawerOpen = true;
+              Navigator.pop(context);
+              // Use push to maintain navigation stack
+              context.push('/home/savings');
+            },
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
@@ -246,6 +267,10 @@ class _HomeShellState extends State<HomeShell> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.assessment_outlined),
                   label: kReportsLabel,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.savings_outlined),
+                  label: 'Savings',
                 ),
               ],
             )
